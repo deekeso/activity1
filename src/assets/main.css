@@ -1,0 +1,26 @@
+@import './base.css';
+
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  font-weight: normal;
+}
+
+/* .app {
+  background-image: url(images/bg.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  width: 100%;
+  background-size: cover;
+} */
+
+body {
+  background-image: url(../assets/images/bg.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  width: 100%;
+  background-size: cover;
+}

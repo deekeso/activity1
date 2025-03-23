@@ -1,0 +1,269 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { User, Calendar, HomeFilled } from '@element-plus/icons-vue'
+import { useStudentStore } from '@/stores/studentStore'
+
+
+// Get the router object
+const router = useRouter()
+const firstName = ref('')
+const middleInitial = ref('')
+const lastName = ref('')
+const address = ref('')
+const birthDate = ref('')
+const studentID = ref('')
+
+const studentStore = useStudentStore()
+// const studentList = computed(() => studentStore.studentList)
+
+
+
+
+//function to get the real age automatically
+const getAge = () => {
+  const birthDateValue = new Date(birthDate.value)
+  const today = new Date()
+  let age = today.getFullYear() - birthDateValue.getFullYear()
+  const monthDifference = today.getMonth() - birthDateValue.getMonth()
+
+  if ((monthDifference === 0 && today.getDate() < birthDateValue.getDate())) {
+    age--;
+  }
+  return age
+}
+
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString)
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const year = date.getFullYear()
+  return `${month}/${day}/${year}`
+}
+
+const onSubmit = () => {
+  if (firstName.value === '' || middleInitial.value === '' || lastName.value === '' || address.value === '' || birthDate.value === '') {
+    console.log('Please fill up all fields')
+  } else {
+    const newStudent = {
+      firstName: firstName.value,
+      middleName: middleInitial.value,
+      lastName: lastName.value,
+      address: address.value,
+      birthDate: birthDate.value,
+      age: getAge(),
+      studentId: 0,
+    }
+    studentStore.registerStudent(newStudent)
+    firstName.value = ''
+    middleInitial.value = ''
+    lastName.value = ''
+    address.value = ''
+    birthDate.value = ''
+    console.log('Successfully registered')
+    console.log('Current student list:', studentStore.studentList)
+  }
+}
+
+
+const goToLogin = () => {
+  router.push({ name: 'home' })
+}
+</script>
+
+<template>
+  <main>
+
+    <el-form @submit.prevent="onSubmit">
+      <div class="form-row">
+        <el-form-item>
+          <el-input v-model="studentID" type="hidden"></el-input>
+          <el-input v-model="firstName" placeholder="FIRST NAME" clearable required class="username">
+            <template #prefix>
+              <el-icon size="large">
+                <User />
+              </el-icon>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input v-model="middleInitial" placeholder="MIDDLE INITIAL" clearable required>
+            <template #prefix>
+              <el-icon size="large">
+                <User />
+              </el-icon>
+            </template>
+          </el-input>
+        </el-form-item>
+      </div>
+      <div class="form-row">
+        <el-form-item>
+          <el-input v-model="lastName" placeholder="LAST NAME" clearable required>
+            <template #prefix>
+              <el-icon size="large">
+                <User />
+              </el-icon>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input v-model="address" placeholder="ADDRESS" clearable required>
+            <template #prefix>
+              <el-icon size="large">
+                <HomeFilled />
+              </el-icon>
+            </template>
+          </el-input>
+        </el-form-item>
+      </div>
+      <div class="form-row">
+        <el-date-picker v-model="birthDate" type="date" placeholder="BIRTHDATE ( MM / DD / YYYY )" clearable
+          class="date-picker" :style="{ width: '100%', height: '45px' }">
+          <template #prefix>
+            <el-icon size="large">
+              <Calendar />
+            </el-icon>
+          </template>
+        </el-date-picker>
+
+
+        <el-form-item>
+          <el-input placeholder="AGE" clearable required :value="getAge()">
+            <template #prefix>
+              <el-icon size="large">
+                <Calendar />
+              </el-icon>
+            </template>
+          </el-input>
+        </el-form-item>
+      </div>
+
+      <el-form-item class="btnLogin-container">
+        <button class="el-button" size="large" style="font-size: large; font-weight: bold;">Register</button>
+      </el-form-item>
+      <el-link @click="goToLogin" class="custom-link" :underline="false">
+        Already have an account?
+      </el-link>
+    </el-form>
+
+    <!-- <div>
+      <h2>Registered Students</h2>
+      <ul>
+        <li v-for="student in studentList" :key="student.studentId">
+          Student ID: {{ student.studentId }}
+        </li>
+        <li v-for="student in studentList" :key="student.studentId">
+          {{ student.firstName }} {{ student.lastName }} - {{ student.age }} years old
+        </li>
+        <li v-for="student in studentList" :key="student.studentId">
+          {{ student.address }}
+        </li>
+      </ul>
+    </div> -->
+
+    <div>
+      <el-card style="max-width: 480px" v-for="student in studentStore.studentList" :key="student.studentId">
+        <template #header>
+          <div class="card-header">
+            <span>Student ID: {{ student.studentId }}</span>
+          </div>
+        </template>
+        <p class="text item">Name: {{ student.firstName }} {{ student.middleName }} {{ student.lastName }}</p>
+        <p class="text item">Address: {{ student.address }}</p>
+        <p class="text item">Birthdate: {{ formatDate(student.birthDate) }}</p>
+        <p class="text item">Age: {{ student.age }}</p>
+      </el-card>
+    </div>
+  </main>
+</template>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+:deep(.el-input__inner::placeholder) {
+  font-size: 12px;
+  padding: 5px;
+}
+
+.el-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 90%;
+  max-width: 900px;
+}
+
+.btnLogin-container {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+.btnLogin-container .el-button {
+  width: 100%;
+  height: 45px;
+  color: #FFFFFF;
+  background-color: #409EFF;
+  border: none;
+}
+
+.btnLogin-container .el-button:hover {
+  background-color: #ffffff;
+  color: #409EFF;
+}
+
+.el-input,
+.date-picker {
+  width: 100%;
+  height: 45px;
+  font-size: 16px;
+  border: none;
+}
+
+.el-form-item {
+  width: 100%;
+}
+
+.link-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.el-link.custom-link {
+  font-size: 12px;
+  font-weight: medium;
+  color: #FFFFFF;
+}
+
+.el-link.custom-link:hover {
+  color: #409EFF;
+}
+
+:deep(.el-input__inner)::placeholder {
+  color: #6e6b6b;
+}
+</style>
