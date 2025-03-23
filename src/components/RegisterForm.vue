@@ -18,7 +18,8 @@ const ruleForm = ref<RuleForm>({
   firstName: '',
   middleName: '',
   lastName: '',
-  password: ''
+  password: '',
+  username: ''
 })
 
 const rules = reactive<FormRules<RuleForm>>({
@@ -37,6 +38,9 @@ const rules = reactive<FormRules<RuleForm>>({
   ],
   password: [
     { required: true, message: 'Please input password', trigger: 'blur' }
+  ],
+  username: [
+    { required: true, message: 'Please input username', trigger: 'blur' }
   ]
 })
 
@@ -51,6 +55,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         middleName: ruleForm.value.middleName,
         lastName: ruleForm.value.lastName,
         password: ruleForm.value.password,
+        username: ruleForm.value.username
       }
       accountStore.registerAccount(newAccount)
       ruleForm.value.email = ''
@@ -58,6 +63,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       ruleForm.value.middleName = ''
       ruleForm.value.lastName = ''
       ruleForm.value.password = ''
+      ruleForm.value.username = ''
       openFullScreen2()
       setTimeout(() => {
         successNotication()
@@ -138,6 +144,15 @@ onMounted(() => {
       </el-form-item>
       <el-form-item prop="email">
         <el-input v-model="ruleForm.email" placeholder="EMAIL" clearable>
+          <template #prefix>
+            <el-icon size="large">
+              <User />
+            </el-icon>
+          </template>
+        </el-input>
+      </el-form-item>
+      <el-form-item prop="username">
+        <el-input v-model="ruleForm.username" placeholder="USERNAME" clearable>
           <template #prefix>
             <el-icon size="large">
               <User />

@@ -16,11 +16,12 @@ export type Student = {
 }
 
 export type Account = {
-  email: string
-  password: string
-  firstName: string
-  middleName: string
-  lastName: string
+  email: string;
+  username: string;
+  password: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
 }
 
 export type RuleForm = {
@@ -29,6 +30,7 @@ export type RuleForm = {
   middleName: string
   lastName: string
   password: string
+  username: string
 }
 
 type Name = (typeof courseNameList)[number]
