@@ -4,6 +4,8 @@ import { User, Lock } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 import { useAccountStore } from '@/stores/accountStore'
 import { ElNotification, ElLoading } from 'element-plus'
+// import type { FormInstance, FormRules } from 'element-plus'
+// import type { RuleForm } from '@/types'
 
 const username = ref('')
 const password = ref('')
@@ -21,18 +23,20 @@ const login = () => {
   console.log('Attempting login with:', username.value, password.value)
   const loginSuccess = accountStore.login(username.value, password.value)
   if (loginSuccess) {
-    router.push({ name: 'studentlist' })
+    setTimeout(() => {
+      router.push({ name: 'studentlist' })
+    }, 3000)
     openFullScreen2()
-      setTimeout(() => {
-        successNotification()
-      }, 3000)
+    setTimeout(() => {
+      successNotification()
+    }, 3000)
   } else {
     console.log('Login failed')
     openFullScreen2()
     openFullScreen2()
-      setTimeout(() => {
-        errorNotification()
-      }, 3000)
+    setTimeout(() => {
+      errorNotification()
+    }, 3000)
   }
 }
 
@@ -65,35 +69,42 @@ const openFullScreen2 = () => {
 </script>
 
 <template>
-  <div id="home-view">
+  <div id="login-view">
     <main>
       <el-form @submit.prevent="login">
         <el-form-item>
-          <el-input v-model="username" placeholder="USERNAME" clearable class="username">
-            <template #prefix>
-              <el-icon size="large">
-                <User />
-              </el-icon>
-            </template>
+          <el-input
+            v-model="username"
+            placeholder="USERNAME"
+            clearable
+            class="username"
+            :prefix-icon="User"
+          >
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="password" placeholder="PASSWORD" show-password transparent>
-            <template #prefix>
-              <el-icon size="large">
-                <Lock />
-              </el-icon>
-            </template>
+          <el-input
+            v-model="password"
+            placeholder="PASSWORD"
+            show-password
+            transparent
+            :prefix-icon="Lock"
+          >
+            <Lock />
           </el-input>
         </el-form-item>
         <el-form-item class="btnLogin-container">
-          <el-button type="primary" @click="login" size="large" style="font-size: large; font-weight: bold;">Login</el-button>
+          <el-button
+            type="primary"
+            @click="login"
+            size="large"
+            style="font-size: medium; font-weight: bold"
+            >Login</el-button
+          >
         </el-form-item>
         <div class="link-container">
           <el-link type="primary" href="#">Forgot password?</el-link>
-          <el-link @click="goToRegister">
-            Don't have an account yet?
-          </el-link>
+          <el-link @click="goToRegister"> Don't have an account yet? </el-link>
         </div>
       </el-form>
     </main>
@@ -120,22 +131,21 @@ main {
   padding: 5px;
 }
 
+:deep(.el-input__inner) {
+  color: rgb(255, 255, 255);
+  font-size: 12px;
+}
+
+:deep(.el-input__wrapper) {
+  background-color: transparent;
+}
+
 .el-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 90%;
   max-width: 700px;
-}
-
-.btnLogin-container {
-  width: 100%;
-  max-width: 800px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-  padding-top: 20px;
 }
 
 .btnLogin-container .el-button {
@@ -150,6 +160,23 @@ main {
   border: none;
 }
 
+.el-input__wrapper {
+  background-color: transparent;
+}
+
+.btnLogin-container .el-button {
+  width: 100%;
+  height: 45px;
+  color: #409eff;
+  background-color: #ffffff;
+  border: none;
+}
+
+.btnLogin-container .el-button:hover {
+  background-color: #409eff;
+  color: #ffffff;
+}
+
 .link-container {
   display: flex;
   flex-direction: row;
@@ -160,6 +187,6 @@ main {
 .el-link {
   font-size: 14px;
   font-weight: medium;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 </style>

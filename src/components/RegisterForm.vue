@@ -19,29 +19,19 @@ const ruleForm = ref<RuleForm>({
   middleName: '',
   lastName: '',
   password: '',
-  username: ''
+  username: '',
 })
 
 const rules = reactive<FormRules<RuleForm>>({
   email: [
     { required: true, message: 'Please input email', trigger: 'blur' },
-    { type: 'email', message: 'Please input correct email', trigger: ['blur', 'change'] }
+    { type: 'email', message: 'Please input correct email', trigger: ['blur', 'change'] },
   ],
-  firstName: [
-    { required: true, message: 'Please input first name', trigger: 'blur' }
-  ],
-  middleName: [
-    { required: true, message: 'Please input middle name', trigger: 'blur' }
-  ],
-  lastName: [
-    { required: true, message: 'Please input last name', trigger: 'blur' }
-  ],
-  password: [
-    { required: true, message: 'Please input password', trigger: 'blur' }
-  ],
-  username: [
-    { required: true, message: 'Please input username', trigger: 'blur' }
-  ]
+  firstName: [{ required: true, message: 'Please input first name', trigger: 'blur' }],
+  middleName: [{ required: true, message: 'Please input middle name', trigger: 'blur' }],
+  lastName: [{ required: true, message: 'Please input last name', trigger: 'blur' }],
+  password: [{ required: true, message: 'Please input password', trigger: 'blur' }],
+  username: [{ required: true, message: 'Please input username', trigger: 'blur' }],
 })
 
 const submitForm = async (formEl: FormInstance | undefined) => {
@@ -55,7 +45,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         middleName: ruleForm.value.middleName,
         lastName: ruleForm.value.lastName,
         password: ruleForm.value.password,
-        username: ruleForm.value.username
+        username: ruleForm.value.username,
       }
       accountStore.registerAccount(newAccount)
       ruleForm.value.email = ''
@@ -113,7 +103,13 @@ onMounted(() => {
 
 <template>
   <main>
-    <el-form @submit.prevent ref="ruleFormRef" style="max-width: 600px" :model="ruleForm" :rules="rules">
+    <el-form
+      @submit.prevent
+      ref="ruleFormRef"
+      style="max-width: 600px"
+      :model="ruleForm"
+      :rules="rules"
+    >
       <el-form-item prop="firstName">
         <el-input type="hidden" />
         <el-input v-model="ruleForm.firstName" placeholder="FIRST NAME" clearable>
@@ -170,8 +166,14 @@ onMounted(() => {
         </el-input>
       </el-form-item>
       <el-form-item class="btnLogin-container">
-        <button @click="submitForm(ruleFormRef)" class="el-button" size="large"
-          style="font-size: large; font-weight: bold;">Register</button>
+        <button
+          @click="submitForm(ruleFormRef)"
+          class="el-button"
+          size="large"
+          style="font-size: medium; font-weight: bold"
+        >
+          Register
+        </button>
       </el-form-item>
       <el-link @click="goToLogin" class="custom-link" :underline="false">
         Already have an account?
@@ -205,6 +207,15 @@ main {
   padding: 5px;
 }
 
+:deep(.el-input__inner) {
+  color: rgb(255, 255, 255);
+  font-size: 12px;
+}
+
+:deep(.el-input__wrapper) {
+  background-color: transparent;
+}
+
 .el-form {
   display: flex;
   flex-direction: column;
@@ -226,14 +237,14 @@ main {
 .btnLogin-container .el-button {
   width: 100%;
   height: 45px;
-  color: #FFFFFF;
-  background-color: #409EFF;
+  color: #409eff;
+  background-color: #ffffff;
   border: none;
 }
 
 .btnLogin-container .el-button:hover {
-  background-color: #ffffff;
-  color: #409EFF;
+  background-color: #409eff;
+  color: #ffffff;
 }
 
 .el-input,
@@ -242,6 +253,7 @@ main {
   height: 45px;
   font-size: 16px;
   border: none;
+  color: rgb(255, 255, 255);
 }
 
 .el-form-item {
@@ -258,18 +270,14 @@ main {
 .el-link.custom-link {
   font-size: 12px;
   font-weight: medium;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .el-link.custom-link:hover {
-  color: #409EFF;
+  color: #409eff;
 }
 
-:deep(.el-input__inner)::placeholder {
+/* :deep(.el-input__inner)::placeholder {
   color: #6e6b6b;
-}
-
-.el-input {
-  background-color: red;
-}
+} */
 </style>
