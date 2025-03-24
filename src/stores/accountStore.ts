@@ -19,7 +19,9 @@ export const useAccountStore = defineStore('AccountStore', () => {
   const login = (username: string, password: string) => {
     console.log('Checking credentials:', username, password)
     console.log('Account list:', accountList.value)
-    const account = accountList.value.find(account => account.username === username && account.password === password)
+    const account = accountList.value.find(
+      (account) => account.username === username && account.password === password,
+    )
     if (account) {
       authenticatedUser.value = account
       console.log('Login successful:', account)
@@ -41,6 +43,6 @@ export const useAccountStore = defineStore('AccountStore', () => {
     isAuthenticated,
     registerAccount,
     login,
-    logout
+    logout,
   }
 })

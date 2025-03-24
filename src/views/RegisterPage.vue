@@ -1,11 +1,11 @@
 <script setup lang="ts">
 // import { useRouter } from 'vue-router'
-
-
 </script>
 
 <template>
-  <main>
-    <RegisterForm />
-  </main>
+  <div id="register-page">
+    <main>
+      <RegisterForm />
+    </main>
+  </div>
 </template>
