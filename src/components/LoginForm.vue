@@ -2,7 +2,8 @@
 import { reactive, ref } from "vue";
 
 import type { FormInstance, FormRules } from "element-plus";
-import { Lock, User, Loading } from "@element-plus/icons-vue";
+import { ElLoading } from "element-plus";
+import { Lock, User } from "@element-plus/icons-vue";
 
 import { useAuthStore } from "../stores/authStore";
 
@@ -44,13 +45,23 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (valid) {
       console.log("submit! valid sya");
       console.log(login(ruleForm));
+      openFullScreen2();
     } else {
       console.log("error submit!");
     }
   });
 };
 
-const isLoading = ref(false);
+const openFullScreen2 = () => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: "Loading",
+    background: "rgba(0, 0, 0, 0.7)",
+  });
+  setTimeout(() => {
+    loading.close();
+  }, 1000);
+};
 </script>
 
 <template>
@@ -83,10 +94,7 @@ const isLoading = ref(false);
       />
     </el-form-item>
     <el-form-item>
-      <el-button v-if="!isLoading" @click="submitForm(ruleFormRef)">
-        LOGIN
-      </el-button>
-      <el-button v-else :icon="Loading" loading />
+      <el-button @click="submitForm(ruleFormRef)">Login</el-button>
     </el-form-item>
   </el-form>
 </template>

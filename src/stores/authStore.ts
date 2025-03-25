@@ -70,13 +70,17 @@ export const useAuthStore = defineStore("auth", () => {
       localStorage.setItem("token", generatedToken);
       localStorage.setItem("currentUser", JSON.stringify(user.value));
 
-      router.push("/login");
+      setTimeout(() => {
+        router.push("/student-records");
+      }, 1000);
       return true;
     } catch (err) {
       error.value = "Registration failed";
       return false;
     } finally {
-      loading.value = false;
+      setTimeout(() => {
+        loading.value = false;
+      }, 1000);
     }
   };
 
@@ -109,14 +113,19 @@ export const useAuthStore = defineStore("auth", () => {
       localStorage.setItem("token", generatedToken);
       localStorage.setItem("currentUser", JSON.stringify(user.value));
 
-      router.push("/student-records");
+      setTimeout(() => {
+        router.push("/student-records");
+      }, 1000);
+
       return true;
     } catch (err) {
       error.value = "Login failed";
       console.log(error.value);
       return false;
     } finally {
-      loading.value = false;
+      setTimeout(() => {
+        loading.value = false;
+      }, 1000);
     }
   };
 
