@@ -2,7 +2,6 @@
 import { reactive, ref } from "vue";
 
 import type { FormInstance, FormRules } from "element-plus";
-import { ElLoading } from "element-plus";
 import { Lock, User } from "@element-plus/icons-vue";
 
 import { useAuthStore } from "../stores/authStore";
@@ -41,26 +40,14 @@ const rules = reactive<FormRules<typeof ruleForm>>({
 
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
+
   formEl.validate((valid) => {
-    if (valid) {
-      console.log("submit! valid sya");
-      console.log(login(ruleForm));
-      openFullScreen2();
-    } else {
+    if (!valid) {
       console.log("error submit!");
     }
-  });
-};
 
-const openFullScreen2 = () => {
-  const loading = ElLoading.service({
-    lock: true,
-    text: "Loading",
-    background: "rgba(0, 0, 0, 0.7)",
+    login(ruleForm);
   });
-  setTimeout(() => {
-    loading.close();
-  }, 1000);
 };
 </script>
 

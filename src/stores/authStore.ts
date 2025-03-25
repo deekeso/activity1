@@ -1,6 +1,23 @@
 import { ref, type Ref } from "vue";
-import { defineStore } from "pinia";
 import { useRouter } from "vue-router";
+
+import { defineStore } from "pinia";
+import { ElLoading } from "element-plus";
+
+import { useNotification } from "../composables/useNotification";
+
+const { successMsg, errorMsg } = useNotification();
+
+const loading = () => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: "Loading",
+    background: "rgba(0, 0, 0, 0.7)",
+  });
+  setTimeout(() => {
+    loading.close();
+  }, 500);
+};
 
 interface User {
   username: string;
@@ -31,7 +48,7 @@ export const useAuthStore = defineStore("auth", () => {
   const user: Ref<User | null> = ref(null);
   const token: Ref<string | null> = ref(null);
   const isAuthenticated: Ref<boolean> = ref(false);
-  const loading: Ref<boolean> = ref(false);
+  const isLoading: Ref<boolean> = ref(false);
   const error: Ref<string | null> = ref(null);
 
   const getUser = (): User | null => user.value;
@@ -40,7 +57,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   const register = async (userData: RegisterCredentials): Promise<boolean> => {
     try {
-      loading.value = true;
+      isLoading.value = true;
       error.value = null;
 
       const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
@@ -70,23 +87,30 @@ export const useAuthStore = defineStore("auth", () => {
       localStorage.setItem("token", generatedToken);
       localStorage.setItem("currentUser", JSON.stringify(user.value));
 
+      loading();
+
       setTimeout(() => {
         router.push("/student-records");
+        successMsg({
+          title: "Success",
+          message: "Registration Sucessful",
+          type: "success",
+          duration: 1000,
+        });
       }, 1000);
+
       return true;
     } catch (err) {
       error.value = "Registration failed";
       return false;
     } finally {
-      setTimeout(() => {
-        loading.value = false;
-      }, 1000);
+      isLoading.value = false;
     }
   };
 
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
     try {
-      loading.value = true;
+      isLoading.value = true;
       error.value = null;
 
       const storedUsers: StoredUser[] = JSON.parse(
@@ -99,8 +123,13 @@ export const useAuthStore = defineStore("auth", () => {
       );
 
       if (!foundUser) {
-        error.value = "Invalid email or password";
-        console.log(error.value);
+        error.value = "User not found.";
+        errorMsg({
+          title: "Error",
+          message: error.value,
+          type: "error",
+          duration: 1000,
+        });
         return false;
       }
 
@@ -113,8 +142,16 @@ export const useAuthStore = defineStore("auth", () => {
       localStorage.setItem("token", generatedToken);
       localStorage.setItem("currentUser", JSON.stringify(user.value));
 
+      loading();
+
       setTimeout(() => {
         router.push("/student-records");
+        successMsg({
+          title: "Success",
+          message: "Login Sucessful",
+          type: "success",
+          duration: 1000,
+        });
       }, 1000);
 
       return true;
@@ -123,9 +160,7 @@ export const useAuthStore = defineStore("auth", () => {
       console.log(error.value);
       return false;
     } finally {
-      setTimeout(() => {
-        loading.value = false;
-      }, 1000);
+      isLoading.value = true;
     }
   };
 
@@ -154,7 +189,7 @@ export const useAuthStore = defineStore("auth", () => {
     user,
     token,
     isAuthenticated,
-    loading,
+    isLoading,
     error,
     getUser,
     isLoggedIn,
