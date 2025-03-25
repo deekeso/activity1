@@ -70,6 +70,7 @@ export const useAuthStore = defineStore("auth", () => {
       localStorage.setItem("token", generatedToken);
       localStorage.setItem("currentUser", JSON.stringify(user.value));
 
+      router.push("/login");
       return true;
     } catch (err) {
       error.value = "Registration failed";
