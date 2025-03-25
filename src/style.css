@@ -1,5 +1,11 @@
 body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: "Poppins", sans-serif;
+}
+
+.parent-container {
   width: 100%;
   height: 100vh;
   background-image: url("./assets/images/backgroundImage.jpg");

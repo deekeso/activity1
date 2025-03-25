@@ -3,12 +3,14 @@ import RegisterForm from "../components/RegisterForm.vue";
 </script>
 
 <template>
-  <div class="form-container">
-    <RegisterForm />
-    <p>
-      Already have an account?
-      <router-link to="/login">Log in here</router-link>
-    </p>
+  <div class="parent-container">
+    <div class="form-container">
+      <RegisterForm />
+      <p>
+        Already have an account?
+        <router-link to="/login">Log in here</router-link>
+      </p>
+    </div>
   </div>
 </template>
 
