@@ -5,10 +5,10 @@ import RegisterForm from "../components/RegisterForm.vue";
 <template>
   <div class="form-container">
     <RegisterForm />
-    <div>
+    <p>
       Already have an account?
       <router-link to="/login">Log in here</router-link>
-    </div>
+    </p>
   </div>
 </template>
 
@@ -20,5 +20,18 @@ import RegisterForm from "../components/RegisterForm.vue";
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+p {
+  color: white;
+  font-size: 14px;
+}
+
+a {
+  color: white;
+}
+
+a:hover {
+  color: rgb(167, 187, 80);
 }
 </style>
