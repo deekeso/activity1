@@ -5,13 +5,14 @@ import { ElMessageBox } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
 
 import { useStudentsStore } from "../stores/studentsStore";
-import { id } from "element-plus/es/locales.mjs";
 
 const studentsStore = useStudentsStore;
 
 const { addStudent } = studentsStore();
 
 const formLabelWidth = "120px";
+
+let timer;
 
 const dialog = ref(false);
 const loading = ref(false);
@@ -91,10 +92,13 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      console.log("submit!");
-      console.log(formEl);
-      addStudent(studentForm);
-      dialog.value = false;
+      loading.value = true;
+
+      setTimeout(() => {
+        loading.value = false;
+        dialog.value = false;
+        addStudent(studentForm);
+      }, 400);
     } else {
       console.log("error submit!", fields);
     }
@@ -107,7 +111,14 @@ const handleClose = (done: any) => {
   }
   ElMessageBox.confirm("Do you want to submit?")
     .then(() => {
-      submitForm(ruleFormRef.value);
+      loading.value = true;
+      timer = setTimeout(() => {
+        submitForm(ruleFormRef.value);
+        done();
+        setTimeout(() => {
+          loading.value = false;
+        }, 400);
+      }, 2000);
     })
     .catch(() => {});
 };
@@ -121,8 +132,11 @@ const cancelForm = (formEl: FormInstance | undefined) => {
 </script>
 
 <template>
-  <el-button text @click="dialog = true"
-    >Open Drawer with nested form</el-button
+  <el-button
+    :style="{ 'margin-left': '10px' }"
+    type="primary"
+    @click="dialog = true"
+    >Add Student</el-button
   >
   <el-drawer
     v-model="dialog"
@@ -130,6 +144,7 @@ const cancelForm = (formEl: FormInstance | undefined) => {
     :before-close="handleClose"
     direction="ltr"
     class="demo-drawer"
+    :style="{ 'min-width': '300px' }"
   >
     <div class="demo-drawer__content">
       <el-form :rules="rules" ref="ruleFormRef" :model="studentForm">
@@ -193,10 +208,6 @@ const cancelForm = (formEl: FormInstance | undefined) => {
             <el-option
               label="Bachelor of Science in Computer Science"
               value="BSCS"
-            />
-            <el-option
-              label="Bachelor of Science in Information and Technology"
-              value="BSIT"
             />
             <el-option
               label="Bachelor of Science in Hotel and Restaurant Management"

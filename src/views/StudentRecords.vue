@@ -18,7 +18,7 @@ const { logout, getUser } = useAuth();
     </el-text>
     <div class="flex-grow" />
     <el-menu-item>
-      <el-button @click="logout" type="primary" round>Logout</el-button>
+      <el-button @click="logout" type="danger" round>Logout</el-button>
     </el-menu-item>
   </el-menu>
   <StudentForm />

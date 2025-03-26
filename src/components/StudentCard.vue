@@ -29,7 +29,7 @@ const { students } = studentsStore();
           <div class="card-header">
             <span
               >{{ student.firstName }} {{ student.middleName }}
-              {{ student.lastName }}</span
+              {{ student.lastName }} {{ student.id }}</span
             >
             <Edit style="width: 1em; height: 1em; margin-right: 8px" />
           </div>
