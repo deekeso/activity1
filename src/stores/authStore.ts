@@ -150,7 +150,7 @@ export const useAuthStore = defineStore("auth", () => {
           title: "Success",
           message: "Login Sucessful",
           type: "success",
-          duration: 1000,
+          duration: 2000,
         });
       }, 1000);
 

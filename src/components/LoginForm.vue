@@ -53,6 +53,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
 
 <template>
   <el-form
+    @keyup.enter="submitForm(ruleFormRef)"
     ref="ruleFormRef"
     style="max-width: 400px"
     :model="ruleForm"
