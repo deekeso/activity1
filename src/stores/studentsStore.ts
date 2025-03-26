@@ -17,7 +17,7 @@ interface Student {
 }
 
 export const useStudentsStore = defineStore("students", () => {
-  const { data: students, save } = useLocalStorage<Student>("students", []);
+  let { data: students, save } = useLocalStorage<Student>("students", []);
 
   const addStudent = (newStudent: Student) => {
     newStudent.id = students.length
@@ -34,5 +34,20 @@ export const useStudentsStore = defineStore("students", () => {
     });
   };
 
-  return { students, addStudent };
+  const deleteStudent = (id: number) => {
+    const index = students.findIndex((student) => student.id === id);
+
+    if (index !== -1) {
+      students.splice(index, 1);
+      successMsg({
+        title: "Success",
+        message: "Student Deleted",
+        type: "success",
+        duration: 2000,
+      });
+      save();
+    }
+  };
+
+  return { students, addStudent, deleteStudent };
 });

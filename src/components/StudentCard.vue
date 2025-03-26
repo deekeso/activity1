@@ -5,13 +5,14 @@ import {
   Location,
   School,
   Edit,
+  Delete,
 } from "@element-plus/icons-vue";
 
 import { useStudentsStore } from "../stores/studentsStore";
 
 const studentsStore = useStudentsStore;
 
-const { students } = studentsStore();
+const { students, deleteStudent } = studentsStore();
 </script>
 
 <template>
@@ -31,7 +32,16 @@ const { students } = studentsStore();
               >{{ student.firstName }} {{ student.middleName }}
               {{ student.lastName }} {{ student.id }}</span
             >
-            <Edit style="width: 1em; height: 1em; margin-right: 8px" />
+            <div>
+              <el-button size="small" type="primary" :icon="Edit" />
+              <el-button
+                size="small"
+                type="primary"
+                :icon="Delete"
+                @click="deleteStudent(student.id)"
+              />
+            </div>
+            <!-- <Edit style="width: 1em; height: 1em; margin-right: 8px" /> -->
           </div>
         </template>
         <div class="card-content">
@@ -66,6 +76,7 @@ const { students } = studentsStore();
 
 .card-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
 }
