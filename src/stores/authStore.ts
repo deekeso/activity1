@@ -4,6 +4,13 @@ import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
 import { ElLoading } from "element-plus";
 
+import type {
+  User,
+  StoredUser,
+  LoginCredentials,
+  RegisterCredentials,
+} from "../types";
+
 import { useNotification } from "../composables/useNotification";
 
 const { successMsg, errorMsg } = useNotification();
@@ -18,29 +25,6 @@ const loading = () => {
     loading.close();
   }, 500);
 };
-
-interface User {
-  username: string;
-}
-
-interface StoredUser {
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  username: string;
-  password: string;
-}
-
-interface LoginCredentials {
-  username: string;
-  password: string;
-}
-
-interface RegisterCredentials extends LoginCredentials {
-  firstName: string;
-  middleName: string;
-  lastName: string;
-}
 
 export const useAuthStore = defineStore("auth", () => {
   const router = useRouter();
@@ -165,16 +149,20 @@ export const useAuthStore = defineStore("auth", () => {
   };
 
   const logout = (): void => {
+    loading();
     user.value = null;
     token.value = null;
     isAuthenticated.value = false;
     localStorage.removeItem("token");
     localStorage.removeItem("currentUser");
 
-    router.push("/login");
+    setTimeout(() => {
+      router.push("/login");
+    }, 1000);
   };
 
   const initializeAuth = (): void => {
+    loading();
     const storedToken: string | null = localStorage.getItem("token");
     const storedUser: string | null = localStorage.getItem("currentUser");
 

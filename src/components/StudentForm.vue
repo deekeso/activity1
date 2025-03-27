@@ -20,7 +20,7 @@ const loading = ref(false);
 const ruleFormRef = ref<FormInstance>();
 
 const studentForm = reactive({
-  id: 0,
+  id: "",
   firstName: "",
   middleName: "",
   lastName: "",

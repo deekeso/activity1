@@ -3,26 +3,15 @@ import { defineStore } from "pinia";
 import { useNotification } from "../composables/useNotification";
 import { useLocalStorage } from "../composables/useLocalStorage";
 
-const { successMsg } = useNotification();
+import { type Student } from "../types";
 
-interface Student {
-  id: number;
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  birthDate: string;
-  age: number;
-  address: string;
-  course: string;
-}
+const { successMsg } = useNotification();
 
 export const useStudentsStore = defineStore("students", () => {
   let { data: students, save } = useLocalStorage<Student>("students", []);
 
   const addStudent = (newStudent: Student) => {
-    newStudent.id = students.length
-      ? Math.max(...students.map((student) => student.id)) + 1
-      : 1;
+    newStudent.id = crypto.randomUUID();
     students.push(newStudent);
     save();
 
@@ -34,7 +23,7 @@ export const useStudentsStore = defineStore("students", () => {
     });
   };
 
-  const deleteStudent = (id: number) => {
+  const deleteStudent = (id: string) => {
     const index = students.findIndex((student) => student.id === id);
 
     if (index !== -1) {
@@ -49,5 +38,19 @@ export const useStudentsStore = defineStore("students", () => {
     }
   };
 
-  return { students, addStudent, deleteStudent };
+  const updateStudent = (student: Student) => {
+    const index = students.findIndex((s) => s.id === student.id);
+    if (index !== -1) {
+      students[index] = student;
+      successMsg({
+        title: "Success",
+        message: "Student Updated",
+        type: "success",
+        duration: 2000,
+      });
+      save();
+    }
+  };
+
+  return { students, addStudent, deleteStudent, updateStudent };
 });
