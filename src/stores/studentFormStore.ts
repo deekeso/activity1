@@ -3,7 +3,6 @@ import { ref, watch } from "vue";
 
 export const studentFormStore = defineStore("formStore", () => {
   // FormStatus
-
   const firstName = ref("");
   const middleName = ref("");
   const lastName = ref("");

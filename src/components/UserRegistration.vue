@@ -7,7 +7,7 @@
     label-width="auto"
   >
     <h2>Sign Up</h2>
-    <el-form-item label="First Name">
+    <el-form-item label="First Name" prop="firstName">
       <el-input v-model="formStore.firstName" autocomplete="off" />
     </el-form-item>
 
@@ -15,7 +15,7 @@
       <el-input v-model="formStore.middleName" autocomplete="off" />
     </el-form-item>
 
-    <el-form-item label="Last Name">
+    <el-form-item label="Last Name" prop="firstName">
       <el-input v-model="formStore.lastName" autocomplete="off" />
     </el-form-item>
 
@@ -40,37 +40,23 @@
     <el-form-item label="Course">
       <el-select v-model="formStore.course" placeholder="Select a course">
         <el-option
-          label="Bachelor of Science in Computer Science"
-          value="Bachelor of Science in Computer Science"
-        ></el-option>
-        <el-option
-          label="Bachelor of Science in Information Technology"
-          value="Bachelor of Science in Information Technology"
-        ></el-option>
-        <el-option
-          label="Bachelor of Science in Tourism Management"
-          value="Bachelor of Science in Tourism Management"
-        ></el-option>
-        <el-option
-          label="Bachelor of Science in Hotel and Restaurant Management"
-          value="Bachelor of Science in Hotel and Restaurant Management"
-        ></el-option>
-        <el-option
-          label="Bachelor of Science in Nursing"
-          value="Bachelor of Science in Nursing"
+          v-for="course in courseOptions"
+          :key="course"
+          :label="course"
+          :value="course"
         ></el-option>
       </el-select>
     </el-form-item>
 
-    <el-form-item label="Username">
+    <el-form-item label="Username" prop="username">
       <el-input v-model="formStore.username" autocomplete="off" />
     </el-form-item>
 
-    <el-form-item label="Email">
+    <el-form-item label="Email" prop="email">
       <el-input v-model="formStore.email" type="email" autocomplete="off" />
     </el-form-item>
 
-    <el-form-item label="Password">
+    <el-form-item label="Password" prop="password">
       <el-input
         v-model="formStore.password"
         type="password"
@@ -90,6 +76,7 @@ import { useFormStore } from "@/stores/useFormStore";
 import type { FormInstance } from "element-plus";
 import { useRouter } from "vue-router";
 import { onMounted, ref, watch } from "vue";
+import { courseOptions } from "@/constants/courses";
 
 const router = useRouter();
 const ruleFormRef = ref<FormInstance>();
@@ -98,6 +85,8 @@ const formStore = useFormStore();
 onMounted(() => {
   formStore.loadStoredData();
 });
+
+// FORM RULES TO ENSURE THE USER FILL ALL THE INPUT FIELDS
 
 const rules = {
   firstName: [
@@ -172,6 +161,7 @@ const rules = {
   ],
 };
 
+// WATCH FUNCTION FOR THE AUTO COMPUTE OF AGE
 watch(
   () => formStore.birthDate,
   (newBirthDate) => {
@@ -195,6 +185,7 @@ watch(
   }
 );
 
+// SUCCESSFUL REGISTER >> STORING DATA ON LOCAL STORAGE
 const registerUser = () => {
   formStore.saveToLocalStorage();
   alert("Sign Up Successfully!");

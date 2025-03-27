@@ -23,6 +23,7 @@ const drawer = ref(false);
 
 const router = useRouter();
 
+// REDIRECT TO LOGIN PAGE
 const goHome = () => {
   router.push("/");
 };

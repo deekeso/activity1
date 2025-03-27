@@ -1,9 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import LoginView from "@/views/loginView.vue";
 import RegistrationView from "@/views/RegistrationView.vue";
-
 import IndexView from "@/views/indexView.vue";
-import component from "element-plus/es/components/tree-select/src/tree-select-option.mjs";
 
 const routes = [
   { path: "/", name: "Login", component: LoginView },

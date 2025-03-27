@@ -53,24 +53,6 @@ export const useFormStore = defineStore("formStore", () => {
       console.error("Failed to save student data to localStorage:", error);
     }
   };
-  /** 
-    try {
-      const studentsData = localStorage.getItem("students");
-      if (!studentsData) {
-        localStorage.setItem("students", JSON.stringify([newUser]));
-        return;
-      }
-
-      const updatedData = JSON.stringify([
-        ...JSON.parse(studentsData),
-        newUser,
-      ]);
-
-      localStorage.setItem("students", updatedData);
-    } catch (error) {
-      console.error("Failed to parse userFormData from localStorage:", error);
-    }
-  }; */
 
   // Login function
   const login = (inputUsername: string, inputPassword: string) => {
@@ -96,7 +78,7 @@ export const useFormStore = defineStore("formStore", () => {
     localStorage.removeItem("isAuthenticated");
   };
 
-  // Return all properties and methods (including saveToLocalStorage)
+  // Return all properties and methods
   return {
     firstName,
     middleName,

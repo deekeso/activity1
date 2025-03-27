@@ -6,6 +6,8 @@
     :rules="rules"
     label-width="auto"
   >
+    <!-- ADD NEW STUDENT INFORMATION BLOCK -->
+
     <h3>Add New Student</h3>
     <el-form-item label="First Name" prop="firstName">
       <el-input v-model="formStore.firstName" autocomplete="off" />
@@ -24,8 +26,8 @@
         v-model="formStore.birthDate"
         type="date"
         placeholder="Select Birth Date"
-        format="YYYY-MM-DD"
-        value-format="YYYY-MM-DD"
+        format="MM / DD / YYYY"
+        value-format="MM / DD / YYYY"
       />
     </el-form-item>
 
@@ -37,30 +39,18 @@
       <el-input v-model="formStore.address" />
     </el-form-item>
 
-    <el-form-item label="Course" prop="course">
+    <el-form-item label="Course">
       <el-select v-model="formStore.course" placeholder="Select a course">
         <el-option
-          label="Bachelor of Science in Computer Science"
-          value="Bachelor of Science in Computer Science"
-        ></el-option>
-        <el-option
-          label="Bachelor of Science in Information Technology"
-          value="Bachelor of Science in Information Technology"
-        ></el-option>
-        <el-option
-          label="Bachelor of Science in Tourism Management"
-          value="Bachelor of Science in Tourism Management"
-        ></el-option>
-        <el-option
-          label="Bachelor of Science in Hotel and Restaurant Management"
-          value="Bachelor of Science in Hotel and Restaurant Management"
-        ></el-option>
-        <el-option
-          label="Bachelor of Science in Nursing"
-          value="Bachelor of Science in Nursing"
+          v-for="course in courseOptions"
+          :key="course"
+          :label="course"
+          :value="course"
         ></el-option>
       </el-select>
     </el-form-item>
+
+    <!-- SUBMIT/ADD NEW STUDENT -->
     <el-form-item>
       <el-button type="primary" @click="registerUser">Add Student</el-button>
     </el-form-item>
@@ -73,6 +63,7 @@ import type { FormInstance } from "element-plus";
 import { useRouter } from "vue-router";
 import { onMounted, ref, watch } from "vue";
 import { ElNotification } from "element-plus";
+import { courseOptions } from "@/constants/courses";
 
 const router = useRouter();
 const ruleFormRef = ref<FormInstance>();
@@ -81,6 +72,8 @@ const formStore = useFormStore();
 onMounted(() => {
   formStore.loadStoredData();
 });
+
+// FORM RULES TO ENSURE THE USER FILL ALL THE INPUT FIELDS
 
 const rules = {
   firstName: [
@@ -155,6 +148,8 @@ const rules = {
   ],
 };
 
+// WATCH FUNCTION FOR THE AUTO COMPUTE OF AGE
+
 watch(
   () => formStore.birthDate,
   (newBirthDate) => {
@@ -178,6 +173,8 @@ watch(
   }
 );
 
+// REGISTER/ADD NEW STUDENT INFORMATION
+
 const registerUser = () => {
   formStore.saveToLocalStorage();
   ElNotification({
@@ -186,6 +183,8 @@ const registerUser = () => {
     type: "success",
     duration: 4000,
   });
+
+  // SUCCESSFUL REGISTER >> STORING DATA ON LOCAL STORAGE
 
   formStore.firstName = "";
   formStore.middleName = "";

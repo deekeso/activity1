@@ -12,9 +12,11 @@
         <div class="cardContainer">
           <el-card :key="item">
             <template #header>
+              <!-- EDIT BUTTON ON CARD -->
               <el-button type="primary" :icon="Edit" @click="editStudent(item)">
                 Edit
               </el-button>
+              <!-- DELETE BUTTON ON CARD -->
               <el-button
                 type="primary"
                 :icon="Delete"
@@ -22,6 +24,8 @@
                 style="background-color: red; color: #000"
               />
             </template>
+
+            <!-- CARD CONTAINER BLOCK -->
             <div class="card-header">
               <span><h2>Student Information</h2></span>
 
@@ -38,6 +42,7 @@
       </el-col>
     </el-row>
 
+    <!-- MODAL POP UP FOR EDITING THE STUDENT INFORMATION -->
     <el-dialog
       v-model="dialogFormVisible"
       title="Edit Student Information"
@@ -54,7 +59,7 @@
         </div>
       </template>
     </el-dialog>
-    <!-- </div> -->
+    <!-- MODAL POP UP FORM-->
     <el-dialog
       v-model="dialogFormVisible"
       title="Edit Student Information"
@@ -92,34 +97,22 @@
           <el-input v-model="studentStore.editingStudent.address"></el-input>
         </el-form-item>
 
-        <el-form-item label="Course" prop="course">
+        <el-form-item label="Course">
           <el-select
             v-model="studentStore.editingStudent.course"
-            placeholder="Select a Course"
+            placeholder="Select a course"
           >
             <el-option
-              label="Bachelor of Science in Computer Science"
-              value="Bachelor of Science in Computer Science"
-            ></el-option>
-            <el-option
-              label="Bachelor of Science in Information Technology"
-              value="Bachelor of Science in Information Technology"
-            ></el-option>
-            <el-option
-              label="Bachelor of Science in Tourism Management"
-              value="Bachelor of Science in Tourism Management"
-            ></el-option>
-            <el-option
-              label="Bachelor of Science in Hotel and Restaurant Management"
-              value="Bachelor of Science in Hotel and Restaurant Management"
-            ></el-option>
-            <el-option
-              label="Bachelor of Science in Nursing"
-              value="Bachelor of Science in Nursing"
+              v-for="course in courseOptions"
+              :key="course"
+              :label="course"
+              :value="course"
             ></el-option>
           </el-select>
         </el-form-item>
       </el-form>
+
+      <!-- EDIT STUDENT INFORMATION ACTIONS -->
 
       <template #footer>
         <div class="dialog-footer">
@@ -138,6 +131,7 @@ import { useFormStore } from "@/stores/useFormStore";
 import { onMounted, ref } from "vue";
 import { type FormInstance } from "element-plus";
 import { Delete, Edit } from "@element-plus/icons-vue";
+import { courseOptions } from "@/constants/courses";
 
 const ruleFormRef = ref<FormInstance>();
 const dialogFormVisible = ref(false);
@@ -255,10 +249,14 @@ interface Student {
   course: string;
 }
 
+// EDIT STUDENT INFORMATION FUNCTION
+
 const editStudent = (student: Student) => {
   dialogFormVisible.value = true;
   studentStore.editingStudent = { ...student };
 };
+
+// SAVE STUDENT INFORMATION THAT WAS EDITED
 
 const saveEditedStudent = () => {
   const index: number = studentStore.students.findIndex(
@@ -284,6 +282,8 @@ interface Student {
   address: string;
   course: string;
 }
+
+// DELETE STUDENTS INFORMATION
 
 const deleteStudent = (student: Student) => {
   const confirmation: boolean = window.confirm("Are you SURE about that?!");

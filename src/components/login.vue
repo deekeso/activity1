@@ -37,13 +37,12 @@ const inputUsername = ref("");
 const inputPassword = ref("");
 const errorMessage = ref("");
 
-// Validate user login
 const handleLogin = () => {
   const isValid = formStore.login(inputUsername.value, inputPassword.value);
 
   if (isValid) {
     alert("Login successful!");
-    router.push("/index"); // Redirect to HomeView.vue
+    router.push("/index");
   } else {
     errorMessage.value = "Invalid username or password. Please try again.";
   }
