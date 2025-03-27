@@ -131,13 +131,7 @@ const deleteStudent = (userName: string) => {
   }
 }
 
-const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
-}
+import { formatDate } from './composables/global'
 </script>
 
 <style scoped>

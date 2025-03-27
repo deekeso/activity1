@@ -118,15 +118,7 @@ const signUpForm = reactive<SignUpForm>({
   ConfirmPassword: '',
 })
 
-const courseOptions = [
-  'Bachelor of Science in Information and Technology',
-  'Bachelor in Computer Science',
-  'Bachelor of Science in Tourism',
-  'Bachelor of Science in Hotel and Restaurant Management',
-  'Bachelor of Science in Nursing',
-]
-
-// console.log(signUpForm, '')
+import { courseOptions } from './composables/global'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const validatePassword = (rule: any, value: any, callback: any) => {

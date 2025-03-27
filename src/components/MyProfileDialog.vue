@@ -8,31 +8,37 @@
     >
       <el-form :model="form">
         <el-form-item label="Username">
-          <span>{{ form.UserName }}</span>
+          <span>:{{ form.UserName }}</span>
         </el-form-item>
         <el-form-item label="First Name">
-          <span>{{ form.FirstName }}</span>
+          <span>:{{ form.FirstName }}</span>
         </el-form-item>
         <el-form-item label="Middle Name">
-          <span>{{ form.MiddleName }}</span>
+          <span>:{{ form.MiddleName }}</span>
         </el-form-item>
         <el-form-item label="Last Name">
-          <span>{{ form.LastName }}</span>
+          <span>:{{ form.LastName }}</span>
         </el-form-item>
         <el-form-item label="Birthday">
-          <span>{{ form.Birthday }}</span>
+          <span>:{{ formatDate(form.Birthday) }}</span>
         </el-form-item>
         <el-form-item label="Age">
-          <span>{{ form.Age }}</span>
+          <span>:{{ form.Age }}</span>
         </el-form-item>
         <el-form-item label="Address">
-          <span>{{ form.Address }}</span>
+          <span>:{{ form.Address }}</span>
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="handleProfileDialogClose">Close</el-button>
-          <el-button @click="handleLogout">Log Out</el-button>
+          <el-row :gutter="20">
+            <el-col :span="12" xs="24">
+              <el-button @click="handleProfileDialogClose" style="width: 100%">Close</el-button>
+            </el-col>
+            <el-col :span="12" xs="24">
+              <el-button @click="handleLogout" style="width: 100%">Log Out</el-button>
+            </el-col>
+          </el-row>
         </div>
       </template>
     </el-dialog>
@@ -40,27 +46,22 @@
 </template>
 
 <script lang="ts" setup>
+import { Profileform } from '@/components/composables/global'
 import { InputStoreUser } from '@/stores/studentInfo'
-import { defineEmits, defineProps, reactive, watch } from 'vue'
+import { defineEmits, defineProps, watch } from 'vue'
 import { useRouter } from 'vue-router'
+
+const form = Profileform
 
 const props = defineProps({
   isProfileDialogOpen: Boolean,
 })
 
+import { formatDate } from '@/components/composables/global'
+
 const emits = defineEmits(['closerProfileDialog'])
 
 const inputStore = InputStoreUser()
-
-const form = reactive({
-  UserName: '',
-  FirstName: '',
-  MiddleName: '',
-  LastName: '',
-  Birthday: '',
-  Age: '',
-  Address: '',
-})
 
 const handleProfileDialogClose = () => {
   emits('closerProfileDialog')
@@ -95,12 +96,12 @@ const handleLogout = () => {
 </script>
 
 <style scoped>
-:deep(.el-dialog) {
-  border: 2px solid red;
-}
-
 :deep(.el-dialog__body) {
   height: 50vh;
   width: auto;
+}
+
+:deep(.el-button) {
+  border: 2px solid black;
 }
 </style>

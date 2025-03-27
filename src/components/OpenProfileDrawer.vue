@@ -15,15 +15,11 @@
             </el-col>
           </el-row>
 
-          <el-form ref="AddStudentFormRef" :model="addStudentForm" :rules="AddStudentFormRules">
+          <el-form ref="AddStudentFormRef" :model="form" :rules="Rules">
             <el-row>
               <el-col>
                 <el-form-item prop="UserName">
-                  <el-input
-                    v-model="addStudentForm.UserName"
-                    placeholder="Username"
-                    disabled
-                  ></el-input>
+                  <el-input v-model="form.UserName" placeholder="Username" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -31,7 +27,7 @@
             <el-row>
               <el-col>
                 <el-form-item prop="FirstName">
-                  <el-input v-model="addStudentForm.FirstName" placeholder="Firstname"></el-input>
+                  <el-input v-model="form.FirstName" placeholder="Firstname"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -39,12 +35,12 @@
             <el-row :gutter="10">
               <el-col :span="12">
                 <el-form-item prop="MiddleName">
-                  <el-input v-model="addStudentForm.MiddleName" placeholder="Middlename"></el-input>
+                  <el-input v-model="form.MiddleName" placeholder="Middlename"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item prop="LastName">
-                  <el-input v-model="addStudentForm.LastName" placeholder="Lastname"></el-input>
+                  <el-input v-model="form.LastName" placeholder="Lastname"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -53,7 +49,7 @@
               <el-col :span="12">
                 <el-form-item prop="Birthday">
                   <el-date-picker
-                    v-model="addStudentForm.Birthday"
+                    v-model="form.Birthday"
                     type="date"
                     placeholder="Birth Date"
                     style="width: 100%"
@@ -62,7 +58,7 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item prop="Age">
-                  <el-input v-model="addStudentForm.Age" placeholder="Age" type="number"></el-input>
+                  <el-input v-model="form.Age" placeholder="Age" type="number"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -70,17 +66,13 @@
             <el-row>
               <el-col>
                 <el-form-item prop="Address">
-                  <el-input v-model="addStudentForm.Address" placeholder="Address"></el-input>
+                  <el-input v-model="form.Address" placeholder="Address"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-form-item prop="Course">
-              <el-select
-                v-model="addStudentForm.Course"
-                placeholder="Select Course"
-                style="width: 100%"
-              >
+              <el-select v-model="form.Course" placeholder="Select Course" style="width: 100%">
                 <el-option
                   v-for="course in courseOptions"
                   :key="course"
@@ -107,51 +99,20 @@
 <script lang="ts" setup>
 import { InputStoreUser } from '@/stores/studentInfo'
 import { useWindowSize } from '@vueuse/core'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormInstance } from 'element-plus'
 import { defineEmits, defineProps, nextTick, reactive, ref, watch } from 'vue'
+import { Profileform } from './composables/global'
+import type { StudentAddForm } from '@/types/types'
+import { courseOptions } from './composables/global'
 
-interface AddStudentForm {
-  UserName: string
-  FirstName: string
-  MiddleName: string
-  LastName: string
-  Birthday: string | Date
-  Age: string
-  Address: string
-  Course: string
-}
+import { RulesOfTheForm } from './composables/global'
+
+const Rules = reactive(RulesOfTheForm)
+
+const StudentAddForm = {}
+const form = Profileform
 
 const AddStudentFormRef = ref<FormInstance>()
-
-const addStudentForm = reactive<AddStudentForm>({
-  UserName: '',
-  FirstName: '',
-  MiddleName: '',
-  LastName: '',
-  Birthday: '',
-  Age: '',
-  Address: '',
-  Course: '',
-})
-
-const AddStudentFormRules = reactive<FormRules<AddStudentForm>>({
-  UserName: [{ required: true, message: 'Please input username', trigger: 'blur' }],
-  FirstName: [{ required: true, message: 'Please input firstname', trigger: 'blur' }],
-  MiddleName: [{ required: false, message: 'Please input middlename', trigger: 'blur' }],
-  LastName: [{ required: true, message: 'Please input lastname', trigger: 'blur' }],
-  Birthday: [{ required: true, message: 'Please pick a date', trigger: 'blur' }],
-  Age: [{ required: true, message: 'Please input age', trigger: 'blur' }],
-  Address: [{ required: true, message: 'Please input address', trigger: 'blur' }],
-  Course: [{ required: true, message: 'Please input course', trigger: 'blur' }],
-})
-
-const courseOptions = [
-  'Bachelor of Science in Information and Technology',
-  'Bachelor in Computer Science',
-  'Bachelor of Science in Tourism',
-  'Bachelor of Science in Hotel and Restaurant Management',
-  'Bachelor of Science in Nursing',
-]
 
 const { width } = useWindowSize()
 const drawerSize = ref()
@@ -162,7 +123,7 @@ watch(width, (newWidth) => {
 
 const props = defineProps({
   isOpenProfileDrawer: Boolean,
-  selectedStudent: Object as () => AddStudentForm,
+  selectedStudent: Object as () => StudentAddForm,
 })
 
 const emits = defineEmits(['ProfilecloseDrawer'])
@@ -176,7 +137,7 @@ const handleCloseProfileDrawer = () => {
 const handleSubmit = () => {
   AddStudentFormRef.value?.validate((valid) => {
     if (valid) {
-      inputStore.updateStudentInfo(addStudentForm)
+      inputStore.updateStudentInfo(form)
       handleCloseProfileDrawer()
       nextTick()
     }
@@ -188,13 +149,13 @@ watch(
   () => props.selectedStudent,
   (newVal) => {
     if (newVal) {
-      addStudentForm.UserName = newVal.UserName
-      addStudentForm.FirstName = newVal.FirstName
-      addStudentForm.MiddleName = newVal.MiddleName
-      addStudentForm.LastName = newVal.LastName
-      addStudentForm.Birthday = newVal.Birthday
-      addStudentForm.Age = newVal.Age
-      addStudentForm.Address = newVal.Address
+      form.UserName = newVal.UserName
+      form.FirstName = newVal.FirstName
+      form.MiddleName = newVal.MiddleName
+      form.LastName = newVal.LastName
+      form.Birthday = newVal.Birthday
+      form.Age = newVal.Age
+      form.Address = newVal.Address
     }
   },
   { immediate: true },

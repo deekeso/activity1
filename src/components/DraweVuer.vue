@@ -15,11 +15,11 @@
             </el-col>
           </el-row>
 
-          <el-form ref="AddStudentFormRef" :model="addStudentForm" :rules="AddStudentFormRules">
+          <el-form ref="AddStudentFormRef" :model="form" :rules="Rules">
             <el-row>
               <el-col>
                 <el-form-item prop="UserName">
-                  <el-input v-model="addStudentForm.UserName" placeholder="Username"></el-input>
+                  <el-input v-model="form.UserName" placeholder="Username"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -27,7 +27,7 @@
             <el-row>
               <el-col>
                 <el-form-item prop="FirstName">
-                  <el-input v-model="addStudentForm.FirstName" placeholder="Firstname"></el-input>
+                  <el-input v-model="form.FirstName" placeholder="Firstname"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -35,12 +35,12 @@
             <el-row :gutter="10">
               <el-col :span="12">
                 <el-form-item prop="MiddleName">
-                  <el-input v-model="addStudentForm.MiddleName" placeholder="Middlename"></el-input>
+                  <el-input v-model="form.MiddleName" placeholder="Middlename"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item prop="LastName">
-                  <el-input v-model="addStudentForm.LastName" placeholder="Lastname"></el-input>
+                  <el-input v-model="form.LastName" placeholder="Lastname"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -48,7 +48,7 @@
               <el-col :span="12">
                 <el-form-item prop="Birthday">
                   <el-date-picker
-                    v-model="addStudentForm.Birthday"
+                    v-model="form.Birthday"
                     type="date"
                     placeholder="Birth Date"
                     style="width: 100%"
@@ -58,12 +58,7 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item prop="Age">
-                  <el-input
-                    v-model="addStudentForm.Age"
-                    placeholder="Age"
-                    type="number"
-                    disabled
-                  ></el-input>
+                  <el-input v-model="form.Age" placeholder="Age" type="number" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -71,17 +66,13 @@
             <el-row>
               <el-col>
                 <el-form-item prop="Address">
-                  <el-input v-model="addStudentForm.Address" placeholder="Address"></el-input>
+                  <el-input v-model="form.Address" placeholder="Address"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-form-item prop="Course">
-              <el-select
-                v-model="addStudentForm.Course"
-                placeholder="Select Course"
-                style="width: 100%"
-              >
+              <el-select v-model="form.Course" placeholder="Select Course" style="width: 100%">
                 <el-option
                   v-for="course in courseOptions"
                   :key="course"
@@ -109,26 +100,20 @@
 <script lang="ts" setup>
 import { InputStoreUser } from '@/stores/studentInfo'
 import { useWindowSize } from '@vueuse/core'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormInstance } from 'element-plus'
 import { defineEmits, defineProps, reactive, ref, watch } from 'vue'
+// import type { StudentAddForm } from '@/types/types'
+import { RulesOfTheForm } from './composables/global'
+import { Profileform } from './composables/global'
 
-interface AddStudentForm {
-  UserName: string
-  FirstName: string
-  MiddleName: string
-  LastName: string
-  Birthday: string | Date
-  Age: string
-  Address: string
-  Course: string
-}
+const Rules = reactive(RulesOfTheForm)
 
 const AddStudentFormRef = ref<FormInstance>()
 
 // Calculate age based on the birthday
 const calculateAge = () => {
-  if (addStudentForm.Birthday) {
-    const birthDate = new Date(addStudentForm.Birthday)
+  if (form.Birthday) {
+    const birthDate = new Date(form.Birthday)
     const today = new Date()
     let age = today.getFullYear() - birthDate.getFullYear()
     const monthDiff = today.getMonth() - birthDate.getMonth()
@@ -136,13 +121,11 @@ const calculateAge = () => {
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--
     }
-    addStudentForm.Age = age.toString()
+    form.Age = age.toString()
 
     // Validate that the age is at least 3 years
     if (age < 3) {
-      AddStudentFormRules.Age = [
-        { required: true, message: 'Age must be at least 3 years old', trigger: 'blur' },
-      ]
+      Rules.Age = [{ required: true, message: 'Age must be at least 3 years old', trigger: 'blur' }]
     }
   }
 }
@@ -154,48 +137,7 @@ const courseOptions = [
   'Bachelor of Science in Hotel and Restaurant Management',
   'Bachelor of Science in Nursing',
 ]
-
-const addStudentForm = reactive<AddStudentForm>({
-  UserName: '',
-  FirstName: '',
-  MiddleName: '',
-  LastName: '',
-  Birthday: '',
-  Age: '',
-  Address: '',
-  Course: '',
-})
-
-const AddStudentFormRules = reactive<FormRules<AddStudentForm>>({
-  UserName: [{ required: true, message: 'Please input username', trigger: 'blur' }],
-  FirstName: [
-    { required: true, message: 'Please input firstname', trigger: 'blur' },
-    {
-      pattern: /^[a-zA-Z\s]+$/,
-      message: 'Firstname cannot contain numbers or special characters',
-      trigger: 'blur',
-    },
-  ],
-  MiddleName: [
-    {
-      pattern: /^[a-zA-Z\s]+$/,
-      message: 'Middlename cannot contain numbers or special characters',
-      trigger: 'blur',
-    },
-  ],
-  LastName: [
-    { required: true, message: 'Please input lastname', trigger: 'blur' },
-    {
-      pattern: /^[a-zA-Z\s]+$/,
-      message: 'Lastname cannot contain numbers or special characters',
-      trigger: 'blur',
-    },
-  ],
-  Birthday: [{ required: true, message: 'Please pick a date', trigger: 'blur' }],
-  Age: [{ required: true, message: 'Please input age', trigger: 'blur' }],
-  Address: [{ required: true, message: 'Please input address', trigger: 'blur' }],
-})
-
+const form = Profileform
 const { width } = useWindowSize()
 const drawerSize = ref()
 
@@ -218,7 +160,7 @@ const handleClose = () => {
 const handleSubmit = () => {
   AddStudentFormRef.value?.validate((valid) => {
     if (valid) {
-      inputStore.SignUp(addStudentForm)
+      inputStore.SignUp(form)
       handleClose()
     }
   })
