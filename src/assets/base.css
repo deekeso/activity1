@@ -1,0 +1,26 @@
+/* color palette from <https://github.com/vuejs/theme> */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+body {
+  color: var(--color-text);
+  background: url(./bg.png) no-repeat;
+  background-size: cover;
+  background-color: #3c67e6;
+  transition: color 0.5s, background-color 0.5s;
+  font-family: "Montserrat", sans-serif;
+  font-size: 15px;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.montserrat-input {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
