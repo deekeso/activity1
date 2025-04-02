@@ -12,8 +12,9 @@ import type {
 } from "../types";
 
 import { useNotification } from "../composables/useNotification";
-
 const { successMsg, errorMsg } = useNotification();
+
+import { v4 as uuidv4 } from "uuid";
 
 const loading = () => {
   const loading = ElLoading.service({
@@ -62,7 +63,7 @@ export const useAuthStore = defineStore("auth", () => {
       storedUsers.push(newUser);
       localStorage.setItem("users", JSON.stringify(storedUsers));
 
-      const generatedToken: string = crypto.randomUUID();
+      const generatedToken: string = uuidv4();
 
       user.value = { username: userData.username };
       token.value = generatedToken;
@@ -117,7 +118,7 @@ export const useAuthStore = defineStore("auth", () => {
         return false;
       }
 
-      const generatedToken: string = crypto.randomUUID();
+      const generatedToken: string = uuidv4();
 
       user.value = { username: foundUser.username };
       token.value = generatedToken;
@@ -140,6 +141,8 @@ export const useAuthStore = defineStore("auth", () => {
 
       return true;
     } catch (err) {
+      console.log(err);
+
       error.value = "Login failed";
       console.log(error.value);
       return false;
