@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { User, HomeFilled } from '@element-plus/icons-vue'
-// import type { DrawerProps } from 'element-plus'
 
 const firstName = ref('')
 const middleName = ref('')
@@ -12,15 +11,29 @@ const birthdate = ref('')
 const age = ref('')
 
 const drawer = ref(false)
-// const direction = ref<DrawerProps['direction']>('btt')
-// const dialogFormVisible = ref(false)
+
+// Function to calculate age based on birthdate
+const calculateAge = (birthdate: string) => {
+  if (!birthdate) return ''
+  const today = new Date()
+  const birthDate = new Date(birthdate)
+  let calculatedAge = today.getFullYear() - birthDate.getFullYear()
+  const monthDifference = today.getMonth() - birthDate.getMonth()
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    calculatedAge--
+  }
+  return calculatedAge
+}
+
+// Watch the birthdate and update the age automatically
+watch(birthdate, (newBirthdate) => {
+  age.value = String(calculateAge(newBirthdate))
+})
 </script>
 
 <template>
   <div class="addBtn-container">
     <el-button @click="drawer = true" class="addBtn">Add Student</el-button>
-
-    <el-dialog value="btt" title="Add Student" max-width="500" min-width="400"> </el-dialog>
 
     <el-drawer size="60%" v-model="drawer" title="Add Student">
       <el-form>

@@ -16,18 +16,18 @@ export type Student = {
 }
 
 export type Account = {
-  email: string;
-  username: string;
-  password: string;
-  firstName: string;
-  middleName: string;
-  lastName: string;
+  email: string
+  username: string
+  password: string
+  firstName: string
+  middleName: string
+  lastName: string
 }
 
 export type RuleForm = {
   email: string
   firstName: string
-  middleName: string
+  middleName?: string
   lastName: string
   password: string
   username: string
