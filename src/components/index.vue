@@ -82,7 +82,7 @@
           <el-input v-model="studentStore.editingStudent.address"></el-input>
         </el-form-item>
 
-        <el-form-item label="Course">
+        <el-form-item label="Course" prop="course">
           <el-select
             v-model="studentStore.editingStudent.course"
             placeholder="Select a course"
@@ -113,7 +113,7 @@
 
 <script setup lang="ts">
 import { useFormStore } from "@/stores/useFormStore";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { type FormInstance } from "element-plus";
 import { Delete, Edit } from "@element-plus/icons-vue";
 import { courseOptions } from "@/constants/courses";
@@ -193,6 +193,13 @@ const rules = {
       trigger: "blur",
     },
   ],
+  courseOptions: [
+    {
+      required: true,
+      message: "Course is required to be filled",
+      trigger: "blur",
+    },
+  ],
 };
 
 const studentStore = useFormStore();
@@ -267,6 +274,34 @@ interface Student {
   address: string;
   course: string;
 }
+
+watch(
+  () => studentStore.editingStudent.birthDate,
+  (newBirthDate) => {
+    if (newBirthDate) {
+      const birthDate = new Date(newBirthDate);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+
+      if (
+        monthDiff < 0 ||
+        (monthDiff === 0 && today.getDate() < birthDate.getDate())
+      ) {
+        age--;
+      }
+
+      if (age < 18) {
+        studentStore.editingStudent.age = 0; // Reset age to 0 if under 18
+        alert("Student must be 18 years or older.");
+      } else {
+        studentStore.editingStudent.age = age; // Update the age in editingStudent
+      }
+    } else {
+      studentStore.editingStudent.age = 0;
+    }
+  }
+);
 
 // DELETE STUDENTS INFORMATION
 

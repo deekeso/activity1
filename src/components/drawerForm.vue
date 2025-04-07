@@ -39,7 +39,7 @@
       <el-input v-model="formStore.address" />
     </el-form-item>
 
-    <el-form-item label="Course">
+    <el-form-item label="Course" prop="course">
       <el-select v-model="formStore.course" placeholder="Select a course">
         <el-option
           v-for="course in courseOptions"
@@ -143,6 +143,13 @@ const rules = {
     {
       required: true,
       message: "Password is required to be filled",
+      trigger: "blur",
+    },
+  ],
+  courseOptions: [
+    {
+      required: true,
+      message: "Course is required to be filled",
       trigger: "blur",
     },
   ],
