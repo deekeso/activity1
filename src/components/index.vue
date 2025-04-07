@@ -80,7 +80,10 @@
         </el-form-item>
 
         <el-form-item label="Age" prop="age">
-          <el-input v-model="studentStore.editingStudent.age"></el-input>
+          <el-input
+            v-model="studentStore.editingStudent.age"
+            disabled
+          ></el-input>
         </el-form-item>
         <el-form-item label="Address" prop="address">
           <el-input v-model="studentStore.editingStudent.address"></el-input>
