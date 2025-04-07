@@ -3,7 +3,6 @@ import { ref } from "vue";
 import { v4 as uuidv4 } from "uuid";
 
 export const useFormStore = defineStore("formStore", () => {
-  // Define user fields
   const firstName = ref("");
   const middleName = ref("");
   const lastName = ref("");
@@ -14,7 +13,7 @@ export const useFormStore = defineStore("formStore", () => {
   const username = ref("");
   const email = ref("");
   const password = ref("");
-  const isAuthenticated = ref(false); // Track login status
+  const isAuthenticated = ref(false);
   const students = ref<any>([]);
   const editingStudent = ref({});
 
@@ -22,13 +21,11 @@ export const useFormStore = defineStore("formStore", () => {
   const loadStoredData = () => {
     const studentsData = localStorage.getItem("students");
     if (!studentsData) return;
-    // console.log(studentsData);
 
     students.value = JSON.parse(studentsData);
   };
 
   const saveToLocalStorage = () => {
-    let existingUsers = [];
     const newUser = {
       id: uuidv4(),
       firstName: firstName.value,
@@ -73,6 +70,7 @@ export const useFormStore = defineStore("formStore", () => {
   };
 
   // Logout function
+
   const logout = () => {
     isAuthenticated.value = false;
     localStorage.removeItem("isAuthenticated");

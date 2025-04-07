@@ -29,4 +29,8 @@ export default defineConfig({
       scss: { api: "modern-compiler" },
     },
   },
+  server: {
+    port: 3000,
+    host: true,
+  },
 });

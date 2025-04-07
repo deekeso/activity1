@@ -1,34 +1,45 @@
 <template>
-  <el-form class="login-form">
-    <el-form-item label="Username">
-      <el-input v-model="inputUsername" autocomplete="off" />
-    </el-form-item>
+  <body>
+    <el-form class="login-form">
+      <el-form-item>
+        <el-input
+          v-model="inputUsername"
+          placeholder="  USERNAME"
+          autocomplete="off"
+        /><el-icon class="icon-placeholder"><User /> </el-icon>
+      </el-form-item>
 
-    <el-form-item label="Password">
-      <el-input
-        v-model="inputPassword"
-        type="password"
-        show-password
-        autocomplete="off"
-      />
-    </el-form-item>
+      <el-form-item>
+        <el-input
+          v-model="inputPassword"
+          type="password"
+          placeholder="  PASSWORD"
+          show-password
+          autocomplete="off"
+        /><el-icon class="icon-placeholder"><Lock /> </el-icon>
+      </el-form-item>
 
-    <el-form-item>
-      <el-button type="primary" @click="handleLogin">Login</el-button>
-    </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="handleLogin">Login</el-button>
+      </el-form-item>
 
-    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 
-    <p>
-      Don't have an account? <router-link to="/register">Sign up</router-link>
-    </p>
-  </el-form>
+      <p class="forgot-password">
+        <router-link to="/forgot-password" class="forgot-password-link">
+          Forgot Password?
+        </router-link>
+      </p>
+    </el-form>
+  </body>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useFormStore } from "@/stores/useFormStore";
+import { saveDefaultUser } from "@/constants/userDefault";
+import { ElNotification } from "element-plus";
 
 const router = useRouter();
 const formStore = useFormStore();
@@ -37,58 +48,104 @@ const inputUsername = ref("");
 const inputPassword = ref("");
 const errorMessage = ref("");
 
+function handleFields(fields: string[]): boolean {
+  return fields.some((field) => field.trim() === "");
+}
+
 const handleLogin = () => {
+  const fields = [inputUsername.value, inputPassword.value];
+
+  // Validate fields before attempting to login
+  if (handleFields(fields)) {
+    ElNotification({
+      title: "ERROR",
+      message: "Please input all the fields.",
+      type: "error",
+    });
+    return;
+  }
+
+  // Attempt login only if fields are valid
   const isValid = formStore.login(inputUsername.value, inputPassword.value);
 
   if (isValid) {
-    alert("Login successful!");
+    ElNotification({
+      title: "Success",
+      message: "Login Successful!",
+      type: "success",
+    });
     router.push("/index");
   } else {
-    errorMessage.value = "Invalid username or password. Please try again.";
+    ElNotification({
+      title: "ERROR",
+      message: "Invalid username or password.",
+      type: "error",
+    });
   }
 };
+
+onMounted(() => {
+  saveDefaultUser();
+  formStore.logout();
+});
 </script>
 
 <style scoped>
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
 .login-form {
   width: 100%;
-  max-width: 400px;
+  max-width: 300px;
   margin: 0 auto;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  color: #fff;
 }
 
-.el-form-item {
-  margin-bottom: 20px;
+::v-deep(.el-input__wrapper) {
+  background-color: #2148c0;
 }
 
-.el-form-item__label {
+::v-deep(.el-input__inner) {
+  border-radius: 8px;
+  padding: 20px;
+  color: white;
+}
+
+::v-deep(.el-input__inner::placeholder) {
+  color: #ccc;
   font-size: 14px;
-  color: #333;
-  font-weight: bold;
 }
 
-.el-input__inner {
-  padding: 10px;
-  font-size: 14px;
-  border-radius: 4px;
-  border: 1px solid #dcdfe6;
+.icon-placeholder {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgb(255, 255, 255);
+  pointer-events: none;
 }
 
 .el-button {
   width: 100%;
   padding: 10px;
   font-size: 16px;
-  border-radius: 4px;
-  background-color: #409eff;
-  color: white;
+  background-color: #ffffff;
+  color: #2148c0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border: none;
+  font-weight: 600;
 }
 
 .el-button:hover {
-  background-color: #66b1ff;
+  background-color: #57a3eb;
+  color: #fff;
 }
 
 .error {
@@ -97,17 +154,16 @@ const handleLogin = () => {
   margin-top: 10px;
 }
 
-p {
-  text-align: center;
-  font-size: 14px;
+.forgot-password {
+  text-align: right;
+}
+
+.forgot-password-link {
+  color: white;
   text-decoration: none;
 }
 
-router-link {
-  text-decoration: none;
-}
-
-router-link:hover {
-  text-decoration: none;
+.forgot-password-link:hover {
+  text-decoration: underline;
 }
 </style>

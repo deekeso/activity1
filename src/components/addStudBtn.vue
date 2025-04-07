@@ -19,13 +19,22 @@
 import drawerForm from "@/components/drawerForm.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-const drawer = ref(false);
+import { ElNotification } from "element-plus";
+import { useFormStore } from "@/stores/useFormStore";
 
+const formStore = useFormStore();
+const drawer = ref(false);
 const router = useRouter();
 
 // REDIRECT TO LOGIN PAGE
 const goHome = () => {
-  router.push("/");
+  formStore.logout(); // Reset authentication state
+  ElNotification({
+    title: "Logged Out",
+    message: "You have successfully logged out.",
+    type: "info",
+  });
+  router.push("/"); // Redirect to the login page
 };
 </script>
 

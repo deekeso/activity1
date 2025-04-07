@@ -6,7 +6,12 @@ import IndexView from "@/views/indexView.vue";
 const routes = [
   { path: "/", name: "Login", component: LoginView },
   { path: "/register", name: "Register", component: RegistrationView },
-  { path: "/index", name: "Index", component: IndexView },
+  {
+    path: "/index",
+    name: "Index",
+    component: IndexView,
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = createRouter({

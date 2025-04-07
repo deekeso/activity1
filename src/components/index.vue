@@ -47,23 +47,6 @@
       v-model="dialogFormVisible"
       title="Edit Student Information"
       width="500"
-      :rule="rules"
-      ref="ruleFormRef"
-    >
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">
-            Confirm
-          </el-button>
-        </div>
-      </template>
-    </el-dialog>
-    <!-- MODAL POP UP FORM-->
-    <el-dialog
-      v-model="dialogFormVisible"
-      title="Edit Student Information"
-      width="500"
     >
       <el-form
         :model="studentStore.editingStudent"
