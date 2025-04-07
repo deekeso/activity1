@@ -95,7 +95,7 @@ h1 {
 .demo-ruleForm {
   width: 100%;
   margin-top: -200px;
-  margin-left: -20px;
+  padding: 20px;
 }
 
 :deep(.el-input__wrapper) {

@@ -3,6 +3,8 @@ import { defineStore } from "pinia";
 import { useNotification } from "../composables/useNotification";
 import { useLocalStorage } from "../composables/useLocalStorage";
 
+import { v4 as uuidv4 } from "uuid";
+
 import { type Student } from "../types";
 
 const { successMsg } = useNotification();
@@ -11,7 +13,7 @@ export const useStudentsStore = defineStore("students", () => {
   let { data: students, save } = useLocalStorage<Student>("students", []);
 
   const addStudent = (newStudent: Student) => {
-    newStudent.id = crypto.randomUUID();
+    newStudent.id = uuidv4();
     students.push(newStudent);
     save();
 

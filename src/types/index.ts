@@ -3,9 +3,9 @@ export interface User {
 }
 
 export interface StoredUser {
-  firstName: string;
-  middleName: string;
-  lastName: string;
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
   username: string;
   password: string;
 }

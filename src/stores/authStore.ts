@@ -98,9 +98,12 @@ export const useAuthStore = defineStore("auth", () => {
       isLoading.value = true;
       error.value = null;
 
-      const storedUsers: StoredUser[] = JSON.parse(
-        localStorage.getItem("users") || "[]"
-      );
+      const storedUsers: StoredUser[] = [
+        {
+          username: "testusername",
+          password: "Test123456",
+        },
+      ];
       const foundUser = storedUsers.find(
         (u: StoredUser) =>
           u.username === credentials.username &&

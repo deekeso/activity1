@@ -4,18 +4,16 @@ import LoginForm from "../components/LoginForm.vue";
 
 <template>
   <div class="parent-container">
-    <div class="form-container">
-      <LoginForm />
-      <p>
-        Dont have an account?
-        <router-link to="/register">Register here</router-link>
-      </p>
-    </div>
+    <LoginForm />
+    <p>
+      Dont have an account?
+      <router-link to="/register">Register here</router-link>
+    </p>
   </div>
 </template>
 
 <style scoped>
-.form-container {
+.parent-container {
   width: 100%;
   height: 100vh;
   display: flex;
