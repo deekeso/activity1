@@ -94,8 +94,14 @@ h1 {
 
 .demo-ruleForm {
   width: 100%;
-  margin-top: -200px;
-  padding: 20px;
+}
+
+.demo-ruleForm > * {
+  margin-inline: 10px;
+}
+
+:deep(.el-form-item__error) {
+  margin-inline: 5px;
 }
 
 :deep(.el-input__wrapper) {
