@@ -49,6 +49,7 @@
       :rule="rules"
       ref="ruleFormRef"
       direction="rtl"
+      :style="{ 'min-width': '400px' }"
     >
       <el-form
         :model="studentStore.editingStudent"
@@ -84,6 +85,7 @@
             placeholder="Select Birth Date"
             format="MM / DD / YYYY"
             value-format="MM / DD / YYYY"
+            :editable="false"
           ></el-date-picker>
         </el-form-item>
 
@@ -132,14 +134,13 @@
 
 <script setup lang="ts">
 import { useFormStore } from "@/stores/useFormStore";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, reactive } from "vue";
 import { type FormInstance, ElNotification } from "element-plus";
 import { Delete, Edit } from "@element-plus/icons-vue";
 import { courseOptions } from "@/constants/courses";
 
 const ruleFormRef = ref<FormInstance>();
 const drawerFormVisible = ref(false);
-const formStore = useFormStore();
 
 const rules = {
   firstName: [
@@ -239,7 +240,7 @@ interface EditingStudent {
   course: string;
 }
 
-studentStore.editingStudent = ref<EditingStudent>({
+studentStore.editingStudent = reactive<EditingStudent>({
   id: "",
   firstName: "",
   middleName: "",
@@ -340,15 +341,19 @@ const validateMiddleInitial = () => {
 
 // REMOVE EXCESS WHITESPACE FUNCTION FOR THE INPUT FIELDS
 const removeWhitespace = (field: keyof EditingStudent) => {
-  studentStore.editingStudent[field] = (
-    studentStore.editingStudent[field] as string
-  ).replace(/\s{2,}/g, " ");
+  if (typeof studentStore.editingStudent[field] === "string") {
+    studentStore.editingStudent[field] = (
+      studentStore.editingStudent[field] as string
+    ).replace(/\s{2,}/g, " ");
+  }
 };
 
 const cleanInputOnBlur = (field: keyof EditingStudent) => {
-  studentStore.editingStudent[field] = (
-    studentStore.editingStudent[field] as string
-  ).trim();
+  if (typeof studentStore.editingStudent[field] === "string") {
+    studentStore.editingStudent[field] = (
+      studentStore.editingStudent[field] as string
+    ).trim();
+  }
 };
 
 // DELETE STUDENTS INFORMATION
@@ -358,7 +363,7 @@ const deleteStudent = (student: Student) => {
 
   if (confirmation) {
     studentStore.students = studentStore.students.filter(
-      (item: Student) => itescriptstudent
+      (item: Student) => item.id !== student.id
     );
 
     localStorage.setItem("students", JSON.stringify(studentStore.students));
@@ -374,6 +379,7 @@ const deleteStudent = (student: Student) => {
 
 .cardContainer {
   margin: 10px;
+  padding: 20px;
 }
 
 .cardHeader {

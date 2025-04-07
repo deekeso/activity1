@@ -10,7 +10,11 @@
 
   <hr />
 
-  <el-drawer v-model="drawer" :with-header="false">
+  <el-drawer
+    v-model="drawer"
+    :with-header="false"
+    :style="{ 'min-width': '400px' }"
+  >
     <drawerForm />
   </el-drawer>
 </template>

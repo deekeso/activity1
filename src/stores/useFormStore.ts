@@ -2,6 +2,20 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { v4 as uuidv4 } from "uuid";
 
+// Define interfaces for Student and EditingStudent
+interface Student {
+  id: string | number;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  birthDate: string;
+  age: number;
+  address: string;
+  course: string;
+}
+
+interface EditingStudent extends Student {}
+
 export const useFormStore = defineStore("formStore", () => {
   const firstName = ref("");
   const middleName = ref("");
@@ -14,8 +28,21 @@ export const useFormStore = defineStore("formStore", () => {
   const email = ref("");
   const password = ref("");
   const isAuthenticated = ref(false);
-  const students = ref<any>([]);
-  const editingStudent = ref({});
+
+  // Properly type the students array
+  const students = ref<Student[]>([]);
+
+  // Properly initialize and type editingStudent
+  const editingStudent = ref<EditingStudent>({
+    id: "",
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    birthDate: "",
+    age: 0,
+    address: "",
+    course: "",
+  });
 
   // Load user data from localStorage
   const loadStoredData = () => {
@@ -26,7 +53,7 @@ export const useFormStore = defineStore("formStore", () => {
   };
 
   const saveToLocalStorage = () => {
-    const newUser = {
+    const newUser: Student = {
       id: uuidv4(),
       firstName: firstName.value,
       middleName: middleName.value,
@@ -35,9 +62,6 @@ export const useFormStore = defineStore("formStore", () => {
       age: age.value,
       address: address.value,
       course: course.value,
-      username: username.value,
-      email: email.value,
-      password: password.value,
     };
     try {
       const studentsData = localStorage.getItem("students");
@@ -70,13 +94,11 @@ export const useFormStore = defineStore("formStore", () => {
   };
 
   // Logout function
-
   const logout = () => {
     isAuthenticated.value = false;
     localStorage.removeItem("isAuthenticated");
   };
 
-  // Return all properties and methods
   return {
     firstName,
     middleName,
@@ -90,7 +112,7 @@ export const useFormStore = defineStore("formStore", () => {
     password,
     isAuthenticated,
     loadStoredData,
-    saveToLocalStorage, // Include this function here!
+    saveToLocalStorage,
     login,
     logout,
     students,

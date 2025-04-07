@@ -43,6 +43,7 @@
         placeholder="Select Birth Date"
         format="MM / DD / YYYY"
         value-format="MM / DD / YYYY"
+        :editable="false"
       />
     </el-form-item>
 
@@ -221,6 +222,7 @@ watch(
     }
   }
 );
+
 // VALIDATE MIDDLE INITIAL INPUT
 const validateMiddleInitial = () => {
   if (!/^[A-Z]?$/.test(formStore.middleName)) {
