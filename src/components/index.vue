@@ -42,28 +42,13 @@
       </el-col>
     </el-row>
 
-    <!-- MODAL POP UP FOR EDITING THE STUDENT INFORMATION -->
-    <el-dialog
-      v-model="dialogFormVisible"
+    <el-drawer
+      v-model="drawerFormVisible"
       title="Edit Student Information"
       width="500"
       :rule="rules"
       ref="ruleFormRef"
-    >
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">
-            Confirm
-          </el-button>
-        </div>
-      </template>
-    </el-dialog>
-    <!-- MODAL POP UP FORM-->
-    <el-dialog
-      v-model="dialogFormVisible"
-      title="Edit Student Information"
-      width="500"
+      direction="rtl"
     >
       <el-form
         :model="studentStore.editingStudent"
@@ -112,17 +97,17 @@
         </el-form-item>
       </el-form>
 
-      <!-- EDIT STUDENT INFORMATION ACTIONS -->
+      <!-- Edit Actions -->
 
       <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">Cancel</el-button>
+        <div class="drawer-footer">
+          <el-button @click="drawerFormVisible = false">Cancel</el-button>
           <el-button type="primary" @click="saveEditedStudent"
             >Confirm</el-button
           >
         </div>
       </template>
-    </el-dialog>
+    </el-drawer>
   </body>
 </template>
 
@@ -134,7 +119,7 @@ import { Delete, Edit } from "@element-plus/icons-vue";
 import { courseOptions } from "@/constants/courses";
 
 const ruleFormRef = ref<FormInstance>();
-const dialogFormVisible = ref(false);
+const drawerFormVisible = ref(false);
 const formStore = useFormStore();
 
 const rules = {
@@ -252,7 +237,7 @@ interface Student {
 // EDIT STUDENT INFORMATION FUNCTION
 
 const editStudent = (student: Student) => {
-  dialogFormVisible.value = true;
+  drawerFormVisible.value = true;
   studentStore.editingStudent = { ...student };
 };
 
@@ -266,7 +251,7 @@ const saveEditedStudent = () => {
   if (index !== -1) {
     studentStore.students[index] = { ...studentStore.editingStudent };
     localStorage.setItem("students", JSON.stringify(studentStore.students));
-    dialogFormVisible.value = false;
+    drawerFormVisible.value = false;
   } else {
     console.error("Student not found. Unable to save edit.");
   }
