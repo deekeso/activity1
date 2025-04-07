@@ -14,7 +14,12 @@
     </el-form-item>
 
     <el-form-item label="Middle Initial" prop="middleName">
-      <el-input v-model="formStore.middleName" autocomplete="off" />
+      <el-input
+        v-model="formStore.middleName"
+        autocomplete="off"
+        maxlength="1"
+        @input="validateMiddleInitial"
+      />
     </el-form-item>
 
     <el-form-item label="Last Name" prop="lastName">
@@ -86,7 +91,12 @@ const rules = {
   middleName: [
     {
       required: true,
-      message: "Middle Name is required to be filled",
+      message: "Middle Initial is required to be filled",
+      trigger: "blur",
+    },
+    {
+      pattern: /^[a-zA-Z]$/,
+      message: "Middle Initial must be a single letter",
       trigger: "blur",
     },
   ],
@@ -173,12 +183,24 @@ watch(
         age--;
       }
 
-      formStore.age = age; // Update age in Pinia store
+      if (age < 18) {
+        formStore.age = 0; // Reset age to 0 if under 18
+        alert("Student must be 18 years or older.");
+      } else {
+        formStore.age = age; // Update the age in editingStudent
+      }
     } else {
       formStore.age = 0;
     }
   }
 );
+
+// VALIDATE MIDDLE INITIAL INPUT
+const validateMiddleInitial = () => {
+  if (!/^[a-zA-Z]?$/.test(formStore.middleName)) {
+    formStore.middleName = formStore.middleName.slice(0, -1);
+  }
+};
 
 // REGISTER/ADD NEW STUDENT INFORMATION
 

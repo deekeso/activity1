@@ -59,7 +59,11 @@
           <el-input v-model="studentStore.editingStudent.firstName"></el-input>
         </el-form-item>
         <el-form-item label="Middle Initial" prop="middleName">
-          <el-input v-model="studentStore.editingStudent.middleName"></el-input>
+          <el-input
+            v-model="studentStore.editingStudent.middleName"
+            maxlength="1"
+            @input="validateMiddleInitial"
+          ></el-input>
         </el-form-item>
         <el-form-item label="Last Name" prop="lastName">
           <el-input v-model="studentStore.editingStudent.lastName"></el-input>
@@ -133,7 +137,12 @@ const rules = {
   middleName: [
     {
       required: true,
-      message: "Middle Name is required to be filled",
+      message: "Middle Initial is required to be filled",
+      trigger: "blur",
+    },
+    {
+      pattern: /^[a-zA-Z]$/,
+      message: "Middle Initial must be a single alphabet letter",
       trigger: "blur",
     },
   ],
@@ -302,6 +311,13 @@ watch(
     }
   }
 );
+
+const validateMiddleInitial = () => {
+  if (!/^[a-zA-Z]?$/.test(studentStore.editingStudent.middleName)) {
+    studentStore.editingStudent.middleName =
+      studentStore.editingStudent.middleName.slice(0, -1);
+  }
+};
 
 // DELETE STUDENTS INFORMATION
 
