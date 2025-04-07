@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
-import Register from "../views/Register.vue";
+import PageNotFound from "../views/PageNotFound.vue";
+
 import StudentRecords from "../views/StudentRecords.vue";
 
 import { useAuthStore } from "../stores/authStore";
@@ -21,15 +22,15 @@ const router = createRouter({
       component: Login,
     },
     {
-      path: "/register",
-      name: "register",
-      component: Register,
-    },
-    {
       path: "/student-records",
       name: "student-records",
       component: StudentRecords,
       meta: { requiresAuth: true },
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "NotFound",
+      component: PageNotFound,
     },
   ],
 });
