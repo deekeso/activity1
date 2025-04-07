@@ -44,6 +44,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (!valid) {
       console.log("error submit!");
+      return;
     }
 
     login(ruleForm);
