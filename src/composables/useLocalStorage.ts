@@ -14,6 +14,7 @@ export function useLocalStorage<T>(key: string, defaultValue: T[] = []) {
 
   function save() {
     localStorage.setItem(key, JSON.stringify(data));
+    location.reload();
   }
 
   load();

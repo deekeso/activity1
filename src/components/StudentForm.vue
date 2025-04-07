@@ -98,6 +98,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         loading.value = false;
         dialog.value = false;
         addStudent(studentForm);
+        formEl.resetFields();
       }, 400);
     } else {
       console.log("error submit!", fields);

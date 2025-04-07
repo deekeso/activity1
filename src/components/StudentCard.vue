@@ -40,8 +40,6 @@ const editStudent = (newStudent: Student) => {
 
 const formLabelWidth = "120px";
 
-let timer;
-
 const loading = ref(false);
 
 const ruleFormRef = ref<FormInstance>();
@@ -128,7 +126,7 @@ const handleClose = (done: any) => {
   ElMessageBox.confirm("Do you want to submit?")
     .then(() => {
       loading.value = true;
-      timer = setTimeout(() => {
+      setTimeout(() => {
         submitForm(ruleFormRef.value);
         done();
         setTimeout(() => {
@@ -286,7 +284,7 @@ const cancelForm = (formEl: FormInstance | undefined) => {
             :loading="loading"
             @click="submitForm(ruleFormRef)"
           >
-            {{ loading ? "Submitting ..." : "Submit" }}
+            {{ loading ? "Updating ..." : "Update" }}
           </el-button>
         </div>
       </div>
