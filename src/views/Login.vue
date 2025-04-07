@@ -5,6 +5,9 @@ import LoginForm from "../components/LoginForm.vue";
 <template>
   <div class="parent-container">
     <LoginForm />
+    <div class="forgot-pass-container">
+      <router-link to="/forgot-pass">Forgot Password?</router-link>
+    </div>
   </div>
 </template>
 
@@ -16,5 +19,10 @@ import LoginForm from "../components/LoginForm.vue";
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+a {
+  color: white;
+  font-size: 0.8rem;
 }
 </style>
