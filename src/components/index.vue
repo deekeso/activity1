@@ -56,7 +56,11 @@
         :rules="rules"
       >
         <el-form-item label="First Name" prop="firstName">
-          <el-input v-model="studentStore.editingStudent.firstName"></el-input>
+          <el-input
+            v-model="studentStore.editingStudent.firstName"
+            @input="removeWhitespace('firstName')"
+            @blur="cleanInputOnBlur('firstName')"
+          ></el-input>
         </el-form-item>
         <el-form-item label="Middle Initial" prop="middleName">
           <el-input
@@ -66,7 +70,11 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="Last Name" prop="lastName">
-          <el-input v-model="studentStore.editingStudent.lastName"></el-input>
+          <el-input
+            v-model="studentStore.editingStudent.lastName"
+            @input="removeWhitespace('lastName')"
+            @blur="cleanInputOnBlur('lastName')"
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="Birth Date" prop="birthDate">
@@ -86,7 +94,11 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="Address" prop="address">
-          <el-input v-model="studentStore.editingStudent.address"></el-input>
+          <el-input
+            v-model="studentStore.editingStudent.address"
+            @input="removeWhitespace('address')"
+            @blur="cleanInputOnBlur('address')"
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="Course" prop="course">
@@ -121,7 +133,7 @@
 <script setup lang="ts">
 import { useFormStore } from "@/stores/useFormStore";
 import { onMounted, ref, watch } from "vue";
-import { type FormInstance } from "element-plus";
+import { type FormInstance, ElNotification } from "element-plus";
 import { Delete, Edit } from "@element-plus/icons-vue";
 import { courseOptions } from "@/constants/courses";
 
@@ -304,10 +316,14 @@ watch(
       }
 
       if (age < 18) {
-        studentStore.editingStudent.age = 0; // Reset age to 0 if under 18
-        alert("Student must be 18 years or older.");
+        studentStore.editingStudent.birthDate = "";
+        ElNotification({
+          title: "ERROR",
+          message: "Age must be 18 years or older.",
+          type: "error",
+        });
       } else {
-        studentStore.editingStudent.age = age; // Update the age in editingStudent
+        studentStore.editingStudent.age = age;
       }
     } else {
       studentStore.editingStudent.age = 0;
@@ -316,10 +332,23 @@ watch(
 );
 
 const validateMiddleInitial = () => {
-  if (!/^[a-zA-Z]?$/.test(studentStore.editingStudent.middleName)) {
+  if (!/^[A-Z]?$/.test(studentStore.editingStudent.middleName)) {
     studentStore.editingStudent.middleName =
       studentStore.editingStudent.middleName.slice(0, -1);
   }
+};
+
+// REMOVE EXCESS WHITESPACE FUNCTION FOR THE INPUT FIELDS
+const removeWhitespace = (field: keyof EditingStudent) => {
+  studentStore.editingStudent[field] = (
+    studentStore.editingStudent[field] as string
+  ).replace(/\s{2,}/g, " ");
+};
+
+const cleanInputOnBlur = (field: keyof EditingStudent) => {
+  studentStore.editingStudent[field] = (
+    studentStore.editingStudent[field] as string
+  ).trim();
 };
 
 // DELETE STUDENTS INFORMATION
@@ -329,7 +358,7 @@ const deleteStudent = (student: Student) => {
 
   if (confirmation) {
     studentStore.students = studentStore.students.filter(
-      (item: Student) => item !== student
+      (item: Student) => itescriptstudent
     );
 
     localStorage.setItem("students", JSON.stringify(studentStore.students));

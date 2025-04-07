@@ -10,7 +10,12 @@
 
     <h3>Add New Student</h3>
     <el-form-item label="First Name" prop="firstName">
-      <el-input v-model="formStore.firstName" autocomplete="off" />
+      <el-input
+        v-model="formStore.firstName"
+        autocomplete="off"
+        @input="removeWhitespace('firstName')"
+        @blur="cleanInputOnBlur('firstName')"
+      />
     </el-form-item>
 
     <el-form-item label="Middle Initial" prop="middleName">
@@ -23,7 +28,12 @@
     </el-form-item>
 
     <el-form-item label="Last Name" prop="lastName">
-      <el-input v-model="formStore.lastName" autocomplete="off" />
+      <el-input
+        v-model="formStore.lastName"
+        autocomplete="off"
+        @input="removeWhitespace('lastName')"
+        @blur="cleanInputOnBlur('lastName')"
+      />
     </el-form-item>
 
     <el-form-item label="Birth Date" prop="birthDate">
@@ -41,7 +51,11 @@
     </el-form-item>
 
     <el-form-item label="Address" prop="address">
-      <el-input v-model="formStore.address" />
+      <el-input
+        v-model="formStore.address"
+        @input="removeWhitespace('address')"
+        @blur="cleanInputOnBlur('address')"
+      />
     </el-form-item>
 
     <el-form-item label="Course" prop="course">
@@ -72,7 +86,16 @@ import { courseOptions } from "@/constants/courses";
 
 const router = useRouter();
 const ruleFormRef = ref<FormInstance>();
-const formStore = useFormStore();
+const formStore = useFormStore() as {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  birthDate: string;
+  age: number;
+  address: string;
+  course: string;
+  [key: string]: any;
+};
 
 onMounted(() => {
   formStore.loadStoredData();
@@ -184,26 +207,37 @@ watch(
       }
 
       if (age < 18) {
-        formStore.age = 0; // Reset age to 0 if under 18
-        alert("Student must be 18 years or older.");
+        formStore.birthDate = "";
+        ElNotification({
+          title: "ERROR",
+          message: "Age must be 18 years or older.",
+          type: "error",
+        });
       } else {
-        formStore.age = age; // Update the age in editingStudent
+        formStore.age = age;
       }
     } else {
       formStore.age = 0;
     }
   }
 );
-
 // VALIDATE MIDDLE INITIAL INPUT
 const validateMiddleInitial = () => {
-  if (!/^[a-zA-Z]?$/.test(formStore.middleName)) {
+  if (!/^[A-Z]?$/.test(formStore.middleName)) {
     formStore.middleName = formStore.middleName.slice(0, -1);
   }
 };
 
-// REGISTER/ADD NEW STUDENT INFORMATION
+// REMOVE EXCESS WHITESPACE FUNCTION FOR THE INPUT FIELDS
+const removeWhitespace = (field: keyof typeof formStore) => {
+  formStore[field] = formStore[field].replace(/\s{2,}/g, " ");
+};
 
+const cleanInputOnBlur = (field: keyof typeof formStore) => {
+  formStore[field] = formStore[field].trim();
+};
+
+// REGISTER/ADD NEW STUDENT INFORMATION
 const registerUser = async () => {
   if (!ruleFormRef.value) return;
 
