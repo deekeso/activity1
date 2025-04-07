@@ -5,6 +5,7 @@ export function useLocalStorage<T>(key: string, defaultValue: T[] = []) {
 
   function load() {
     const stored = localStorage.getItem(key);
+
     if (stored) {
       const parsed = JSON.parse(stored) as UnwrapNestedRefs<T[]>;
       data.length = 0;
@@ -14,7 +15,6 @@ export function useLocalStorage<T>(key: string, defaultValue: T[] = []) {
 
   function save() {
     localStorage.setItem(key, JSON.stringify(data));
-    location.reload();
   }
 
   load();

@@ -16,9 +16,7 @@ import {
 
 import { useStudentsStore } from "../stores/studentsStore";
 
-const studentsStore = useStudentsStore;
-
-const { students, updateStudent, deleteStudent } = studentsStore();
+const studentStore = useStudentsStore();
 
 let studentForm = reactive({
   id: "",
@@ -35,7 +33,8 @@ const dialog = ref(false);
 
 const editStudent = (newStudent: Student) => {
   dialog.value = true;
-  studentForm = newStudent;
+  console.log(newStudent);
+  Object.assign(studentForm, JSON.parse(JSON.stringify(newStudent)));
 };
 
 const formLabelWidth = "120px";
@@ -111,7 +110,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       setTimeout(() => {
         loading.value = false;
         dialog.value = false;
-        updateStudent(studentForm);
+        studentStore.updateStudent({ ...studentForm });
       }, 400);
     } else {
       console.log("error submit!", fields);
@@ -148,7 +147,7 @@ const cancelForm = (formEl: FormInstance | undefined) => {
 <template>
   <el-row :gutter="20" class="card-container">
     <el-col
-      v-for="student in students"
+      v-for="student in studentStore.students"
       :key="student.id"
       :xs="24"
       :sm="12"
@@ -173,7 +172,7 @@ const cancelForm = (formEl: FormInstance | undefined) => {
                 size="small"
                 type="primary"
                 :icon="Delete"
-                @click="deleteStudent(student.id)"
+                @click="studentStore.deleteStudent(student.id)"
               />
             </div>
           </div>

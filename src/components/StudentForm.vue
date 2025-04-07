@@ -6,9 +6,7 @@ import type { FormInstance, FormRules } from "element-plus";
 
 import { useStudentsStore } from "../stores/studentsStore";
 
-const studentsStore = useStudentsStore;
-
-const { addStudent } = studentsStore();
+const studentStore = useStudentsStore();
 
 const formLabelWidth = "120px";
 
@@ -97,7 +95,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       setTimeout(() => {
         loading.value = false;
         dialog.value = false;
-        addStudent(studentForm);
+        studentStore.addStudent(studentForm);
         formEl.resetFields();
       }, 400);
     } else {
