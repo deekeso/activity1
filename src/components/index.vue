@@ -58,7 +58,7 @@
         <el-form-item label="First Name" prop="firstName">
           <el-input v-model="studentStore.editingStudent.firstName"></el-input>
         </el-form-item>
-        <el-form-item label="Middle Name" prop="middleName">
+        <el-form-item label="Middle Initial" prop="middleName">
           <el-input v-model="studentStore.editingStudent.middleName"></el-input>
         </el-form-item>
         <el-form-item label="Last Name" prop="lastName">

@@ -13,7 +13,7 @@
       <el-input v-model="formStore.firstName" autocomplete="off" />
     </el-form-item>
 
-    <el-form-item label="Middle Name" prop="middleName">
+    <el-form-item label="Middle Initial" prop="middleName">
       <el-input v-model="formStore.middleName" autocomplete="off" />
     </el-form-item>
 
