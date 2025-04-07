@@ -175,7 +175,20 @@ watch(
 
 // REGISTER/ADD NEW STUDENT INFORMATION
 
-const registerUser = () => {
+const registerUser = async () => {
+  if (!ruleFormRef.value) return;
+
+  try {
+    await ruleFormRef.value.validate();
+  } catch (error) {
+    ElNotification({
+      title: "ERROR",
+      message: "Please input all the fields.",
+      type: "error",
+    });
+    return;
+  }
+
   formStore.saveToLocalStorage();
   ElNotification({
     title: "Success",
