@@ -105,35 +105,30 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      loading.value = true;
+      ElMessageBox.confirm("Do you want to submit?")
+        .then(() => {
+          loading.value = true;
+          setTimeout(() => {
+            studentStore.updateStudent({ ...studentForm });
 
-      setTimeout(() => {
-        loading.value = false;
-        dialog.value = false;
-        studentStore.updateStudent({ ...studentForm });
-      }, 400);
+            setTimeout(() => {
+              loading.value = false;
+              dialog.value = false;
+            }, 400);
+          }, 1000);
+        })
+        .catch(() => {});
     } else {
       console.log("error submit!", fields);
     }
   });
 };
 
-const handleClose = (done: any) => {
+const handleClose = () => {
   if (loading.value) {
     return;
   }
-  ElMessageBox.confirm("Do you want to submit?")
-    .then(() => {
-      loading.value = true;
-      setTimeout(() => {
-        submitForm(ruleFormRef.value);
-        done();
-        setTimeout(() => {
-          loading.value = false;
-        }, 400);
-      }, 2000);
-    })
-    .catch(() => {});
+  dialog.value = false;
 };
 
 const cancelForm = (formEl: FormInstance | undefined) => {

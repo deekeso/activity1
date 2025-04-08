@@ -104,22 +104,11 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   });
 };
 
-const handleClose = (done: any) => {
+const handleClose = () => {
   if (loading.value) {
     return;
   }
-  ElMessageBox.confirm("Do you want to submit?")
-    .then(() => {
-      loading.value = true;
-      timer = setTimeout(() => {
-        submitForm(ruleFormRef.value);
-        done();
-        setTimeout(() => {
-          loading.value = false;
-        }, 400);
-      }, 2000);
-    })
-    .catch(() => {});
+  dialog.value = false;
 };
 
 const cancelForm = (formEl: FormInstance | undefined) => {
