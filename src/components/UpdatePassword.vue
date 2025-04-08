@@ -3,31 +3,31 @@
     <el-row>
       <el-col>
         <div class="Container">
-          <h1 style="color: white">Log In</h1>
+          <h1 style="color: white">Forgot Password?</h1>
         </div>
       </el-col>
       <el-col>
-        <el-form ref="LogInFormRef" :model="logInForm" :rules="LogInFormRules">
+        <el-form ref="ResetPasswordFormRef" :model="resetPasswordForm" :rules="LogInFormRules">
           <el-form-item prop="UserName">
             <el-input
-              v-model="logInForm.UserName"
-              placeholder="Username"
+              v-model="resetPasswordForm.NewPassword"
+              placeholder="New Password"
               :prefix-icon="User"
+              type="password"
             ></el-input>
           </el-form-item>
           <el-form-item prop="Password">
             <el-input
-              v-model="logInForm.Password"
-              placeholder="Password"
+              v-model="resetPasswordForm.ConfirmPassword"
+              placeholder="Confirm Password"
               :prefix-icon="Lock"
               type="password"
             ></el-input>
           </el-form-item>
-          <el-button type="primary" @click="handleLogIn" style="width: 100%">Log In</el-button>
-          <!-- <p style="color: antiquewhite">
-            Forgot Password? <a @click="UpdatePassword">Sign Up</a>
-          </p> -->
-          <a class="forgotPassword" @click="forgotPassword">Forgot Password?</a>
+          <el-button type="primary" @click="handleLogIn" style="width: 100%"
+            >Update Password</el-button
+          >
+          <a class="goToLogIn" @click="goToLogIn">Go Back to Log In</a>
         </el-form>
       </el-col>
     </el-row>
@@ -41,45 +41,42 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-interface LogInForm {
-  UserName: string
-  Password: string
+interface ResetPassword {
+  NewPassword: string
+  ConfirmPassword: string
 }
 
-const LogInFormRef = ref<FormInstance>()
-const logInForm = reactive<LogInForm>({
-  UserName: '',
-  Password: '',
+const ResetPasswordFormRef = ref<FormInstance>()
+const resetPasswordForm = reactive<ResetPassword>({
+  NewPassword: '',
+  ConfirmPassword: '',
 })
 
-const LogInFormRules = reactive<FormRules<LogInForm>>({
-  UserName: [{ required: true, message: 'Please input Username', trigger: 'blur' }],
-  Password: [{ required: true, message: 'Please input Password', trigger: 'blur' }],
+const LogInFormRules = reactive<FormRules<ResetPassword>>({
+  NewPassword: [{ required: true, message: 'Please input New Password', trigger: 'blur' }],
+  ConfirmPassword: [{ required: true, message: 'Please Confirm Password', trigger: 'blur' }],
 })
 
 const router = useRouter()
-const inputStore = InputStoreUser()
 
-const handleLogIn = () => {
-  LogInFormRef.value?.validate((valid) => {
-    if (valid) {
-      const success = inputStore.LogIn(logInForm.UserName, logInForm.Password)
-      if (success) {
-        router.push('/goToDisplayStudentInformation') // Navigate on success
-      } else {
-        alert('Invalid username or password') // Show error message
-      }
-    }
-  })
+const goToLogIn = () => {
+  router.push('/goToLogInForm')
 }
 
-// const goToSignUp = () => {
-//   router.push('/goToSignUpForm')
+// const inputStore = InputStoreUser()
+
+// const handleLogIn = () => {
+//   LogInFormRef.value?.validate((valid) => {
+//     if (valid) {
+//       const success = inputStore.LogIn(logInForm.UserName, logInForm.Password)
+//       if (success) {
+//         router.push('/goToDisplayStudentInformation')
+//       } else {
+//         alert('Invalid username or password')
+//       }
+//     }
+//   })
 // }
-
-const forgotPassword = () => {
-  router.push('/goToForgotPassword')
-}
 </script>
 
 <style>
@@ -135,6 +132,12 @@ body {
 }
 
 ::v-deep(.el-input__inner::placeholder) {
+  color: white;
+}
+
+.goToLogIn {
+  display: flex;
+  justify-content: end;
   color: white;
 }
 </style>

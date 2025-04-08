@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import DisplayStudentInformation from '@/components/DisplayStudentInformation.vue'
 import LogIn from '@/components/LogIn.vue'
 import SignUp from '@/components/SignUp.vue'
+import UpdatePassword from '@/components/UpdatePassword.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,6 +26,11 @@ const router = createRouter({
       path: '/goToSignUpForm',
       name: 'SignUpForm',
       component: SignUp,
+    },
+    {
+      path: '/goToForgotPassword',
+      name: 'ForgotPassword',
+      component: UpdatePassword,
     },
   ],
 })
