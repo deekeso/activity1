@@ -45,7 +45,7 @@ const goHome = () => {
 }
 
 .error-code {
-  font-size: 120px;
+  font-size: 60px;
   font-weight: bold;
   color: #409eff;
   margin: 0;
@@ -60,5 +60,11 @@ const goHome = () => {
 
 .return-button {
   margin-top: 20px;
+}
+
+@media screen and (min-width: 120px) {
+  .error-code {
+    font-size: 60px;
+  }
 }
 </style>
