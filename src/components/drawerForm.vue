@@ -3,6 +3,7 @@
     class="registration-form"
     ref="ruleFormRef"
     :model="formStore"
+    v-model="FormVisible"
     :rules="rules"
     label-width="auto"
   >
@@ -71,9 +72,11 @@
     </el-form-item>
 
     <!-- SUBMIT/ADD NEW STUDENT -->
-    <el-form-item>
+    <div class="drawer-footer">
       <el-button type="primary" @click="registerUser">Add Student</el-button>
-    </el-form-item>
+      <hr />
+      <el-button @click="cancel">Cancel</el-button>
+    </div>
   </el-form>
 </template>
 
@@ -81,11 +84,13 @@
 import { useFormStore } from "@/stores/useFormStore";
 import type { FormInstance } from "element-plus";
 import { useRouter } from "vue-router";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, defineEmits } from "vue";
 import { ElNotification } from "element-plus";
 import { courseOptions } from "@/constants/courses";
 
 const router = useRouter();
+const emit = defineEmits(["closeDrawer"]);
+const FormVisible = ref(false);
 const requiredAge = 18;
 const ruleFormRef = ref<FormInstance>();
 const formStore = useFormStore() as {
@@ -280,6 +285,10 @@ const registerUser = async () => {
   setTimeout(() => {
     window.location.reload();
   }, 2000);
+};
+
+const cancel = () => {
+  emit("closeDrawer");
 };
 </script>
 

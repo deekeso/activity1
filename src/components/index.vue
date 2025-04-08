@@ -394,6 +394,9 @@ const deleteStudent = (student: Student) => {
 </script>
 
 <style>
+.el-row {
+  margin: 0 !important;
+}
 .el-card {
   border-radius: 15px;
   width: 100%;

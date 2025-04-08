@@ -14,8 +14,9 @@
     v-model="drawer"
     :with-header="false"
     :style="{ 'min-width': '400px' }"
+    @closeDrawer="drawer = false"
   >
-    <drawerForm />
+    <drawerForm @closeDrawer="drawer = false" />
   </el-drawer>
 </template>
 
