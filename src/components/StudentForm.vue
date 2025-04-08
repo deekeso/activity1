@@ -49,6 +49,26 @@ watch(
   { immediate: true }
 );
 
+const validateAge = (
+  rule: any,
+  value: number | "",
+  callback: (error?: Error) => void
+) => {
+  if (value === "" || value === null) {
+    callback(new Error("Please enter your age"));
+    return;
+  }
+  if (!Number.isInteger(value)) {
+    callback(new Error("Age must be a whole number"));
+    return;
+  }
+  if (value < 18) {
+    callback(new Error("Age must be greater than 18"));
+    return;
+  }
+  callback();
+};
+
 const rules = reactive<FormRules>({
   firstName: [
     { required: true, message: "Please input first name", trigger: "blur" },
@@ -70,6 +90,7 @@ const rules = reactive<FormRules>({
       trigger: "change",
     },
   ],
+  age: [{ validator: validateAge, trigger: ["blur", "change"] }],
   address: [
     { required: true, message: "Please input address", trigger: "blur" },
     { min: 3, max: 50, message: "Length should be 3 to 5", trigger: "blur" },
@@ -113,6 +134,10 @@ const cancelForm = (formEl: FormInstance | undefined) => {
 
   if (!formEl) return;
   formEl.resetFields();
+};
+
+const disableDate = (date: Date) => {
+  return date.getTime() > Date.now();
 };
 </script>
 
@@ -166,6 +191,7 @@ const cancelForm = (formEl: FormInstance | undefined) => {
             placeholder="Pick a Date"
             format="YYYY/MM/DD"
             value-format="YYYY-MM-DD"
+            :disabled-date="disableDate"
           />
         </el-form-item>
         <el-form-item prop="age" label="Age" :label-width="formLabelWidth">
