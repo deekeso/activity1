@@ -57,6 +57,7 @@
                     type="date"
                     placeholder="Birth Date"
                     style="width: 100%"
+                    :disabled-date="disableFutureDates"
                     @change="calculateAge"
                   ></el-date-picker>
                 </el-form-item>
@@ -122,6 +123,10 @@ const AddStudentFormRef = ref<FormInstance>()
 const { width } = useWindowSize()
 const drawerSize = ref()
 
+const disableFutureDates = (date: Date) => {
+  return date.getTime() > Date.now()
+}
+
 watch(width, (newWidth) => {
   drawerSize.value = newWidth <= 768 ? '100%' : '30%'
 })
@@ -150,10 +155,15 @@ const calculateAge = () => {
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--
     }
-    form.Age = age.toString()
 
     if (age < 3) {
-      Rules.Age = [{ required: true, message: 'Age must be at least 3 years old', trigger: 'blur' }]
+      form.Age = ''
+      Rules.Age = [
+        { required: true, message: 'Age must be at least 3 years old', trigger: 'change' },
+      ]
+      AddStudentFormRef.value?.validateField('Age') // Trigger validation for the Age field
+    } else {
+      form.Age = age.toString()
     }
   }
 }
