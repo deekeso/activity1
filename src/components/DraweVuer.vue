@@ -56,6 +56,7 @@
                     type="date"
                     placeholder="Birth Date"
                     style="width: 100%"
+                    :disabled-date="disableFutureDates"
                     @change="calculateAge"
                   ></el-date-picker>
                 </el-form-item>
@@ -114,6 +115,9 @@ const Rules = reactive(RulesOfTheForm)
 
 const AddStudentFormRef = ref<FormInstance>()
 
+const disableFutureDates = (date: Date) => {
+  return date.getTime() > Date.now()
+}
 // Calculate age based on the birthday
 const calculateAge = () => {
   if (form.Birthday) {
@@ -125,11 +129,15 @@ const calculateAge = () => {
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--
     }
-    form.Age = age.toString()
 
-    // Validate that the age is at least 3 years
     if (age < 3) {
-      Rules.Age = [{ required: true, message: 'Age must be at least 3 years old', trigger: 'blur' }]
+      form.Age = ''
+      Rules.Age = [
+        { required: true, message: 'Age must be at least 3 years old', trigger: 'change' },
+      ]
+      AddStudentFormRef.value?.validateField('Age') // Trigger validation for the Age field
+    } else {
+      form.Age = age.toString()
     }
   }
 }
