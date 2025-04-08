@@ -98,20 +98,38 @@ export const useAuthStore = defineStore("auth", () => {
       isLoading.value = true;
       error.value = null;
 
-      const storedUsers: StoredUser[] = [
-        {
-          username: "testusername",
-          password: "Test123456",
-        },
-      ];
-      const foundUser = storedUsers.find(
-        (u: StoredUser) =>
-          u.username === credentials.username &&
-          u.password === credentials.password
-      );
+      const storedUsers: StoredUser = {
+        username: "testusername",
+        password: "Test123456",
+      };
 
-      if (!foundUser) {
-        error.value = "User not found.";
+      if (
+        storedUsers.username !== credentials.username &&
+        storedUsers.password !== credentials.password
+      ) {
+        error.value = "Invalid credentials";
+        errorMsg({
+          title: "Error",
+          message: error.value,
+          type: "error",
+          duration: 1000,
+        });
+        return false;
+      }
+
+      if (storedUsers.username !== credentials.username) {
+        error.value = "Incorrect username";
+        errorMsg({
+          title: "Error",
+          message: error.value,
+          type: "error",
+          duration: 1000,
+        });
+        return false;
+      }
+
+      if (storedUsers.password !== credentials.password) {
+        error.value = "Incorrect password";
         errorMsg({
           title: "Error",
           message: error.value,
@@ -123,7 +141,7 @@ export const useAuthStore = defineStore("auth", () => {
 
       const generatedToken: string = uuidv4();
 
-      user.value = { username: foundUser.username };
+      user.value = { username: storedUsers.username };
       token.value = generatedToken;
       isAuthenticated.value = true;
 

@@ -80,6 +80,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
         type="password"
         autocomplete="off"
         placeholder="Password"
+        show-password
       />
     </el-form-item>
     <el-form-item>
