@@ -159,12 +159,6 @@ h3 {
   font-weight: bold;
   margin-bottom: 0.5rem;
   color: #303133;
-  display: inline-block; /* Ensures the text behaves like a block element */
-  width: 100%; /* Ensures the container doesn't stretch beyond its space */
-  white-space: nowrap; /* Prevents the text from wrapping to the next line */
-  overflow: hidden; /* Ensures excess text is hidden */
-  text-overflow: ellipsis; /* Adds the ellipsis at the end of the text */
-  max-width: 200px; /* You can adjust this width depending on your layout */
 }
 
 .address {
