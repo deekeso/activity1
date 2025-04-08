@@ -24,9 +24,9 @@
             ></el-input>
           </el-form-item>
           <el-button type="primary" @click="handleLogIn" style="width: 100%">Log In</el-button>
-          <p style="color: antiquewhite">
+          <!-- <p style="color: antiquewhite">
             Don't have an account? <a @click="goToSignUp">Sign Up</a>
-          </p>
+          </p> -->
         </el-form>
       </el-col>
     </el-row>
@@ -72,9 +72,9 @@ const handleLogIn = () => {
   })
 }
 
-const goToSignUp = () => {
-  router.push('/goToSignUpForm')
-}
+// const goToSignUp = () => {
+//   router.push('/goToSignUpForm')
+// }
 </script>
 
 <style>
@@ -84,6 +84,7 @@ body {
   background-image: url('src/assets/BackgroundImage.png');
   background-size: cover;
   background-color: #2148c0;
+  color: white;
 }
 
 .Container {
@@ -117,7 +118,12 @@ body {
 }
 
 .el-input__inner {
-  color: white;
+  /* color: white !important; */
   font-size: 14px !important;
+}
+
+::v-deep(.el-input__inner::placeholder) {
+  color: white;
+  font-size: 16px;
 }
 </style>
