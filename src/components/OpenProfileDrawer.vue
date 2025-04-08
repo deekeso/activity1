@@ -57,12 +57,13 @@
                     type="date"
                     placeholder="Birth Date"
                     style="width: 100%"
+                    @change="calculateAge"
                   ></el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item prop="Age">
-                  <el-input v-model="form.Age" placeholder="Age" type="number"></el-input>
+                  <el-input v-model="form.Age" placeholder="Age" type="number" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -138,6 +139,25 @@ const handleCloseProfileDrawer = () => {
   emits('ProfilecloseDrawer')
 }
 
+const calculateAge = () => {
+  if (form.Birthday) {
+    const birthDate = new Date(form.Birthday)
+    const today = new Date()
+    let age = today.getFullYear() - birthDate.getFullYear()
+    const monthDiff = today.getMonth() - birthDate.getMonth()
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--
+    }
+    form.Age = age.toString()
+
+    // Validate that the age is at least 3 years
+    if (age < 3) {
+      Rules.Age = [{ required: true, message: 'Age must be at least 3 years old', trigger: 'blur' }]
+    }
+  }
+}
+
 const handleSubmit = () => {
   AddStudentFormRef.value?.validate((valid) => {
     if (valid) {
@@ -149,9 +169,7 @@ const handleSubmit = () => {
       inputStore.updateStudentInfo(form)
       console.log('Updated Users:', inputStore.getAllUser()) // Log updated users
       handleCloseProfileDrawer()
-      nextTick(() => {
-        console.log('Drawer closed successfully')
-      })
+      nextTick()
     } else {
       console.log('Validation failed')
     }
