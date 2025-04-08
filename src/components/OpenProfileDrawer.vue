@@ -139,6 +139,7 @@ const handleCloseProfileDrawer = () => {
   emits('ProfilecloseDrawer')
 }
 
+//validate age
 const calculateAge = () => {
   if (form.Birthday) {
     const birthDate = new Date(form.Birthday)
@@ -151,7 +152,6 @@ const calculateAge = () => {
     }
     form.Age = age.toString()
 
-    // Validate that the age is at least 3 years
     if (age < 3) {
       Rules.Age = [{ required: true, message: 'Age must be at least 3 years old', trigger: 'blur' }]
     }
