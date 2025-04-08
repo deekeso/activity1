@@ -2,10 +2,10 @@
   <h1 style="margin-top: 20px; margin-bottom: 30px">Student Information</h1>
   <div class="buttonContainer">
     <el-button type="primary" @click="openDrawer">Add Student</el-button>
-    <el-button type="primary" @click="openProfileDialog">Check my Profile</el-button>
+    <el-button type="primary" @click="openProfileDialog">Check My Profile</el-button>
   </div>
   <div class="student-grid">
-    <el-card v-for="student in filteredStudentList" :key="student.UserName" class="student-card">
+    <el-card v-for="student in filteredStudentList" :key="student.Id" class="student-card">
       <div class="student-info">
         <div class="avatar-section">
           <el-avatar :size="64" :icon="UserFilled" />
@@ -51,15 +51,13 @@
             type="danger"
             text
             :icon="Delete"
-            @click="deleteStudent(student.UserName)"
+            @click="deleteStudent(student.Id)"
             style="width: 100%"
           />
         </el-col>
       </el-row>
     </el-card>
   </div>
-  <!-- </el-col> -->
-  <!-- </el-row> -->
 
   <DrawerVuer :isOpen="isDrawerOpen" @closeDrawer="handleCloseDrawer" />
   <OpenProfileDrawer
@@ -83,55 +81,49 @@ import { Delete, Edit, UserFilled } from '@element-plus/icons-vue'
 
 const inputStore = InputStoreUser()
 
-const studentList = computed(() => inputStore.getAllUser())
+// Compute student list and filter out the current user
+const studentList = computed(() => inputStore.users)
+const filteredStudentList = computed(() =>
+  studentList.value.filter((student) => student.Id !== inputStore.currentUser),
+)
 
-const filteredStudentList = computed(() => {
-  return studentList.value.filter((student) => student.UserName !== inputStore.currentUser)
-})
-
+// Modal states
 const isDrawerOpen = ref(false)
 const isProfileDrawerOpen = ref(false)
 const isDialogOpen = ref(false)
 const selectedStudent = ref(null)
 
+// Methods for modal and user actions
 const openDrawer = () => {
-  isDrawerOpen.value = !isDrawerOpen.value
-  console.log('Open Drawer:', isDrawerOpen.value)
+  isDrawerOpen.value = true
 }
 
 const openProfileDrawer = (student) => {
   selectedStudent.value = student
   isProfileDrawerOpen.value = true
-  console.log('Open Profile Drawer:', isProfileDrawerOpen.value)
 }
 
 const openProfileDialog = () => {
-  isDialogOpen.value = !isDialogOpen.value
-  console.log('Close Drawer:', isDialogOpen.value)
+  isDialogOpen.value = true
 }
 
 const handleCloseDrawer = () => {
-  isDrawerOpen.value = !isDrawerOpen.value
-  console.log('Close Drawer:', isDrawerOpen.value)
+  isDrawerOpen.value = false
 }
 
 const handleProfileCloseDrawer = () => {
-  isProfileDrawerOpen.value = !isProfileDrawerOpen.value
-  console.log('Close Drawer:', isProfileDrawerOpen.value)
+  isProfileDrawerOpen.value = false
 }
 
 const handleDialogCloser = () => {
-  isDialogOpen.value = !isDialogOpen.value
-  console.log('Close Drawer:', isDialogOpen.value)
+  isDialogOpen.value = false
 }
 
-const deleteStudent = (userName: string) => {
-  const index = inputStore.users.findIndex((user) => user.UserName === userName)
-  if (index !== -1) {
-    inputStore.deleteStudent(index)
-  }
+const deleteStudent = (studentId: string) => {
+  inputStore.deleteStudent(studentId)
 }
 
+// Utility function for formatting dates
 import { formatDate } from './composables/global'
 </script>
 

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 
 export interface SignUpFormUser {
+  Id: string // Add unique ID for each user
   UserName: string
   FirstName: string
   MiddleName: string
@@ -21,7 +22,13 @@ export const InputStoreUser = defineStore('user', {
   }),
 
   actions: {
-    SignUp(user: SignUpFormUser) {
+    // SignUp(user: SignUpFormUser) {
+    //   this.users.push(user)
+    // },
+
+    AddUser(user: SignUpFormUser) {
+      user.Id = `${Date.now()}` // Generate a unique ID (timestamp-based)
+      console.log('Generated User Id:', user.Id) // Log the assigned ID
       this.users.push(user)
     },
 
@@ -42,14 +49,22 @@ export const InputStoreUser = defineStore('user', {
     },
 
     updateStudentInfo(studentData: SignUpFormUser) {
-      const index = this.users.findIndex((user) => user.UserName == studentData.UserName)
+      const index = this.users.findIndex((user) => user.Id === studentData.Id)
+      console.log('Searching for Id:', studentData.Id)
+      console.log(
+        'Available Ids:',
+        this.users.map((user) => user.Id),
+      )
       if (index !== -1) {
-        this.users[index] = studentData
+        console.log(`Updating User at Index ${index}`)
+        this.users[index] = { ...this.users[index], ...studentData } // Merge new data
+      } else {
+        console.warn(`User with Id ${studentData.Id} not found`)
       }
     },
 
-    deleteStudent(index: number) {
-      this.users.splice(index, 1)
+    deleteStudent(id: string) {
+      this.users = this.users.filter((user) => user.Id !== id)
     },
 
     logout() {

@@ -2,6 +2,7 @@ import type { FormRules } from 'element-plus'
 import { reactive } from 'vue'
 
 export const Profileform = reactive({
+  Id: '',
   UserName: '',
   FirstName: '',
   MiddleName: '',

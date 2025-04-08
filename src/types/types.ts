@@ -1,4 +1,5 @@
 export interface StudentAddForm {
+  Id: string
   UserName: string
   FirstName: string
   MiddleName: string

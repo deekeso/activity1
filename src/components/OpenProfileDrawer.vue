@@ -137,9 +137,19 @@ const handleCloseProfileDrawer = () => {
 const handleSubmit = () => {
   AddStudentFormRef.value?.validate((valid) => {
     if (valid) {
+      console.log('Validated Form Data:', form)
+      if (!form.Id) {
+        console.error('Form Id is missing!')
+        return
+      }
       inputStore.updateStudentInfo(form)
+      console.log('Updated Users:', inputStore.getAllUser()) // Log updated users
       handleCloseProfileDrawer()
-      nextTick()
+      nextTick(() => {
+        console.log('Drawer closed successfully')
+      })
+    } else {
+      console.log('Validation failed')
     }
   })
 }
@@ -149,6 +159,7 @@ watch(
   () => props.selectedStudent,
   (newVal) => {
     if (newVal) {
+      form.Id = newVal.Id // Ensure Id is properly assigned
       form.UserName = newVal.UserName
       form.FirstName = newVal.FirstName
       form.MiddleName = newVal.MiddleName

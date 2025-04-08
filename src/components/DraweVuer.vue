@@ -160,11 +160,11 @@ const handleClose = () => {
 const handleSubmit = () => {
   AddStudentFormRef.value?.validate((valid) => {
     if (valid) {
-      inputStore.SignUp({ ...form })
+      inputStore.AddUser({ ...form, Id: `${Date.now()}` }) // Include an ID if required
       alert('Student added successfully!')
 
-      resetForm()
-      handleClose()
+      resetForm() // Clear the form inputs
+      handleClose() // Close the drawer
     }
   })
 }
