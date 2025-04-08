@@ -13,6 +13,7 @@
               v-model="logInForm.UserName"
               placeholder="Username"
               :prefix-icon="User"
+              autocomplete="off"
             ></el-input>
           </el-form-item>
           <el-form-item prop="Password">
@@ -82,7 +83,7 @@ const forgotPassword = () => {
 }
 </script>
 
-<style>
+<style scoped>
 body {
   height: 100%;
   width: 100%;
@@ -129,12 +130,7 @@ body {
   font-weight: 300;
 }
 
-.el-input__inner {
-  /* color: white !important; */
-  font-size: 14px !important;
-}
-
-::v-deep(.el-input__inner::placeholder) {
-  color: white;
+:deep(.el-input__inner::placeholder) {
+  color: white !important;
 }
 </style>
