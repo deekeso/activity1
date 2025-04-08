@@ -16,13 +16,13 @@
           </el-row>
 
           <el-form ref="AddStudentFormRef" :model="form" :rules="Rules">
-            <el-row>
+            <!-- <el-row>
               <el-col>
                 <el-form-item prop="UserName">
                   <el-input v-model="form.UserName" placeholder="Username"></el-input>
                 </el-form-item>
               </el-col>
-            </el-row>
+            </el-row> -->
 
             <el-row>
               <el-col>
@@ -160,9 +160,18 @@ const handleClose = () => {
 const handleSubmit = () => {
   AddStudentFormRef.value?.validate((valid) => {
     if (valid) {
-      inputStore.SignUp(form)
+      inputStore.SignUp({ ...form })
+      alert('Student added successfully!')
+
+      resetForm()
       handleClose()
     }
+  })
+}
+
+const resetForm = () => {
+  Object.keys(form).forEach((key) => {
+    form[key] = ''
   })
 }
 </script>

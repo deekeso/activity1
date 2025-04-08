@@ -16,13 +16,13 @@
           </el-row>
 
           <el-form ref="AddStudentFormRef" :model="form" :rules="Rules">
-            <el-row>
+            <!-- <el-row>
               <el-col>
                 <el-form-item prop="UserName">
                   <el-input v-model="form.UserName" placeholder="Username" disabled></el-input>
                 </el-form-item>
               </el-col>
-            </el-row>
+            </el-row> -->
 
             <el-row>
               <el-col>
