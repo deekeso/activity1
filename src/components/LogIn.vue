@@ -64,9 +64,9 @@ const handleLogIn = () => {
     if (valid) {
       const success = inputStore.LogIn(logInForm.UserName, logInForm.Password)
       if (success) {
-        router.push('/goToDisplayStudentInformation')
+        router.push('/goToDisplayStudentInformation') // Navigate on success
       } else {
-        alert('Invalid username or password')
+        alert('Invalid username or password') // Show error message
       }
     }
   })
@@ -124,6 +124,5 @@ body {
 
 ::v-deep(.el-input__inner::placeholder) {
   color: white;
-  font-size: 16px;
 }
 </style>
