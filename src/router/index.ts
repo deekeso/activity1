@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import LoginView from "@/views/loginView.vue";
 import IndexView from "@/views/indexView.vue";
+import forgotPass from "@/views/forgotPass.vue";
 
 const routes = [
   {
@@ -28,6 +29,20 @@ const routes = [
         next();
       } else {
         next("/");
+      }
+    },
+  },
+  {
+    path: "/forgotPass",
+    component: forgotPass,
+    beforeEnter: (to, from, next) => {
+      const isAuthenticated =
+        localStorage.getItem("isAuthenticated") === "true";
+
+      if (isAuthenticated) {
+        next("/index");
+      } else {
+        next();
       }
     },
   },

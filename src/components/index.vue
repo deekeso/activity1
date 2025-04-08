@@ -30,7 +30,7 @@
               <span><h2>Student Information</h2></span>
 
               <p><b>First Name:</b> {{ item.firstName }}</p>
-              <p><b>Middle Name:</b> {{ item.middleName }}</p>
+              <p><b>Middle Initial:</b> {{ item.middleName }}</p>
               <p><b>Last Name:</b> {{ item.lastName }}</p>
               <p><b>Birth Date:</b> {{ item.birthDate }}</p>
               <p><b>Age:</b> {{ item.age }}</p>
@@ -154,11 +154,6 @@ const rules = {
   ],
   middleName: [
     {
-      required: true,
-      message: "Middle Initial is required to be filled",
-      trigger: "blur",
-    },
-    {
       pattern: /^[a-zA-Z]$/,
       message: "Middle Initial must be a single alphabet letter",
       trigger: "blur",
@@ -277,10 +272,23 @@ const editStudent = (student: Student) => {
 
 // SAVE STUDENT INFORMATION THAT WAS EDITED
 
-const saveEditedStudent = () => {
+const saveEditedStudent = async () => {
   const index: number = studentStore.students.findIndex(
     (item: Student) => item.id === studentStore.editingStudent.id
   );
+
+  if (!ruleFormRef.value) return;
+
+  try {
+    await ruleFormRef.value.validate();
+  } catch (error) {
+    ElNotification({
+      title: "ERROR",
+      message: "Please input all the required fields.",
+      type: "error",
+    });
+    return;
+  }
 
   if (studentStore.editingStudent.age < requiredAge) {
     ElNotification({
@@ -344,7 +352,10 @@ watch(
 );
 
 const validateMiddleInitial = () => {
-  if (!/^[A-Z]?$/.test(studentStore.editingStudent.middleName)) {
+  if (
+    studentStore.editingStudent.middleName &&
+    !/^[A-Z]?$/.test(studentStore.editingStudent.middleName)
+  ) {
     studentStore.editingStudent.middleName =
       studentStore.editingStudent.middleName.slice(0, -1);
   }

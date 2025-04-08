@@ -115,11 +115,6 @@ const rules = {
   ],
   middleName: [
     {
-      required: true,
-      message: "Middle Initial is required to be filled",
-      trigger: "blur",
-    },
-    {
       pattern: /^[a-zA-Z]$/,
       message: "Middle Initial must be a single letter",
       trigger: "blur",
@@ -226,7 +221,7 @@ watch(
 
 // VALIDATE MIDDLE INITIAL INPUT
 const validateMiddleInitial = () => {
-  if (!/^[A-Z]?$/.test(formStore.middleName)) {
+  if (formStore.middleName && !/^[A-Z]?$/.test(formStore.middleName)) {
     formStore.middleName = formStore.middleName.slice(0, -1);
   }
 };
@@ -249,7 +244,7 @@ const registerUser = async () => {
   } catch (error) {
     ElNotification({
       title: "ERROR",
-      message: "Please input all the fields.",
+      message: "Please input all the required fields.",
       type: "error",
     });
     return;

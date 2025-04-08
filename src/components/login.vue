@@ -26,9 +26,7 @@
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 
       <p class="forgot-password">
-        <router-link to="/forgot-password" class="forgot-password-link">
-          Forgot Password?
-        </router-link>
+        <router-link to="/forgotPass"> Forgot Password? </router-link>
       </p>
     </el-form>
   </body>
