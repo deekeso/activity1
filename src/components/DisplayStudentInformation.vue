@@ -12,8 +12,10 @@
         </div>
         <div class="student-details">
           <div class="name-section">
-            <h3>@{{ student.UserName }}</h3>
-            <p class="username">{{ student.FirstName }} {{ student.LastName }}</p>
+            <p class="username">
+              {{ student.FirstName }} {{ formattedMiddleName(student.MiddleName) }}
+              {{ student.LastName }}
+            </p>
           </div>
           <div class="info-grid">
             <div class="info-item">
@@ -92,6 +94,10 @@ const isDrawerOpen = ref(false)
 const isProfileDrawerOpen = ref(false)
 const isDialogOpen = ref(false)
 const selectedStudent = ref(null)
+
+const formattedMiddleName = (middleName: string) => {
+  return middleName ? `${middleName}.` : ''
+}
 
 // Methods for modal and user actions
 const openDrawer = () => {

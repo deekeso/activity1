@@ -35,7 +35,11 @@
             <el-row :gutter="10">
               <el-col :span="12">
                 <el-form-item prop="MiddleName">
-                  <el-input v-model="form.MiddleName" placeholder="Middlename"></el-input>
+                  <el-input
+                    v-model="form.MiddleName"
+                    placeholder="Middle Initial"
+                    maxlength="1"
+                  ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
