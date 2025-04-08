@@ -3,11 +3,33 @@ import LoginView from "@/views/loginView.vue";
 import IndexView from "@/views/indexView.vue";
 
 const routes = [
-  { path: "/", component: LoginView },
+  {
+    path: "/",
+    component: LoginView,
+    beforeEnter: (to, from, next) => {
+      const isAuthenticated =
+        localStorage.getItem("isAuthenticated") === "true";
+
+      if (isAuthenticated) {
+        next("/index");
+      } else {
+        next();
+      }
+    },
+  },
   {
     path: "/index",
     component: IndexView,
-    meta: { requiresAuth: true },
+    beforeEnter: (to, from, next) => {
+      const isAuthenticated =
+        localStorage.getItem("isAuthenticated") === "true";
+
+      if (isAuthenticated) {
+        next();
+      } else {
+        next("/");
+      }
+    },
   },
 ];
 

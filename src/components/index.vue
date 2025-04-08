@@ -142,6 +142,8 @@ import { courseOptions } from "@/constants/courses";
 const ruleFormRef = ref<FormInstance>();
 const drawerFormVisible = ref(false);
 
+const requiredAge = 18;
+
 const rules = {
   firstName: [
     {
@@ -279,6 +281,15 @@ const saveEditedStudent = () => {
   const index: number = studentStore.students.findIndex(
     (item: Student) => item.id === studentStore.editingStudent.id
   );
+
+  if (studentStore.editingStudent.age < requiredAge) {
+    ElNotification({
+      title: "ERROR",
+      message: `Age must be ${requiredAge} years or older.`,
+      type: "error",
+    });
+    return;
+  }
 
   if (index !== -1) {
     studentStore.students[index] = { ...studentStore.editingStudent };
