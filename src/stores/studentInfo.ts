@@ -17,6 +17,7 @@ export const InputStoreUser = defineStore('user', {
   state: () => ({
     users: [] as SignUpFormUser[],
     currentUser: null as string | null,
+    isLoggedIn: false,
   }),
 
   actions: {
@@ -24,15 +25,16 @@ export const InputStoreUser = defineStore('user', {
       this.users.push(user)
     },
 
-    LogIn(UserName: string, Password: string): boolean {
-      const FindUser = this.users.find(
-        (user) => user.UserName == UserName && user.Password == Password,
-      )
-      if (FindUser) {
-        this.currentUser = UserName
-        return true
+    LogIn(Username: string, Password: string): boolean {
+      const constantUsername = 'admin'
+      const constantPassword = 'admin123'
+
+      if (Username === constantUsername && Password === constantPassword) {
+        this.isLoggedIn = true
+        return true // Successful login
+      } else {
+        return false // Failed login
       }
-      return false
     },
 
     getAllUser() {
