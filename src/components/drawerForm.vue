@@ -86,6 +86,7 @@ import { ElNotification } from "element-plus";
 import { courseOptions } from "@/constants/courses";
 
 const router = useRouter();
+const requiredAge = 18;
 const ruleFormRef = ref<FormInstance>();
 const formStore = useFormStore() as {
   firstName: string;
@@ -249,6 +250,15 @@ const registerUser = async () => {
     ElNotification({
       title: "ERROR",
       message: "Please input all the fields.",
+      type: "error",
+    });
+    return;
+  }
+
+  if (formStore.age < requiredAge) {
+    ElNotification({
+      title: "ERROR",
+      message: `Age must be ${requiredAge} years or older.`,
       type: "error",
     });
     return;
