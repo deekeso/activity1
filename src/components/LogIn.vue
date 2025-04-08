@@ -119,7 +119,7 @@ body {
 
 .el-button {
   background-color: white;
-  color: black;
+  /* color: black; */
   /* margin-top: 2vh; */
   width: 300px;
 }
@@ -132,5 +132,9 @@ body {
 
 :deep(.el-input__inner::placeholder) {
   color: white !important;
+}
+
+::v-deep(.el-input__inner) {
+  color: white;
 }
 </style>
