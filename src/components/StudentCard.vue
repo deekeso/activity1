@@ -163,7 +163,7 @@ const deleteStudent = (studentId: string) => {
       :md="8"
       :lg="6"
     >
-      <el-card class="card-item" style="max-width: 480px">
+      <el-card class="card-item" style="max-width: 700px">
         <template #header>
           <div class="card-header">
             <span
@@ -301,6 +301,9 @@ const deleteStudent = (studentId: string) => {
 </template>
 
 <style scoped>
+.card-container {
+  margin-inline: 0 !important;
+}
 .card-item {
   margin-bottom: 20px;
   border-radius: 8px;

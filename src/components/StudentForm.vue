@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref, computed, watch } from "vue";
 
-import { ElMessageBox } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
 
 import { useStudentsStore } from "../stores/studentsStore";
@@ -9,8 +8,6 @@ import { useStudentsStore } from "../stores/studentsStore";
 const studentStore = useStudentsStore();
 
 const formLabelWidth = "120px";
-
-let timer;
 
 const dialog = ref(false);
 const loading = ref(false);
@@ -120,10 +117,7 @@ const cancelForm = (formEl: FormInstance | undefined) => {
 </script>
 
 <template>
-  <el-button
-    :style="{ 'margin-left': '10px' }"
-    type="primary"
-    @click="dialog = true"
+  <el-button :style="{ margin: '10px' }" type="primary" @click="dialog = true"
     >Add Student</el-button
   >
   <el-drawer
