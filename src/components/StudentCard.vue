@@ -21,7 +21,7 @@ const studentStore = useStudentsStore();
 let studentForm = reactive({
   id: "",
   firstName: "",
-  middleName: "",
+  middleInitial: "",
   lastName: "",
   birthDate: "",
   age: 0,
@@ -72,9 +72,9 @@ const rules = reactive<FormRules>({
     { required: true, message: "Please input first name", trigger: "blur" },
     { min: 3, max: 50, message: "Length should be 3 to 50", trigger: "blur" },
   ],
-  middleName: [
-    { required: true, message: "Please input last name", trigger: "blur" },
-    { min: 3, max: 50, message: "Length should be 3 to 50", trigger: "blur" },
+  middleInitial: [
+    { required: true, message: "Please input middle initial", trigger: "blur" },
+    { min: 1, max: 1, message: "only one character allowed", trigger: "blur" },
   ],
   lastName: [
     { required: true, message: "Please input first name", trigger: "blur" },
@@ -167,7 +167,8 @@ const deleteStudent = (studentId: string) => {
         <template #header>
           <div class="card-header">
             <span
-              >{{ student.firstName }} {{ student.middleName }}
+              >{{ student.firstName }}
+              {{ student.middleInitial.toUpperCase() }}.
               {{ student.lastName }}
             </span>
             <div>
@@ -228,7 +229,11 @@ const deleteStudent = (studentId: string) => {
             label="Middle Name"
             :label-width="formLabelWidth"
           >
-            <el-input v-model="studentForm.middleName" autocomplete="off" />
+            <el-input
+              v-model="studentForm.middleInitial"
+              autocomplete="off"
+              maxlength="1"
+            />
           </el-form-item>
           <el-form-item
             prop="lastName"
