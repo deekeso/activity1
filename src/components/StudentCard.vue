@@ -190,7 +190,11 @@ const deleteStudent = (studentId: string) => {
           <div class="card-header">
             <span
               >{{ student.firstName }}
-              {{ student.middleInitial.toUpperCase() }}.
+              {{
+                student.middleInitial
+                  ? `${student.middleInitial.toUpperCase()}.`
+                  : ""
+              }}
               {{ student.lastName }}
             </span>
             <div>

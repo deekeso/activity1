@@ -24,7 +24,7 @@ export interface RegisterCredentials extends LoginCredentials {
 export interface Student {
   id: string;
   firstName: string;
-  middleInitial: string;
+  middleInitial?: string;
   lastName: string;
   birthDate: string;
   age: number;

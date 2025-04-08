@@ -75,7 +75,6 @@ const rules = reactive<FormRules>({
     { min: 3, max: 50, message: "Length should be 3 to 50", trigger: "blur" },
   ],
   middleInitial: [
-    { required: true, message: "Please input middle initial", trigger: "blur" },
     { min: 1, max: 1, message: "only one character allowed", trigger: "blur" },
   ],
   lastName: [
