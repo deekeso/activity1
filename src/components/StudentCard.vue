@@ -110,7 +110,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           loading.value = true;
           setTimeout(() => {
             studentStore.updateStudent({ ...studentForm });
-
             setTimeout(() => {
               loading.value = false;
               dialog.value = false;
@@ -136,6 +135,21 @@ const cancelForm = (formEl: FormInstance | undefined) => {
 
   if (!formEl) return;
   formEl.resetFields();
+};
+
+const deleteStudent = (studentId: string) => {
+  ElMessageBox.confirm("Confirm delete?")
+    .then(() => {
+      loading.value = true;
+      setTimeout(() => {
+        studentStore.deleteStudent(studentId);
+        setTimeout(() => {
+          loading.value = false;
+          dialog.value = false;
+        }, 400);
+      }, 1000);
+    })
+    .catch(() => {});
 };
 </script>
 
@@ -167,7 +181,7 @@ const cancelForm = (formEl: FormInstance | undefined) => {
                 size="small"
                 type="primary"
                 :icon="Delete"
-                @click="studentStore.deleteStudent(student.id)"
+                @click="deleteStudent(student.id)"
               />
             </div>
           </div>
