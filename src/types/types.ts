@@ -1,18 +1,12 @@
-import type { courseNameList } from '@/constants'
-
-export type CourseName = {
-  name: Name
-}
-
 export type Student = {
   studentId: number
   firstName: string
-  middleName: string
+  middleName?: string
   lastName: string
-  birthDate: string
+  birthDate?: string
   age: number
   address: string
-  // course: CourseName
+  course: string
 }
 
 export type Account = {
@@ -27,10 +21,8 @@ export type Account = {
 export type RuleForm = {
   email: string
   firstName: string
-  middleName?: string
+  middleName: string
   lastName: string
   password: string
   username: string
 }
-
-type Name = (typeof courseNameList)[number]

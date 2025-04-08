@@ -1,71 +1,103 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
-import { useAccountStore } from '@/stores/accountStore'
-import { ElNotification, ElLoading } from 'element-plus'
-// import type { FormInstance, FormRules } from 'element-plus'
-// import type { RuleForm } from '@/types'
+import { useStudentStore } from '@/stores/PiniaStore'
+import { ElNotification } from 'element-plus'
+
+const router = useRouter()
 
 const username = ref('')
 const password = ref('')
+const isLoading = ref(false)
 
-// Get the router object
-const router = useRouter()
-const accountStore = useAccountStore()
+const accountStore = useStudentStore()
 
-// Function to navigate to the register page
+//Watch the isAuthenticated state
+watch(
+  () => accountStore.isAuhthenticated,
+  (isAuthenticated) => {
+    if (isAuthenticated) {
+      // Stop loading
+      isLoading.value = false
+
+      // Navigate to the student list page
+      router.push({ name: 'studentlist' })
+
+      // Show success notification
+      successNotification()
+    } else if (!isAuthenticated && isLoading.value) {
+      // Stop loading if login fails
+      isLoading.value = false
+      errorNotification()
+    }
+  },
+)
+
+//Router: Register Page
 const goToRegister = () => {
   router.push({ name: 'register' })
 }
 
-const login = () => {
-  console.log('Attempting login with:', username.value, password.value)
-  const loginSuccess = accountStore.login(username.value, password.value)
-  if (loginSuccess) {
-    setTimeout(() => {
-      router.push({ name: 'studentlist' })
-    }, 3000)
-    openFullScreen2()
-    setTimeout(() => {
-      successNotification()
-    }, 3000)
-  } else {
-    console.log('Login failed')
-    openFullScreen2()
-    openFullScreen2()
-    setTimeout(() => {
-      errorNotification()
-    }, 3000)
-  }
+const goToForgotPass = () => {
+  router.push({ name: 'forgotpassword' })
 }
 
+//Function for login button
+const login = () => {
+  if (!username.value || !password.value) {
+    errorNotification('Please fill in both username and password.')
+    return
+  }
+
+  // Start loading
+  isLoading.value = true
+
+  // Simulate a delay for the login process
+  setTimeout(() => {
+    const loginSuccess = accountStore.login(username.value, password.value)
+    if (loginSuccess) {
+      successNotification()
+      router.push({ name: 'studentlist' })
+    } else {
+      errorNotification('Invalid username or password.')
+    }
+    isLoading.value = false
+  }, 1000)
+}
+
+//Function for Success Notification
 const successNotification = () => {
   ElNotification({
     title: 'Login Success',
     message: 'You have successfully logged in',
     type: 'success',
+    duration: 2000,
   })
 }
 
-const errorNotification = () => {
+//Function for Error Notification
+const errorNotification = (
+  message = 'Login failed. Please check your credentials and try again.',
+) => {
   ElNotification({
     title: 'Error',
-    message: 'Login failed. Please check your credentials and try again.',
+    message,
     type: 'error',
   })
 }
 
-const openFullScreen2 = () => {
-  const loading = ElLoading.service({
-    lock: true,
-    text: 'Logging in...',
-    background: 'rgba(0, 0, 0, 0.7)',
-  })
-  setTimeout(() => {
-    loading.close()
-  }, 3000)
-}
+//Function for Loading Screen
+// const loadingScreen = () => {
+//   const loading = ElLoading.service({
+//     lock: true,
+//     text: 'Loggin in...',
+//     background: 'rgba(0, 0, 0, 0.7)',
+//   })
+//   setTimeout(() => {
+//     loading.close()
+//   }, 3000)
+// }
 </script>
 
 <template>
@@ -95,15 +127,16 @@ const openFullScreen2 = () => {
         </el-form-item>
         <el-form-item class="btnLogin-container">
           <el-button
-            type="primary"
             @click="login"
+            type="primary"
+            :loading="isLoading"
             size="large"
             style="font-size: medium; font-weight: bold"
             >Login</el-button
           >
         </el-form-item>
         <div class="link-container">
-          <el-link type="primary" href="#">Forgot password?</el-link>
+          <el-link @click="goToForgotPass" type="primary" href="#">Forgot password?</el-link>
           <el-link @click="goToRegister"> Don't have an account yet? </el-link>
         </div>
       </el-form>

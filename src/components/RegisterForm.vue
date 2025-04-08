@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, reactive } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
 import type { FormInstance, FormRules } from 'element-plus'
-import type { RuleForm, Account } from '@/types'
-import { useAccountStore } from '@/stores/accountStore'
+import type { RuleForm, Account } from '@/types/types'
 import { ElNotification } from 'element-plus'
 import { ElLoading } from 'element-plus'
+import { useStudentStore } from '@/stores/PiniaStore'
 
 const router = useRouter()
-
-const accountStore = useAccountStore()
+const accountStore = useStudentStore()
 
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = ref<RuleForm>({
@@ -22,6 +21,7 @@ const ruleForm = ref<RuleForm>({
   username: '',
 })
 
+//Validator Messages
 const rules = reactive<FormRules<RuleForm>>({
   email: [
     { required: true, message: 'Please input email', trigger: 'blur' },
@@ -34,11 +34,13 @@ const rules = reactive<FormRules<RuleForm>>({
   username: [{ required: true, message: 'Please input username', trigger: 'blur' }],
 })
 
+//Function for Submitting Form
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
-  await formEl.validate((valid, fields) => {
+  await formEl.validate((valid) => {
     if (valid) {
-      console.log('submit')
+      LoadingScreen()
+      //Get the value of all inputs
       const newAccount: Account = {
         email: ruleForm.value.email,
         firstName: ruleForm.value.firstName,
@@ -47,24 +49,29 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         password: ruleForm.value.password,
         username: ruleForm.value.username,
       }
+      //Store the inputs data in the pinia
       accountStore.registerAccount(newAccount)
+      //Clear the input fields
       ruleForm.value.email = ''
       ruleForm.value.firstName = ''
       ruleForm.value.middleName = ''
       ruleForm.value.lastName = ''
-      ruleForm.value.password = ''
       ruleForm.value.username = ''
-      openFullScreen2()
+      ruleForm.value.password = ''
       setTimeout(() => {
+        //Render the success notification
         successNotication()
+        //Route: Home or Login Page
+        router.push({ name: 'home' })
       }, 3000)
     } else {
-      console.log('error submit', fields)
+      //Else render the Error Notification
       errorNotification()
     }
   })
 }
 
+//Success Notification Function
 const successNotication = () => {
   ElNotification({
     title: 'Register Success',
@@ -73,99 +80,85 @@ const successNotication = () => {
   })
 }
 
+//Error Notification Function
 const errorNotification = () => {
   ElNotification({
     title: 'Error',
-    // message: 'This is an error message',
     type: 'error',
   })
 }
 
-const openFullScreen2 = () => {
+//Loading Screen
+const LoadingScreen = () => {
   const loading = ElLoading.service({
     lock: true,
     text: 'Registering...',
-    background: 'rgba(0, 0, 0, 0.7)',
+    background: 'rgba(0, 0 , 0, 0.7)',
   })
   setTimeout(() => {
     loading.close()
   }, 3000)
 }
 
+//Router: Login Page
 const goToLogin = () => {
   router.push({ name: 'home' })
 }
-
-onMounted(() => {
-  console.log('Register Page Mounted')
-})
 </script>
 
 <template>
   <main>
-    <el-form
-      @submit.prevent
-      ref="ruleFormRef"
-      style="max-width: 600px"
-      :model="ruleForm"
-      :rules="rules"
-    >
+    <el-form @submit.prevent ref="ruleFormRef" :model="ruleForm" :rules="rules">
       <el-form-item prop="firstName">
         <el-input type="hidden" />
-        <el-input v-model="ruleForm.firstName" placeholder="FIRST NAME" clearable>
-          <template #prefix>
-            <el-icon size="large">
-              <User />
-            </el-icon>
-          </template>
-        </el-input>
+        <el-input
+          v-model="ruleForm.firstName"
+          placeholder="FIRST NAME"
+          clearable
+          :prefix-icon="User"
+        ></el-input>
       </el-form-item>
       <el-form-item prop="middleName">
-        <el-input v-model="ruleForm.middleName" placeholder="MIDDLE NAME" clearable>
-          <template #prefix>
-            <el-icon size="large">
-              <User />
-            </el-icon>
-          </template>
-        </el-input>
+        <el-input
+          v-model="ruleForm.middleName"
+          placeholder="MIDDLE NAME"
+          clearable
+          :prefix-icon="User"
+        ></el-input>
       </el-form-item>
       <el-form-item prop="lastName">
-        <el-input v-model="ruleForm.lastName" placeholder="LAST NAME" clearable>
-          <template #prefix>
-            <el-icon size="large">
-              <User />
-            </el-icon>
-          </template>
-        </el-input>
+        <el-input
+          v-model="ruleForm.lastName"
+          placeholder="LAST NAME"
+          clearable
+          :prefix-icon="User"
+        ></el-input>
       </el-form-item>
       <el-form-item prop="email">
-        <el-input v-model="ruleForm.email" placeholder="EMAIL" clearable>
-          <template #prefix>
-            <el-icon size="large">
-              <User />
-            </el-icon>
-          </template>
-        </el-input>
+        <el-input
+          v-model="ruleForm.email"
+          placeholder="EMAIL"
+          clearable
+          :prefix-icon="User"
+        ></el-input>
       </el-form-item>
       <el-form-item prop="username">
-        <el-input v-model="ruleForm.username" placeholder="USERNAME" clearable>
-          <template #prefix>
-            <el-icon size="large">
-              <User />
-            </el-icon>
-          </template>
-        </el-input>
+        <el-input
+          v-model="ruleForm.username"
+          placeholder="USERNAME"
+          clearable
+          :prefix-icon="User"
+        ></el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input v-model="ruleForm.password" placeholder="PASSWORD" show-password>
-          <template #prefix>
-            <el-icon size="large">
-              <Lock />
-            </el-icon>
-          </template>
-        </el-input>
+        <el-input
+          v-model="ruleForm.password"
+          placeholder="PASSWORD"
+          :prefix-icon="Lock"
+          show-password
+        ></el-input>
       </el-form-item>
-      <el-form-item class="btnLogin-container">
+      <el-form-item>
         <button
           @click="submitForm(ruleFormRef)"
           class="el-button"
@@ -242,6 +235,20 @@ main {
   border: none;
 }
 
+.el-button {
+  width: 100%;
+  width: 100%;
+  height: 45px;
+  color: #409eff;
+  background-color: #ffffff;
+  border: none;
+}
+
+.el-button:hover {
+  background-color: #409eff;
+  color: #ffffff;
+}
+
 .btnLogin-container .el-button:hover {
   background-color: #409eff;
   color: #ffffff;
@@ -276,8 +283,4 @@ main {
 .el-link.custom-link:hover {
   color: #409eff;
 }
-
-/* :deep(.el-input__inner)::placeholder {
-  color: #6e6b6b;
-} */
 </style>

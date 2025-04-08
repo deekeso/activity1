@@ -1,34 +1,17 @@
-@import './base.css';
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  font-weight: normal;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* .app {
-  background-image: url(images/bg.jpg);
+#login-view,
+#register-page,
+#forgotpass-view {
+  background-image: url('images/bg_login.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
   width: 100%;
   background-size: cover;
-} */
-
-#login-view {
-  background-image: url(../assets/images/bg.jpg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
-  width: 100%;
-  background-size: cover;
-}
-
-#register-page {
-  background-image: url(../assets/images/bg.jpg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
-  width: 100%;
-  background-size: cover;
+  overflow: hidden;
 }
