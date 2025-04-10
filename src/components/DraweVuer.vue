@@ -172,11 +172,16 @@ const handleClose = () => {
 const handleSubmit = () => {
   AddStudentFormRef.value?.validate((valid) => {
     if (valid) {
-      inputStore.AddUser({ ...form, Id: `${Date.now()}` }) // Include an ID if required
-      alert('Student added successfully!')
+      const confirmation = confirm('Click Ok if you want to proceed with adding this student?') // Ask for confirmation
+      if (confirmation) {
+        inputStore.AddUser({ ...form, Id: `${Date.now()}` }) // Include an ID if required
+        alert('Student added successfully!')
 
-      resetForm() // Clear the form inputs
-      handleClose() // Close the drawer
+        resetForm() // Clear the form inputs
+        handleClose() // Close the drawer
+      } else {
+        alert('Action canceled.') // Notify user if they cancel
+      }
     }
   })
 }
