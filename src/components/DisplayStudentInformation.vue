@@ -126,7 +126,14 @@ const handleDialogCloser = () => {
 }
 
 const deleteStudent = (studentId: string) => {
-  inputStore.deleteStudent(studentId)
+  const confirmation = confirm('Click OK if you are sure you want to delete a student')
+
+  if (confirmation) {
+    inputStore.deleteStudent(studentId)
+    alert('Student deleted successfully!')
+  } else {
+    alert('Student deletion canceled.')
+  }
 }
 
 // Utility function for formatting dates
