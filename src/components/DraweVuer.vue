@@ -202,4 +202,8 @@ const resetForm = () => {
 :deep(.el-button) {
   width: 100%;
 }
+
+:deep(.el-select__placeholder) {
+  color: var(--el-input-text-color, var(--el-text-color-regular));
+}
 </style>
