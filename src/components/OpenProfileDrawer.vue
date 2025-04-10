@@ -184,6 +184,7 @@ const handleSubmit = () => {
         console.log('Updated Users:', inputStore.getAllUser()) // Log updated users
         handleCloseProfileDrawer()
         nextTick()
+        resetForm()
       } else {
         console.log('Update action canceled by the user.')
         alert('Update canceled.')
@@ -191,6 +192,12 @@ const handleSubmit = () => {
     } else {
       console.log('Validation failed')
     }
+  })
+}
+
+const resetForm = () => {
+  Object.keys(form).forEach((key) => {
+    form[key] = '' // Clear all fields
   })
 }
 
