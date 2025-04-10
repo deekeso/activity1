@@ -133,12 +133,12 @@
 </template>
 
 <script setup lang="ts">
-import { useFormStore } from "@/stores/useFormStore";
+import { useFormStore } from "../stores/useFormStore";
 import { onMounted, ref, watch, reactive } from "vue";
 import { type FormInstance, ElNotification } from "element-plus";
 import { Delete, Edit } from "@element-plus/icons-vue";
-import { courseOptions } from "@/constants/courses";
-import { rules } from "@/constants/globalConstants";
+import { courseOptions } from "../constants/courses";
+import { rules } from "../constants/globalConstants";
 
 const ruleFormRef = ref<FormInstance>();
 const drawerFormVisible = ref(false);
