@@ -172,6 +172,7 @@ const handleSubmit = () => {
   AddStudentFormRef.value?.validate((valid) => {
     if (valid) {
       console.log('Validated Form Data:', form)
+      alert('Successfully updated student informaion')
       if (!form.Id) {
         console.error('Form Id is missing!')
         return
