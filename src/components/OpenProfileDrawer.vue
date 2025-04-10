@@ -167,20 +167,27 @@ const calculateAge = () => {
     }
   }
 }
-
 const handleSubmit = () => {
   AddStudentFormRef.value?.validate((valid) => {
     if (valid) {
-      console.log('Validated Form Data:', form)
-      alert('Successfully updated student informaion')
-      if (!form.Id) {
-        console.error('Form Id is missing!')
-        return
+      const confirmation = confirm(
+        'Click Ok if you want to proceed with updating the student information?',
+      ) // Ask for confirmation
+      if (confirmation) {
+        console.log('Validated Form Data:', form)
+        alert('Successfully updated student information')
+        if (!form.Id) {
+          console.error('Form Id is missing!')
+          return
+        }
+        inputStore.updateStudentInfo(form)
+        console.log('Updated Users:', inputStore.getAllUser()) // Log updated users
+        handleCloseProfileDrawer()
+        nextTick()
+      } else {
+        console.log('Update action canceled by the user.')
+        alert('Update canceled.')
       }
-      inputStore.updateStudentInfo(form)
-      console.log('Updated Users:', inputStore.getAllUser()) // Log updated users
-      handleCloseProfileDrawer()
-      nextTick()
     } else {
       console.log('Validation failed')
     }
