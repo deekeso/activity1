@@ -156,10 +156,10 @@ const calculateAge = () => {
       age--
     }
 
-    if (age < 3) {
+    if (age < 1) {
       form.Age = ''
       Rules.Age = [
-        { required: true, message: 'Age must be at least 3 years old', trigger: 'change' },
+        { required: true, message: 'Age must be at least 1 years old', trigger: 'change' },
       ]
       AddStudentFormRef.value?.validateField('Age') // Trigger validation for the Age field
     } else {
@@ -193,6 +193,8 @@ const handleSubmit = () => {
       console.log('Validation failed')
     }
   })
+  nextTick()
+  resetForm()
 }
 
 const resetForm = () => {
@@ -229,5 +231,13 @@ watch(
 
 :deep(.el-button) {
   width: 100%;
+}
+
+:deep(.el-input__inner::placeholder) {
+  color: black;
+}
+
+:deep(.el-select__placeholder) {
+  color: black;
 }
 </style>

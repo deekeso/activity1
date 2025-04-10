@@ -1,5 +1,5 @@
 <template>
-  <h1 style="margin-top: 20px; margin-bottom: 30px">Student Information</h1>
+  <h1 style="margin-top: 20px; margin-bottom: 30px; color: white">Student Information</h1>
   <div class="buttonContainer">
     <el-button type="primary" @click="openDrawer">Add Student</el-button>
     <el-button type="primary" @click="openProfileDialog">Check My Profile</el-button>
