@@ -183,7 +183,7 @@ const handleSubmit = () => {
 
 const resetForm = () => {
   Object.keys(form).forEach((key) => {
-    form[key] = ''
+    form[key] = '' // Clear all fields
   })
 }
 </script>
