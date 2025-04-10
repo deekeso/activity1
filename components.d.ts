@@ -39,6 +39,7 @@ declare module 'vue' {
     RegForm: typeof import('./src/components/RegForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Testdrawer: typeof import('./src/components/testdrawer.vue')['default']
     TestingHello: typeof import('./src/components/TestingHello.vue')['default']
     UserRegistration: typeof import('./src/components/UserRegistration.vue')['default']
   }

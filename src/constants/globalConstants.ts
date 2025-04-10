@@ -36,3 +36,85 @@ export const courseOptions = [
   "Bachelor of Science in Hotel and Restaurant Management",
   "Bachelor of Science in Nursing",
 ];
+
+// FORM RULES TO ENSURE THE USER FILL ALL THE INPUT FIELDS
+
+export const rules = {
+  firstName: [
+    {
+      required: true,
+      message: "First Name is required to be filled",
+      trigger: "blur",
+    },
+  ],
+  middleName: [
+    {
+      pattern: /^[a-zA-Z]$/,
+      message: "Middle Initial must be a single alphabet letter",
+      trigger: "blur",
+    },
+  ],
+  lastName: [
+    {
+      required: true,
+      message: "Last Name is required to be filled",
+      trigger: "blur",
+    },
+  ],
+  birthDate: [
+    {
+      required: true,
+      message: "Birth Date is required to be filled",
+      trigger: "blur",
+    },
+  ],
+  age: [
+    {
+      required: true,
+      message: "Age is required to be filled",
+      trigger: "blur",
+    },
+  ],
+  address: [
+    {
+      required: true,
+      message: "Address is required to be filled",
+      trigger: "blur",
+    },
+  ],
+  course: [
+    {
+      required: true,
+      message: "Course is required to be filled",
+      trigger: "blur",
+    },
+  ],
+  username: [
+    {
+      required: true,
+      message: "Username is required to be filled",
+      trigger: "blur",
+    },
+  ],
+  email: [
+    {
+      required: true,
+      message: "Email is required to be filled",
+      trigger: "blur",
+    },
+  ],
+  password: [
+    {
+      required: true,
+      message: "Password is required to be filled",
+      trigger: "blur",
+    },
+  ],
+  courseOptions: [
+    {
+      required: true,
+      message: "Course is required to be filled",
+      trigger: "blur",
+    },
+  ],
+};

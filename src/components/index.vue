@@ -138,91 +138,12 @@ import { onMounted, ref, watch, reactive } from "vue";
 import { type FormInstance, ElNotification } from "element-plus";
 import { Delete, Edit } from "@element-plus/icons-vue";
 import { courseOptions } from "@/constants/courses";
+import { rules } from "@/constants/globalConstants";
 
 const ruleFormRef = ref<FormInstance>();
 const drawerFormVisible = ref(false);
 
 const requiredAge = 18;
-
-const rules = {
-  firstName: [
-    {
-      required: true,
-      message: "First Name is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  middleName: [
-    {
-      pattern: /^[a-zA-Z]$/,
-      message: "Middle Initial must be a single alphabet letter",
-      trigger: "blur",
-    },
-  ],
-  lastName: [
-    {
-      required: true,
-      message: "Last Name is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  birthDate: [
-    {
-      required: true,
-      message: "Birth Date is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  age: [
-    {
-      required: true,
-      message: "Age is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  address: [
-    {
-      required: true,
-      message: "Address is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  course: [
-    {
-      required: true,
-      message: "Course is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  username: [
-    {
-      required: true,
-      message: "Username is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  email: [
-    {
-      required: true,
-      message: "Email is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  password: [
-    {
-      required: true,
-      message: "Password is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  courseOptions: [
-    {
-      required: true,
-      message: "Course is required to be filled",
-      trigger: "blur",
-    },
-  ],
-};
 
 const studentStore = useFormStore();
 
@@ -252,17 +173,6 @@ onMounted(() => {
   studentStore.loadStoredData();
 });
 
-interface Student {
-  id: string | number;
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  birthDate: string;
-  age: number;
-  address: string;
-  course: string;
-}
-
 // EDIT STUDENT INFORMATION FUNCTION
 
 const editStudent = (student: Student) => {
@@ -286,6 +196,8 @@ const saveEditedStudent = async () => {
       title: "ERROR",
       message: "Please input all the required fields.",
       type: "error",
+      position: "top-left",
+      duration: 2000,
     });
     return;
   }
@@ -295,6 +207,7 @@ const saveEditedStudent = async () => {
       title: "ERROR",
       message: `Age must be ${requiredAge} years or older.`,
       type: "error",
+      position: "top-left",
     });
     return;
   }
@@ -379,7 +292,6 @@ const cleanInputOnBlur = (field: keyof EditingStudent) => {
 };
 
 // DELETE STUDENTS INFORMATION
-
 const deleteStudent = (student: Student) => {
   const confirmation: boolean = window.confirm("Are you SURE about that?!");
 
@@ -405,6 +317,21 @@ const deleteStudent = (student: Student) => {
 .cardContainer {
   margin: 10px;
   padding: 20px;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 74px) {
+  .cardContainer {
+    margin: 5px;
+    padding: 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .cardContainer {
+    margin: 2px;
+    padding: 5px;
+  }
 }
 
 .cardHeader {

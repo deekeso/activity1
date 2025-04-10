@@ -1,10 +1,10 @@
 <template>
   <el-header class="nav-bar">
     <div class="nav-links">
-      <el-button class="addBtn" type="primary" @click="drawer = true">
+      <el-button type="success" plain @click="drawer = true">
         Add New Student
       </el-button>
-      <el-button class="logout" @click="goHome">Logout</el-button>
+      <el-button type="danger" plain @click="goHome">Logout</el-button>
     </div>
   </el-header>
 
@@ -33,6 +33,10 @@ const router = useRouter();
 
 // REDIRECT TO LOGIN PAGE
 const goHome = () => {
+  const confirmation: boolean = window.confirm(
+    "Are you sure you want to log out?"
+  );
+  if (!confirmation) return; // If the user cancels, do nothing
   formStore.logout(); // Reset authentication state
   ElNotification({
     title: "Logged Out",
@@ -47,9 +51,16 @@ const goHome = () => {
 .nav-bar {
   height: 60px;
 }
-.addBtn {
-  background-color: #52be5b;
-  border-radius: 10px;
+
+.el-button {
+  padding: 10px;
+
+  border-radius: 4px;
+}
+
+.el-button:hover {
+  color: white;
+  font-weight: 600;
 }
 
 .addBtn:hover {

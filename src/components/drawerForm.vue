@@ -73,9 +73,10 @@
 
     <!-- SUBMIT/ADD NEW STUDENT -->
     <div class="drawer-footer">
-      <el-button type="primary" @click="registerUser">Add Student</el-button>
-      <hr />
-      <el-button @click="cancel">Cancel</el-button>
+      <el-button type="success" plain @click="registerUser"
+        >Add Student</el-button
+      >
+      <el-button type="danger" plain @click="cancel">Cancel</el-button>
     </div>
   </el-form>
 </template>
@@ -86,7 +87,8 @@ import type { FormInstance } from "element-plus";
 import { useRouter } from "vue-router";
 import { onMounted, ref, watch, defineEmits } from "vue";
 import { ElNotification } from "element-plus";
-import { courseOptions } from "@/constants/courses";
+import { courseOptions } from "@/constants/globalConstants";
+import { rules } from "@/constants/globalConstants";
 
 const router = useRouter();
 const emit = defineEmits(["closeDrawer"]);
@@ -107,88 +109,6 @@ const formStore = useFormStore() as {
 onMounted(() => {
   formStore.loadStoredData();
 });
-
-// FORM RULES TO ENSURE THE USER FILL ALL THE INPUT FIELDS
-
-const rules = {
-  firstName: [
-    {
-      required: true,
-      message: "First Name is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  middleName: [
-    {
-      pattern: /^[a-zA-Z]$/,
-      message: "Middle Initial must be a single letter",
-      trigger: "blur",
-    },
-  ],
-  lastName: [
-    {
-      required: true,
-      message: "Last Name is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  birthDate: [
-    {
-      required: true,
-      message: "Birth Date is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  age: [
-    {
-      required: true,
-      message: "Age is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  address: [
-    {
-      required: true,
-      message: "Address is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  course: [
-    {
-      required: true,
-      message: "Course is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  username: [
-    {
-      required: true,
-      message: "Username is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  email: [
-    {
-      required: true,
-      message: "Email is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  password: [
-    {
-      required: true,
-      message: "Password is required to be filled",
-      trigger: "blur",
-    },
-  ],
-  courseOptions: [
-    {
-      required: true,
-      message: "Course is required to be filled",
-      trigger: "blur",
-    },
-  ],
-};
 
 // WATCH FUNCTION FOR THE AUTO COMPUTE OF AGE
 
@@ -214,6 +134,7 @@ watch(
           title: "ERROR",
           message: "Age must be 18 years or older.",
           type: "error",
+          position: "top-left",
         });
       } else {
         formStore.age = age;
@@ -251,6 +172,8 @@ const registerUser = async () => {
       title: "ERROR",
       message: "Please input all the required fields.",
       type: "error",
+      position: "top-left",
+      duration: 2000,
     });
     return;
   }
@@ -260,6 +183,7 @@ const registerUser = async () => {
       title: "ERROR",
       message: `Age must be ${requiredAge} years or older.`,
       type: "error",
+      position: "top-left",
     });
     return;
   }
@@ -269,6 +193,7 @@ const registerUser = async () => {
     title: "Success",
     message: "Student has been added successfully!",
     type: "success",
+    position: "top-left",
     duration: 4000,
   });
 
@@ -318,22 +243,6 @@ const cancel = () => {
   width: 100%;
 }
 
-.el-button {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 4px;
-  background-color: #52be5b;
-  color: white;
-  border: none;
-}
-
-.el-button:hover {
-  background-color: #ffffff;
-  color: black;
-  border: 1px solid;
-}
-
 .error {
   color: red;
   font-size: 12px;
@@ -343,5 +252,19 @@ const cancel = () => {
 h3 {
   text-align: center;
   margin-bottom: 25px;
+}
+
+.el-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.drawer-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
 }
 </style>
