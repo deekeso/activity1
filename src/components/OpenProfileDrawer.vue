@@ -193,8 +193,6 @@ const handleSubmit = () => {
       console.log('Validation failed')
     }
   })
-  nextTick()
-  resetForm()
 }
 
 const resetForm = () => {
@@ -231,10 +229,6 @@ watch(
 
 :deep(.el-button) {
   width: 100%;
-}
-
-:deep(.el-input__inner::placeholder) {
-  color: black;
 }
 
 :deep(.el-select__placeholder) {
