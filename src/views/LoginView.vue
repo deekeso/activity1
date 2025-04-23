@@ -1,156 +1,153 @@
 <script setup lang="ts">
-import { loginRules } from '@/rules/authRules'
-import { useStudentStore } from '@/stores'
-import type { TLogin } from '@/types/types'
-import { Hide, Lock, User, View } from '@element-plus/icons-vue'
-import type { ComponentSize, FormInstance } from 'element-plus'
-import { reactive, ref } from 'vue'
+// Import Vue composition API methods and other required dependencies
+import { reactive, ref } from "vue"; // Provides reactivity and state management
+import { Lock, User } from "@element-plus/icons-vue"; // Importing icons for the input fields
+import { RouterLink } from "vue-router"; // Provides navigation links between routes
+import { useRouter } from "vue-router"; // Enables programmatic navigation
+import type { FormInstance } from "element-plus"; // Typing for the form instance
+import type { LoginForm } from "../interface/Admin";
+import { loginRules } from "../constants";
+import { ElMessage } from "element-plus";
 
-const formSize = ref<ComponentSize>('default')
-const ruleFormRef = ref<FormInstance>()
-const ruleForm = reactive<TLogin>({
-  userName: '',
-  password: '',
-})
-const showPass = ref(false)
+// Reference to the form instance for validation
+const formRef = ref<FormInstance>(); // Form state for validation
+
+// Initialize Vue Router for programmatic navigation
+const router = useRouter();
+
+// Reactive object to store form input values
+const loginForm = reactive<LoginForm>({
+  username: "",
+  password: "",
+});
+
+const defaultAccount = reactive<LoginForm>({
+  username: "admin",
+  password: "admin",
+});
+
+// Function to handle login action
+const handleLogin = () => {
+  formRef.value?.validate((valid) => {
+    if (valid) {
+      if (
+        loginForm.username === defaultAccount.username &&
+        loginForm.password === defaultAccount.password
+      ) {
+        ElMessage({
+          message: "Login Successfully!!",
+          type: "success",
+          plain: true,
+        }); // Log success message
+        router.push("/registration");
+      } else {
+        alert("Invalid username or password! Please try again."); // Show alert
+      }
+    } else {
+      console.log("Validation failed!"); // Log validation failure
+    }
+  });
+};
 </script>
 
 <template>
-  <div class="login">
-    <el-image draggable="false" src="/BG.png" alt="bg-photo" class="bg-photo" />
+  <div class="login-view">
+    <el-form :model="loginForm" :rules="loginRules" ref="formRef">
+      <!-- Top Part -->
+      <!-- Cart Icon Here -->
 
-    <el-form
-      class="form"
-      ref="ruleFormRef"
-      :model="ruleForm"
-      :size="formSize"
-      :rules="loginRules"
-      status-icon
-    >
-      <!-- username -->
-      <el-form-item prop="userName">
+      <!-- Middle Part -->
+      <el-form-item prop="username">
         <el-input
-          class="username-input"
-          input-style="color:white;margin-left:0.5em;"
-          v-model="ruleForm.userName"
+          v-model="loginForm.username"
+          style="width: 100%"
           size="large"
           placeholder="USERNAME"
           :prefix-icon="User"
-          clearable
+          class="custom-input"
         />
       </el-form-item>
 
-      <!-- password -->
       <el-form-item prop="password">
         <el-input
-          input-style="color:white;margin-left:0.5em;"
-          v-model="ruleForm.password"
+          v-model="loginForm.password"
+          style="width: 100%"
           size="large"
-          :type="showPass ? 'text' : 'password'"
+          type="password"
+          show-password
+          prop="password"
           placeholder="PASSWORD"
-          clearable
-        >
-          <template #prefix>
-            <el-icon class="el-input__icon"><Lock /></el-icon>
-          </template>
-          <template #suffix>
-            <el-icon v-if="showPass" @click="showPass = !showPass" class="el-input__icon pass_icon">
-              <View />
-            </el-icon>
-            <el-icon v-else @click="showPass = !showPass" class="el-input__icon pass_icon">
-              <Hide />
-            </el-icon>
-          </template>
-        </el-input>
+          :prefix-icon="Lock"
+          class="custom-input"
+        />
       </el-form-item>
 
-      <!-- Buttons -->
-      <el-form-item style="margin-top: 16px" label-width="0">
-        <el-col :span="24">
-          <el-button
-            @click="useStudentStore().handleLogin(ruleFormRef)"
-            style="width: 100%"
-            size="large"
-          >
-            <el-text style="color: var(--secondary-text)" class="semibold-text">LOGIN</el-text>
-          </el-button>
-        </el-col>
-
-        <el-col
-          style="
-            display: flex;
-            align-items: center;
-            justify-content: end;
-            gap: 8px;
-            margin-bottom: 4px;
-            margin-top: 4px;
-          "
-          :span="24"
+      <!-- Bottom Part -->
+      <div class="submit-container">
+        <el-button :plain="true" size="large" @click="handleLogin"
+          >LOGIN</el-button
         >
-          <el-link href="/forgot_pass" style="color: var(--primary-text)">Forgot Password?</el-link>
-        </el-col>
-      </el-form-item>
+        <div class="link-container">
+          <RouterLink to="/forgot-password">Forgot Password?</RouterLink>
+        </div>
+      </div>
     </el-form>
   </div>
 </template>
 
 <style scoped>
-.login {
+.login-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   width: 100%;
   height: 100vh;
+}
 
+form {
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 1em;
+  flex-direction: column;
 
-  position: relative;
-  background-color: var(--primary-background);
-
-  .bg-photo {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* z-index: -1; */
-  }
-
-  .form {
-    width: 700px;
-    z-index: 1000;
-
-    .pass_icon:hover {
-      cursor: pointer;
-      color: var(--primary-green);
-      scale: 1.1;
-      animation-duration: 300;
-      transition: all 0.3s;
-    }
-  }
-
-  .username-input .el-input__wrapper {
-    background: red !important;
-  }
+  width: 350px;
+  height: 398px;
 }
 
-::v-deep(.el-select__placeholder, .el-input__inner::placeholder) {
-  color: var(--primary-text) !important;
-  font-size: 16px;
+.input-group,
+.submit-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 2rem;
+  z-index: 100;
 }
 
-::v-deep(.el-input__inner::placeholder) {
-  color: var(--primary-text) !important;
-  font-size: 16px;
+.link-container {
+  display: flex;
+  justify-content: end;
+  align-items: center;
 }
 
-::v-deep(.el-input__icon, .el-icon) {
-  color: var(--primary-text);
-  font-size: 16px;
+.link-container a {
+  font-size: 12px;
+  color: var(--neutral-light);
+  font-weight: 500;
+  text-decoration: none;
 }
 
-@media only screen and (max-width: 480px) {
-  ::v-deep(.el-input__icon) {
-    display: none !important;
+.el-button {
+  color: var(--primary-bg) !important;
+  font-weight: 700 !important;
+}
+
+:deep(.el-input__inner) {
+  color: var(--neutral-light);
+}
+
+@media only screen and (max-width: 606px) {
+  .link-container a {
+    font-size: 10px;
   }
 }
 </style>

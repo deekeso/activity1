@@ -1,282 +1,139 @@
 <script setup lang="ts">
-import type { TSignup } from '@/types/types'
-import type { ComponentSize, FormInstance } from 'element-plus'
-import { reactive, ref } from 'vue'
-import { Hide, House, Lock, User, View } from '@element-plus/icons-vue'
-import { useStudentStore } from '@/stores'
-import { signupRules } from '@/rules/authRules'
-import { courses } from '@/constant/courses'
+// Import required Vue composition API methods and types
+import { reactive, ref } from "vue";
+import type { FormInstance, FormProps } from "element-plus";
+import { useAdminStore } from "../store/adminStore.ts";
+import { useRouter } from "vue-router";
+import { signupRules } from "../constants/index.ts";
 
-const formSize = ref<ComponentSize>('default')
-const ruleFormRef = ref<FormInstance>()
-const ruleForm = reactive<TSignup>({
-  firstName: '',
-  middleName: '',
-  lastName: '',
+// Define a form reference for validation
+const formRef = ref<FormInstance>(); // Form state for validation
 
-  userName: '',
-  password: '',
+// Define the label position for form fields
+const labelPosition = ref<FormProps["labelPosition"]>("top"); // label position state
 
-  birthDate: '',
-  age: null,
+// Access the Admin store
+const adminStore = useAdminStore();
 
-  address: '',
-  course: '',
-})
-const showPass = ref(false)
+// Initialize Vue Router
+const router = useRouter(); // Enables navigation between routes/pages
+
+// Reactive object to store form input values
+const form = reactive({
+  name: "", // Holds the Name input
+  username: "", // Holds the Username input
+  password: "", // Holds the Password input
+});
+
+// Handle form submission with validation
+const onSubmit = async () => {
+  try {
+    const isValid = await formRef.value?.validate(); // Validates the form fields
+    if (isValid) {
+      // If valid, create a new admin in the Admin Store
+      adminStore.createAdmin({
+        id: Math.floor(Math.random() * 10000), // Generate a random ID for the admin
+        ...form, // Spread operator to include all form fields
+      }),
+        console.log(adminStore.admins); // Logs the list of admins in the console
+
+      // Reset form fields after successful submission
+      Object.keys(form).forEach((key) => {
+        form[key as keyof typeof form] =
+          typeof form[key as keyof typeof form] === "number" ? "0" : ""; // Assign "0" as a string
+      });
+      alert("Account Created Successfully"); // Display success alert
+      router.push("/"); // Redirect to login page
+    }
+  } catch (error) {
+    console.error("Error during form submission:", error); // Log any errors during submission
+  }
+};
 </script>
+
 <template>
-  <div class="signup">
-    <el-image draggable="false" src="/BG.png" alt="bg-photo" class="bg-photo" />
+  <div class="signup-view">
     <el-form
-      class="form"
-      ref="ruleFormRef"
-      :model="ruleForm"
+      ref="formRef"
       :rules="signupRules"
-      :size="formSize"
-      status-icon
+      :model="form"
+      :label-position="labelPosition"
+      label-width="auto"
+      class="signup-form"
+      @submit.prevent="onSubmit"
     >
-      <!-- name -->
-      <el-form-item required>
-        <el-col :span="8">
-          <el-form-item prop="firstName">
-            <el-input
-              input-style="color:white;margin-left:0.5em;"
-              v-model="ruleForm.firstName"
-              size="large"
-              placeholder="FIRSTNAME"
-              :prefix-icon="User"
-            />
-          </el-form-item>
-        </el-col>
-
-        <el-col style="text-align: center" :span="1">
-          <span style="color: var(--primary-text)">-</span>
-        </el-col>
-
-        <el-col :span="6">
-          <el-form-item prop="middleName">
-            <el-input
-              input-style="color:white;margin-left:0.5em;"
-              v-model="ruleForm.middleName"
-              size="large"
-              placeholder="MIDDLENAME"
-              :prefix-icon="User"
-            />
-          </el-form-item>
-        </el-col>
-
-        <el-col style="text-align: center" :span="1">
-          <span style="color: var(--primary-text)">-</span>
-        </el-col>
-
-        <el-col :span="8">
-          <el-form-item prop="lastName">
-            <el-input
-              input-style="color:white;margin-left:0.5em;"
-              v-model="ruleForm.lastName"
-              size="large"
-              placeholder="LASTNAME"
-              :prefix-icon="User"
-            />
-          </el-form-item>
-        </el-col>
-      </el-form-item>
-
-      <!-- age & date -->
-      <el-form-item required>
-        <el-col :span="10">
-          <el-form-item prop="age">
-            <el-input
-              type="number"
-              input-style="color:white;margin-left:0.5em;"
-              v-model="ruleForm.age"
-              size="large"
-              placeholder="AGE"
-              :prefix-icon="User"
-            />
-          </el-form-item>
-        </el-col>
-
-        <el-col style="text-align: center" :span="1">
-          <span style="color: var(--primary-text)">-</span>
-        </el-col>
-
-        <el-col :span="13">
-          <el-form-item prop="birthDate">
-            <el-date-picker
-              class="date"
-              v-model="ruleForm.birthDate"
-              type="date"
-              placeholder="PICK YOUR BIRTHDATE"
-              style="width: 100%; height: 50px"
-            />
-          </el-form-item>
-        </el-col>
-      </el-form-item>
-
-      <!-- username & pass -->
-      <el-form-item required>
-        <el-col :span="10">
-          <el-form-item prop="userName">
-            <el-input
-              input-style="color:white;margin-left:0.5em;"
-              v-model="ruleForm.userName"
-              size="large"
-              placeholder="USERNAME"
-              :prefix-icon="User"
-            />
-          </el-form-item>
-        </el-col>
-
-        <el-col style="text-align: center" :span="1">
-          <span style="color: var(--primary-text)">-</span>
-        </el-col>
-
-        <el-col :span="13">
-          <el-form-item prop="password">
-            <el-input
-              input-style="color:white;margin-left:0.5em;"
-              v-model="ruleForm.password"
-              size="large"
-              :type="showPass ? 'text' : 'password'"
-              placeholder="PASSWORD"
-            >
-              <template #prefix>
-                <el-icon class="el-input__icon"><Lock /></el-icon>
-              </template>
-              <template #suffix>
-                <el-icon
-                  v-if="showPass"
-                  @click="showPass = !showPass"
-                  class="el-input__icon pass_icon"
-                >
-                  <View />
-                </el-icon>
-                <el-icon v-else @click="showPass = !showPass" class="el-input__icon pass_icon">
-                  <Hide />
-                </el-icon>
-              </template>
-            </el-input>
-          </el-form-item>
-        </el-col>
-      </el-form-item>
-
-      <!-- address -->
-      <el-form-item prop="address">
+      <el-form-item label="Name" prop="name" class="el-label">
         <el-input
-          input-style="color:white;margin-left:0.5em;"
-          v-model="ruleForm.address"
-          size="large"
-          placeholder="ADDRESS"
-          :prefix-icon="House"
+          v-model="form.name"
+          placeholder="Enter your Name"
+          class="el-input"
         />
       </el-form-item>
 
-      <!-- courses -->
-      <el-form-item prop="course">
-        <el-select-v2
-          :options="courses"
-          input-style="margin-left:0.5em;"
-          v-model="ruleForm.course"
-          size="large"
-          placeholder="COURSE"
+      <el-form-item label="Username" prop="username" class="el-label">
+        <el-input
+          v-model="form.username"
+          placeholder="Enter your Username"
+          class="el-input"
         />
       </el-form-item>
 
-      <!-- Buttons -->
-      <el-form-item style="margin-top: 16px">
-        <el-col :span="24">
-          <el-button
-            @click="useStudentStore().handleSignup(ruleFormRef)"
-            style="width: 100%"
-            size="large"
+      <el-form-item label="Password" prop="password" class="el-label">
+        <el-input
+          v-model="form.password"
+          placeholder="Enter your Password"
+          show-password
+          class="el-input"
+        />
+      </el-form-item>
+
+      <el-form-item class="btn-group">
+        <div class="btn-group">
+          <el-button type="primary" @click="onSubmit"
+            >Create new Admin</el-button
           >
-            <el-text style="color: var(--primary-color)" class="semibold-text">SIGNUP</el-text>
-          </el-button>
-        </el-col>
-
-        <el-col
-          style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; margin-top: 4px"
-          :span="24"
-        >
-          <el-divider style="width: 100%" />
-          <el-text>or</el-text>
-          <el-divider style="width: 100%" />
-        </el-col>
-
-        <el-col :span="24">
-          <el-button @click="$router.push('/login')" style="width: 100%" size="large">
-            <el-text style="color: var(--primary-color)" class="semibold-text">LOGIN</el-text>
-          </el-button>
-        </el-col>
+          <RouterLink to="/">Already have an account? Login!</RouterLink>
+        </div>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <style scoped>
-* {
-  /* border: 1px solid red !important; */
-}
+.signup-view {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-.signup {
   width: 100%;
   height: 100vh;
+  z-index: 100;
+}
 
+.signup-form {
+  width: 450px !important;
+  color: var(--neutral-light) !important;
+}
+
+.el-label {
+  --el-text-color-regular: var(--neutral-light);
+}
+
+.el-input {
+  --el-text-color-regular: var(--neutral-light);
+}
+
+.btn-group {
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 1em;
-
-  position: relative;
-  background-color: var(--primary-background);
-
-  .bg-photo {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* z-index: -1; */
-  }
-
-  .form {
-    width: 700px;
-    z-index: 1000;
-
-    .pass_icon:hover {
-      cursor: pointer;
-      color: var(--primary-green);
-      scale: 1.1;
-      animation-duration: 300;
-      transition: all 0.3s;
-    }
-
-    .el-select__placeholder.is-transparent {
-      color: var(--primary-text) !important;
-      font-size: 16px;
-    }
-  }
+  justify-content: space-between;
 }
 
-::v-deep(.el-select__placeholder, .el-input__inner::placeholder) {
-  color: var(--primary-text) !important;
-  font-size: 16px;
-}
-
-::v-deep(.el-input__inner::placeholder) {
-  color: var(--primary-text) !important;
-  font-size: 16px;
-}
-
-::v-deep(.el-input__icon, .el-icon) {
-  color: var(--primary-text);
-  font-size: 16px;
-}
-
-@media only screen and (max-width: 480px) {
-  ::v-deep(.el-input__icon) {
-    display: none !important;
-  }
+.btn-group a {
+  color: var(--neutral-light);
+  text-decoration: none;
+  font-style: italic;
 }
 </style>

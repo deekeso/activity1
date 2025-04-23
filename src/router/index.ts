@@ -1,66 +1,30 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import LoginView from '@/views/LoginView.vue'
-import SignupView from '@/views/SignupView.vue'
-import ForgotPasswordView from '@/views/ForgotPasswordView.vue'
-import { useStudentStore } from '@/stores'
+// Import required methods from Vue Router to create routing for the app
+import { createWebHistory, createRouter } from "vue-router";
 
+// Import views that will be linked to specific routes
+import LoginView from "../views/LoginView.vue"; // Login page view
+import HomeView from "../views/HomeView.vue"; // Home page view
+import NotFoundPageView from "../views/NotFoundPageView.vue";
+
+// Define the routes for the application
+const routes = [
+  { path: "/", name: "login", component: LoginView },
+  {
+    path: "/registration",
+    component: HomeView,
+  },
+  {
+    // Catch all route for 404 page
+    path: "/:pathMatch(.*)",
+    name: "NotFound",
+    component: NotFoundPageView,
+  },
+];
+
+// Create the router instance
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView,
-      beforeEnter(to, from, next) {
-        const isAuthenticated = useStudentStore().handlePersistLogin()
-        if (isAuthenticated) {
-          next()
-        } else {
-          next('/login')
-        }
-      },
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: LoginView,
-      beforeEnter(to, from, next) {
-        const isAuthenticated = useStudentStore().handlePersistLogin()
-        if (isAuthenticated) {
-          next('/')
-        } else {
-          next()
-        }
-      },
-    },
-    {
-      path: '/signup',
-      name: 'signup',
-      component: SignupView,
-      beforeEnter(to, from, next) {
-        const isAuthenticated = useStudentStore().handlePersistLogin()
-        if (isAuthenticated) {
-          next('/')
-        } else {
-          next()
-        }
-      },
-    },
-    {
-      path: '/forgot_pass',
-      name: 'Forgot password',
-      component: ForgotPasswordView,
-      beforeEnter(to, from, next) {
-        const isAuthenticated = useStudentStore().handlePersistLogin()
-        if (isAuthenticated) {
-          next('/')
-        } else {
-          next()
-        }
-      },
-    },
-  ],
-})
+  routes,
+});
 
-export default router
+export default router;

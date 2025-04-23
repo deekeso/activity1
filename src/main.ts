@@ -1,26 +1,22 @@
-import './styles/index.css'
-import 'element-plus/dist/index.css'
-import 'vue3-toastify/dist/index.css'
+// Import the necessary modules and files from Vue and other dependencies
+import { createApp } from "vue";
+import "./style.css";
+import App from "./App.vue";
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+// Import Element Plus (a UI component library) and its associated styles
+import ElementPlus from "element-plus";
+import "element-plus/dist/index.css";
 
-import ElementPlus from 'element-plus'
-import Vue3Toastify from 'vue3-toastify'
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+// Import the router and state management (Pinia) setup
+import router from "./router";
+import { createPinia } from "pinia";
 
-import App from './App.vue'
-import router from './router'
+// Create the main Vue app instance and set up Pinia
+const app = createApp(App);
+const pinia = createPinia();
 
-const app = createApp(App)
-
-app.use(createPinia())
-app.use(router)
-
-app.use(Vue3Toastify)
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  app.component(key, component)
-}
-
-app.use(ElementPlus)
-app.mount('#app')
+// Configure the app to use the necessary plugins
+app.use(router);
+app.use(pinia);
+app.use(ElementPlus);
+app.mount("#app");

@@ -1,0 +1,100 @@
+/* ----- Universal Styles ----- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Color Combinations */
+:root {
+  --primary-bg: #2148c0;
+  --secondary-bg: #375ac6;
+
+  --cta-primary: #0d1d4d;
+  --cta-secondary: #d3daf2;
+
+  --neutral-dark: #121212;
+  --neutral-light: #dad7d7;
+}
+
+/* ----- Global Styles ----- */
+body {
+  font-family: "Montserrat", sans-serif;
+  touch-action: manipulation; /* Remove default action of zooming the page when click twice*/
+}
+
+/* Change Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 3px;
+  background-color: white;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--cta-primary);
+  border-radius: 4px;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1; /* Show only 1 lines */
+}
+
+/* Element Plus Component Customization */
+
+/* Login */
+.el-input__wrapper {
+  background-color: transparent !important;
+  color: var(--neutral-light) !important;
+  border: 1px solid var(--neutral-light);
+  box-shadow: none !important;
+}
+
+.el-input__inner::placeholder {
+  color: var(--neutral-light) !important;
+}
+
+/* Form */
+
+.el-form-item__label {
+  font-weight: 500;
+}
+
+.el-input-number__decrease,
+.el-input-number__increase {
+  background-color: transparent !important;
+  color: var(--neutral-light) !important;
+}
+
+.el-textarea__inner {
+  background-color: transparent !important;
+  box-shadow: none;
+  border: 1;
+  color: var(--neutral-light) !important;
+}
+
+.el-upload-list__item-file-name,
+.el-icon {
+  color: var(--neutral-light) !important;
+}
+
+.el-select__wrapper {
+  background-color: transparent !important;
+  color: var(--neutral-light) !important;
+}
+
+.el-select__placeholder {
+  color: var(--neutral-light) !important;
+}
+
+.el-card__body {
+  flex-grow: 1 !important;
+}
+
+.el-card {
+  border-radius: 10px !important;
+}

@@ -1,120 +1,216 @@
 <script setup lang="ts">
-import AsideView from '@/components/Home/AsideView.vue'
-import MainView from '@/components/Home/MainView.vue'
-import { getStudents } from '@/composables/useUser'
-import { imagePhoto } from '@/constant/image'
-import { useStudentStore } from '@/stores'
-import { onMounted } from 'vue'
+// Import Vue utilities and required components
+import { ref } from "vue"; // Provides reactive references and state management
+import Drawer from "../components/Drawer.vue"; // Drawer component for adding a new student
+import StudentCard from "../components/StudentCard.vue"; // Component to display individual student information
+import Filters from "../components/Filters.vue"; // Component for filtering students
+import { useStudentStore } from "../store/studentStore"; // Vuex store for managing student data
+import { useFilteredStudents } from "../composables/useFilteredStudents.ts"; // Custom composable for filtering students based on criteria
+import { useRouter } from "vue-router";
+import DialogBox from "../components/DialogBox.vue";
 
-onMounted(() => {
-  getStudents()
-})
+// Define a reactive state for the filter and drawer visibility
+const filter = ref("all"); // Reactive state for selected filter, defaults to "all"
+const studentStore = useStudentStore(); // Access the student store for state management
+studentStore.getStudent(); // Fetch the list of students
+
+const router = useRouter();
+const dialogVisible = ref(false); // logout modal state
+
+const { filteredStudents } = useFilteredStudents(filter);
+
+const drawerVisible = ref(false);
+
+// Function to handle closing the Drawer
+const handleClose = () => {
+  drawerVisible.value = false;
+};
+
+// Function to update the filter state dynamically
+const updateFilter = (newFilter: string) => {
+  filter.value = newFilter;
+};
+
+// confirm logout
+const confirmLogout = () => {
+  router.push("/");
+};
+
+// toggle logout modal
+const handleLogout = () => {
+  dialogVisible.value = true;
+};
 </script>
 
 <template>
-  <div class="home">
-    <el-image draggable="false" src="/BG.png" alt="bg-photo" class="bg-photo" />
+  <div class="common-layout">
+    <!-- Header -->
+    <header>
+      <p>Student Registration</p>
 
-    <el-container style="gap: 1em">
-      <el-header class="header-view">
-        <el-text size="large" class="bold-text header-view-title" style="font-size: 20px"
-          >Welcome, {{ useStudentStore().getUser?.userName }} !</el-text
+      <div class="nav-util">
+        <div class="filter-container">
+          <Filters @change-filter="updateFilter" />
+        </div>
+
+        <el-button
+          style="
+            background-color: var(--cta-primary);
+            color: var(--neutral-light);
+            border: none;
+            font-weight: 600;
+          "
+          @click="
+            drawerVisible = true;
+            console.log(drawerVisible);
+          "
         >
+          Add Student
+        </el-button>
 
-        <!-- Header user dropdown for logout -->
-        <el-dropdown trigger="click">
-          <div class="el-dropdown-link" style="display: flex; align-items: center; gap: 1em">
-            <img :src="imagePhoto" alt="imgPhoto" class="imgPhoto" />
-            <span class="header-view-info" style="display: flex; flex-direction: column">
-              <el-text class="bold-text" style="width: 100%">{{
-                useStudentStore().getUser?.userName
-              }}</el-text>
-              <el-text size="small" style="width: 100%; font-size: 12px"
-                >@ {{ useStudentStore().getUser?.userName }}</el-text
-              >
-            </span>
-          </div>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item @click="useStudentStore().handleLogout"
-                ><el-text>Logout</el-text></el-dropdown-item
-              >
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </el-header>
+        <el-button type="danger" @click="handleLogout">Logout</el-button>
 
-      <el-container
-        class="home-main-view"
-        style="gap: 1em; overflow: hidden; max-height: calc(100vh-80px)"
-      >
-        <AsideView />
-        <MainView />
-      </el-container>
-    </el-container>
+        <Drawer
+          title="Create New Student"
+          :drawerVisible="drawerVisible"
+          @handle-close="handleClose"
+        />
+      </div>
+    </header>
+
+    <DialogBox
+      :model-value="dialogVisible"
+      title="Are you sure to Logout?"
+      @confirm="confirmLogout"
+      @update:modelValue="dialogVisible = false"
+    />
+
+    <!-- Body -->
+    <div class="main-wrapper">
+      <p>You have {{ studentStore.studentCount }} registered student</p>
+      <div class="main">
+        <StudentCard
+          v-for="student in filteredStudents"
+          :key="student.id"
+          :student="student"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-* {
-  /* border: 1px solid red; */
-  color: var(--secondary-text) !important;
+.common-layout {
+  position: relative;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
 }
 
-.home {
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  height: auto;
+  padding: 1rem 4rem;
+}
+
+header p {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--neutral-light);
+  text-transform: uppercase;
+  flex-wrap: nowrap;
+}
+
+header ul {
+  list-style: none;
+}
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 2rem;
   width: 100%;
   height: 100vh;
-  overflow: hidden;
+  padding: 2rem 4rem;
+}
 
+.main-wrapper p {
+  color: var(--neutral-light);
+  text-transform: capitalize;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 100%;
+  height: 700px;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.filter-container {
   display: flex;
+  justify-content: end;
   align-items: center;
-  justify-content: center;
-  padding: 2em;
+  gap: 10px;
+  width: 100%;
+}
 
-  position: relative;
-  background-color: var(--primary-background);
+.nav-util {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
 
-  .bg-photo {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* z-index: -1; */
+@media only screen and (max-width: 1000px) {
+  .main {
+    grid-template-columns: repeat(3, 1fr);
+    height: 700px;
+  }
+}
+
+@media only screen and (max-width: 880px) {
+  .main-wrapper {
+    padding: 1rem;
   }
 
-  .el-container {
-    z-index: 1000;
-
-    width: 100%;
-    height: 100%;
+  header {
+    flex-direction: column;
+    gap: 1rem;
   }
-  .el-header {
-    width: 100%;
-    height: 80px;
 
-    padding: 1em;
-    background: white;
-    border-radius: 1em;
-    box-shadow: 0px 5px 5px 0px var(--primary-shadow);
+  .filter-container {
+    justify-content: center;
+  }
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  header p {
+    font-size: 1rem;
+  }
 
-    .imgPhoto {
-      width: 50px;
-      height: 50px;
-      border-radius: 150px;
-    }
+  .nav-util {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
 
-    .el-dropdown-link {
-      border-radius: 1em;
-      padding: 0.5em 1em;
-    }
-    .el-dropdown-link:hover {
-      cursor: pointer;
-      background: var(--primary-shadow);
-    }
+@media only screen and (max-width: 810px) {
+  .main {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media only screen and (max-width: 650px) {
+  .main {
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 </style>
