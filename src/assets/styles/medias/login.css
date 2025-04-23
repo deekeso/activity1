@@ -1,0 +1,49 @@
+/* ==================================== */
+/*       Medias for Register Page       */
+/* ==================================== */
+
+@media (max-width: 575.98px) {
+  .half-circle,
+  .wave {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+}
+
+@media (max-width: 768px) {
+}
+
+@media (min-width: 992px) {
+}
+
+@media (min-width: 1024px) {
+}
+
+@media (max-width: 1280px) {
+  .wave {
+    width: 350px !important;
+  }
+
+  .bottom {
+    right: 0 !important;
+    width: 100px !important;
+  }
+
+  .second {
+    right: 0 !important;
+    width: 160px !important;
+  }
+
+  .third {
+    right: 0 !important;
+    width: 200px !important;
+  }
+}
+
+@media (min-width: 1200px) {
+}
+
+@media (min-width: 1400px) {
+}

@@ -1,0 +1,74 @@
+/* ============================= */
+/*             Sizing            */
+/* ============================= */
+
+.h-auto {
+  height: auto;
+}
+
+.w-auto {
+  width: auto;
+}
+
+/* HEIGHT PERCENTAGE*/
+.h-100 {
+  height: 100%;
+}
+
+.h-50 {
+  height: 50%;
+}
+
+/* HEIGHT VIEWPORT */
+.vh-50 {
+  height: 50vh;
+}
+
+.vh-30 {
+  height: 30vh;
+}
+
+.vh-20 {
+  height: 20vh;
+}
+
+.vh-10 {
+  height: 10vh;
+}
+
+/* WIDTH */
+.w-auto {
+  width: auto;
+}
+
+.w-40 {
+  width: 40%;
+}
+.w-50 {
+  width: 50%;
+}
+
+.w-20 {
+  width: 20% !important;
+}
+.w-70 {
+  width: 70% !important;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.vw-50 {
+  width: 50vh;
+}
+
+.d-flex {
+  display: flex;
+}
+
+/* SHAPES */
+.rounded {
+  border-radius: 50%;
+  object-fit: cover;
+}

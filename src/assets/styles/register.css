@@ -1,0 +1,83 @@
+/* ============================= */
+/*        Register Page          */
+/* ============================= */
+
+@import "./utils/util.css";
+@import "./utils/typography.css";
+@import "./utils/spacing.css";
+@import "./utils/sizing.css";
+@import "./medias/register.css";
+
+body,
+html {
+  background-color: #f4f7ff;
+}
+.half-circle,
+.wave {
+  position: absolute;
+  pointer-events: none;
+}
+
+.bottom {
+  right: -1px;
+  width: 250px;
+  height: auto;
+  z-index: 3;
+  transform: rotate(180deg);
+}
+
+.second {
+  top: -20px;
+  right: -23px;
+  width: 320px;
+  height: auto;
+  z-index: 2;
+  transform: rotate(180deg);
+  filter: brightness(0) invert(1);
+}
+
+.third {
+  top: 3px;
+  right: -1px;
+  width: 360px;
+  height: auto;
+  z-index: 1;
+  transform: rotate(180deg);
+}
+
+.wave {
+  left: 0;
+  bottom: 0;
+  width: 650px;
+  transform: rotate(180deg);
+}
+
+.el-button--primary {
+  color: var(--black);
+}
+
+footer-cont .el-button {
+  font-weight: 600 !important;
+  padding: 25px 25px;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  color: var(--primary-blue);
+}
+
+button span {
+  text-transform: capitalize;
+}
+
+.no-data-image {
+  width: 100%;
+  max-width: 300px;
+  margin: auto;
+}
+
+.el-dialog__header {
+  display: none !important;
+}
+
+.el-form-item {
+  padding-bottom: 10px;
+}

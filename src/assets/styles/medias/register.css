@@ -1,0 +1,281 @@
+/* ================================== */
+/*        Medias for Login Page       */
+/* ================================== */
+
+@media (max-width: 575.98px) {
+  .carousel-container::before,
+  .carousel-container::after {
+    display: none !important;
+  }
+
+  .el-drawer {
+    width: 100% !important;
+  }
+
+  .el-drawer__body {
+    width: 88% !important;
+  }
+
+  .half-circle,
+  .wave {
+    display: none !important;
+  }
+
+  .header-sm {
+    text-align: center !important;
+  }
+
+  .orig-state-container {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .orig-state-create-btn {
+    width: 70% !important;
+  }
+
+  .orig-state-container {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .orig-state-create-btn {
+    width: 70% !important;
+  }
+
+  .emp-state-container {
+    width: 100% !important;
+  }
+
+  .empty-state-create-btn {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 576px) {
+  .header-sm {
+    text-align: center !important;
+  }
+
+  .create-btn {
+    width: 60% !important;
+  }
+
+  .card {
+    flex: 1 0 100% !important;
+  }
+
+  .emp-state-container {
+    width: 100% !important;
+  }
+
+  .empty-state-create-btn {
+    width: 100% !important;
+  }
+
+  .orig-state-container {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .orig-state-create-btn {
+    width: 70% !important;
+  }
+  .el-col-xs-offset-10 {
+    margin-left: 0% !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .el-drawer {
+    width: 70% !important;
+  }
+
+  .el-drawer__body {
+    width: 88% !important;
+  }
+  .header-sm {
+    text-align: center !important;
+  }
+
+  .create-btn {
+    width: 60% !important;
+  }
+
+  .card {
+    flex: 1 0 100% !important;
+  }
+
+  .emp-state-container {
+    width: 100% !important;
+  }
+
+  .empty-state-create-btn {
+    width: 100% !important;
+  }
+
+  .orig-state-container {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .orig-state-create-btn {
+    width: 70% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    flex: 1 0 100% !important;
+  }
+  .emp-state-container {
+    width: 100% !important;
+  }
+
+  .empty-state-create-btn {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 820) {
+  .el-col-xs-offset-9 {
+    margin: 0;
+  }
+}
+@media (min-width: 992px) {
+  .el-drawer {
+    width: 30% !important;
+  }
+
+  .el-drawer__body {
+    width: 85% !important;
+  }
+
+  .create-btn {
+    width: 40% !important;
+  }
+  .emp-state-container {
+    width: 100% !important;
+  }
+
+  .empty-state-create-btn {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .el-drawer {
+    width: 30% !important;
+  }
+
+  .el-drawer__body {
+    width: 80% !important;
+  }
+  .emp-state-container {
+    width: 100% !important;
+  }
+
+  .empty-state-create-btn {
+    width: 100% !important;
+  }
+
+  .orig-state-container {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .orig-state-create-btn {
+    width: 70% !important;
+  }
+}
+
+@media (max-width: 1280px) {
+  .wave {
+    width: 350px !important;
+  }
+
+  .bottom {
+    right: 0 !important;
+    width: 100px !important;
+  }
+
+  .second {
+    right: 0 !important;
+    width: 160px !important;
+  }
+
+  .third {
+    top: 0 !important;
+    right: 0 !important;
+    width: 200px !important;
+  }
+
+  .full-name {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .el-drawer {
+    width: 30% !important;
+  }
+
+  .el-drawer__body {
+    width: 80% !important;
+  }
+
+  .orig-state-container {
+    width: 100% !important;
+    justify-content: right !important;
+  }
+
+  .orig-state-create-btn {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  .el-drawer {
+    width: 30% !important;
+  }
+
+  .el-drawer__body {
+    width: 91% !important;
+  }
+
+  .emp-state-container {
+    width: 100% !important;
+  }
+
+  .empty-state-create-btn {
+    width: 100% !important;
+  }
+
+  .orig-state-container {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .orig-state-create-btn {
+    width: 100% !important;
+  }
+
+  .footer-cont.el-row {
+    display: initial;
+    flex: initial;
+  }
+  .footer-cont .el-col-xl-12,
+  .footer-cont .el-col-xl-3 {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 1924px) {
+  .el-drawer {
+    width: 30% !important;
+  }
+  .el-drawer__body {
+    width: 87% !important;
+  }
+  .el-drawer__header {
+    width: 85% !important;
+  }
+}
