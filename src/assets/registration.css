@@ -1,0 +1,103 @@
+@import './base.css';
+
+body {
+  background-color: var(--blue);
+}
+.el-header {
+  background-color: var(--blue);
+  color: var(--white);
+  text-align: center;
+  align-content: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.save-btn {
+  background-color: var(--white);
+  color: var(--blue);
+  border: none;
+  width: 100%;
+}
+.save-btn span {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.el-input__wrapper:focus {
+  border: 2px solid var(--blue);
+}
+.el-select__selected-item {
+  color: var(--white);
+}
+.el-select__wrapper.el-select__selected-item {
+  background-color: #ffffff4f;
+}
+/* .el-input__inner,
+.el-form-item__label {
+  color: var(--black-soft);
+} */
+.form-input :deep(.el-input__inner) {
+  color: black;
+}
+.el-form-item__label {
+  color: var(--white);
+}
+.el-drawer {
+  width: 80%;
+  background-color: var(--blue);
+}
+.el-col {
+  margin-bottom: 20px;
+}
+.card-container {
+  margin-block: 20px;
+}
+
+/* card styles */
+.el-card {
+  /* height: 100%; */
+  width: 100%;
+  background: var(--white-soft);
+  justify-items: center;
+  text-align: center;
+}
+.el-card * {
+  margin-block: 5px;
+}
+.el-card__body {
+  padding: 0.2rem;
+}
+.icon {
+  height: 8rem;
+  border-radius: 100%;
+}
+h2 {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+h3 {
+  font-weight: 500;
+  color: grey;
+}
+.address {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.btn-container {
+  padding: 0;
+}
+.icon-btn {
+  height: 1.5rem;
+}
+.details {
+  margin-bottom: 20px;
+}
+.el-drawer__header {
+  background-color: white;
+  padding-bottom: 20px;
+}
+.el-drawer__title {
+  font-weight: bold;
+  color: var(--blue);
+}

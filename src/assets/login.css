@@ -1,0 +1,42 @@
+@import './base.css';
+
+.form-container,
+.form-container *,
+.login-btn,
+.forgot-pass-text {
+  z-index: 1000;
+}
+.login-btn {
+  width: 100%;
+  background-color: var(--white);
+  color: var(--blue);
+}
+.user-input {
+  background-color: transparent;
+  border-radius: 5px;
+  color: var(--white);
+}
+.el-input__wrapper,
+.el-input__wrapper:focus,
+.el-select__wrapper {
+  background-color: transparent;
+}
+.el-input.is-disabled {
+  background-color: var(--blue);
+}
+el-input__prefix-inner,
+.el-input__inner,
+.el-text {
+  color: white;
+}
+.form-container {
+  max-width: 300px;
+  width: 100%;
+}
+
+.el-form-item {
+  flex-direction: column;
+}
+.el-form-item__label {
+  display: block;
+}

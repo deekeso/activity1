@@ -1,66 +1,42 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import LoginView from '@/views/LoginView.vue'
-import SignupView from '@/views/SignupView.vue'
-import ForgotPasswordView from '@/views/ForgotPasswordView.vue'
-import { useStudentStore } from '@/stores'
+import LoginView from '../views/LoginView.vue'
+import RegisterView from '../views/RegisterView.vue'
+import ForgotPassword from '../views/ForgotPassword.vue'
+
+// Simulated authentication check
+const isAuthenticated = () => {
+  // Replace this with real authentication logic
+  return localStorage.getItem('auth') === 'true'
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
-      beforeEnter(to, from, next) {
-        const isAuthenticated = useStudentStore().handlePersistLogin()
-        if (isAuthenticated) {
-          next()
-        } else {
-          next('/login')
-        }
-      },
-    },
-    {
-      path: '/login',
       name: 'login',
       component: LoginView,
-      beforeEnter(to, from, next) {
-        const isAuthenticated = useStudentStore().handlePersistLogin()
-        if (isAuthenticated) {
-          next('/')
-        } else {
-          next()
-        }
-      },
     },
     {
-      path: '/signup',
-      name: 'signup',
-      component: SignupView,
-      beforeEnter(to, from, next) {
-        const isAuthenticated = useStudentStore().handlePersistLogin()
-        if (isAuthenticated) {
-          next('/')
-        } else {
-          next()
-        }
-      },
+      path: '/register',
+      name: 'register',
+      component: RegisterView,
     },
     {
-      path: '/forgot_pass',
-      name: 'Forgot password',
-      component: ForgotPasswordView,
-      beforeEnter(to, from, next) {
-        const isAuthenticated = useStudentStore().handlePersistLogin()
-        if (isAuthenticated) {
-          next('/')
-        } else {
-          next()
-        }
-      },
+      path: '/forgot-password',
+      name: 'forgotPassword',
+      component: ForgotPassword,
     },
   ],
+})
+
+// Navigation guard for protected routes
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !isAuthenticated()) {
+    next('/login') // Redirect to login if not authenticated
+  } else {
+    next() // Allow access
+  }
 })
 
 export default router

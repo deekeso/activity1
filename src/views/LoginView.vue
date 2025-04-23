@@ -1,156 +1,141 @@
-<script setup lang="ts">
-import { loginRules } from '@/rules/authRules'
-import { useStudentStore } from '@/stores'
-import type { TLogin } from '@/types/types'
-import { Hide, Lock, User, View } from '@element-plus/icons-vue'
-import type { ComponentSize, FormInstance } from 'element-plus'
-import { reactive, ref } from 'vue'
-
-const formSize = ref<ComponentSize>('default')
-const ruleFormRef = ref<FormInstance>()
-const ruleForm = reactive<TLogin>({
-  userName: '',
-  password: '',
-})
-const showPass = ref(false)
-</script>
-
 <template>
-  <div class="login">
-    <el-image draggable="false" src="/BG.png" alt="bg-photo" class="bg-photo" />
-
-    <el-form
-      class="form"
-      ref="ruleFormRef"
-      :model="ruleForm"
-      :size="formSize"
-      :rules="loginRules"
-      status-icon
-    >
-      <!-- username -->
-      <el-form-item prop="userName">
+  <div class="background">
+    <el-form class="form-container">
+      <el-form-item :model="loginForm">
         <el-input
-          class="username-input"
-          input-style="color:white;margin-left:0.5em;"
-          v-model="ruleForm.userName"
-          size="large"
+          v-model="loginForm.username"
+          type="input"
           placeholder="USERNAME"
+          class="user-input"
           :prefix-icon="User"
-          clearable
-        />
+        ></el-input>
       </el-form-item>
-
-      <!-- password -->
-      <el-form-item prop="password">
+      <el-form-item>
         <el-input
-          input-style="color:white;margin-left:0.5em;"
-          v-model="ruleForm.password"
-          size="large"
-          :type="showPass ? 'text' : 'password'"
+          v-model="loginForm.passInput"
+          type="password"
+          show-password
+          class="user-input"
           placeholder="PASSWORD"
-          clearable
-        >
-          <template #prefix>
-            <el-icon class="el-input__icon"><Lock /></el-icon>
-          </template>
-          <template #suffix>
-            <el-icon v-if="showPass" @click="showPass = !showPass" class="el-input__icon pass_icon">
-              <View />
-            </el-icon>
-            <el-icon v-else @click="showPass = !showPass" class="el-input__icon pass_icon">
-              <Hide />
-            </el-icon>
-          </template>
-        </el-input>
+          :prefix-icon="Lock"
+        ></el-input>
       </el-form-item>
 
-      <!-- Buttons -->
-      <el-form-item style="margin-top: 16px" label-width="0">
-        <el-col :span="24">
-          <el-button
-            @click="useStudentStore().handleLogin(ruleFormRef)"
-            style="width: 100%"
-            size="large"
-          >
-            <el-text style="color: var(--secondary-text)" class="semibold-text">LOGIN</el-text>
-          </el-button>
-        </el-col>
+      <el-form-item>
+        <el-button type="plain" width="100%" @click="onSubmit" class="login-btn">LOGIN</el-button>
+      </el-form-item>
 
-        <el-col
-          style="
-            display: flex;
-            align-items: center;
-            justify-content: end;
-            gap: 8px;
-            margin-bottom: 4px;
-            margin-top: 4px;
-          "
-          :span="24"
-        >
-          <el-link href="/forgot_pass" style="color: var(--primary-text)">Forgot Password?</el-link>
-        </el-col>
+      <el-form-item>
+        <RouterLink to="/forgot-password" class="pass-link">
+          <el-text class="mx-1">Forgot Password?</el-text>
+        </RouterLink>
       </el-form-item>
     </el-form>
+
+    <el-alert
+      title="Log in failed"
+      type="error"
+      description="Incorrect email or password."
+      class="error-alert"
+      :closable="false"
+      v-if="errorAlert"
+      show-icon
+    />
+    <el-alert
+      title="Log in successful!"
+      type="success"
+      v-if="successAlert"
+      class="success-alert"
+      :closable="false"
+      show-icon
+    ></el-alert>
   </div>
+  <Background></Background>
 </template>
 
+<script lang="ts" setup>
+// import { ref } from 'vue'
+import { reactive, ref } from 'vue'
+import { User, Lock } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
+import Background from '../components/BackgroundImg.vue'
+
+const router = useRouter()
+const loginForm = reactive({
+  username: '',
+  passInput: '',
+})
+
+const loginData: {
+  username: string
+  password: string
+} = {
+  username: 'root',
+  password: 'root',
+}
+
+const errorAlert = ref(false)
+const successAlert = ref(false)
+
+const onSubmit = () => {
+  if (loginForm.username === loginData.username && loginForm.passInput === loginData.password) {
+    localStorage.setItem('auth', 'true')
+
+    successAlert.value = true
+    setTimeout(() => {
+      successAlert.value = false
+      router.push('/register')
+    }, 2000)
+  } else {
+    errorAlert.value = true
+    setTimeout(() => {
+      errorAlert.value = false
+    }, 4000)
+    console.error('incorrect username or password')
+  }
+}
+</script>
+
 <style scoped>
-.login {
+.pass-link {
+  text-decoration: none;
+  text-align: right;
   width: 100%;
-  height: 100vh;
+}
+.error-alert,
+.success-alert {
+  width: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-block: 50px;
+  margin-inline: 20px;
+  z-index: 100;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1em;
+  animation: slideIn 0.5s ease, fadeOut 0.5s ease 3s forwards;
+}
 
-  position: relative;
-  background-color: var(--primary-background);
-
-  .bg-photo {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* z-index: -1; */
+/* Slide-in effect */
+@keyframes slideIn {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
   }
-
-  .form {
-    width: 700px;
-    z-index: 1000;
-
-    .pass_icon:hover {
-      cursor: pointer;
-      color: var(--primary-green);
-      scale: 1.1;
-      animation-duration: 300;
-      transition: all 0.3s;
-    }
-  }
-
-  .username-input .el-input__wrapper {
-    background: red !important;
+  100% {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
 
-::v-deep(.el-select__placeholder, .el-input__inner::placeholder) {
-  color: var(--primary-text) !important;
-  font-size: 16px;
-}
-
-::v-deep(.el-input__inner::placeholder) {
-  color: var(--primary-text) !important;
-  font-size: 16px;
-}
-
-::v-deep(.el-input__icon, .el-icon) {
-  color: var(--primary-text);
-  font-size: 16px;
-}
-
-@media only screen and (max-width: 480px) {
-  ::v-deep(.el-input__icon) {
-    display: none !important;
+/* Fade-out effect */
+@keyframes fadeOut {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
   }
 }
 </style>
