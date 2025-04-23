@@ -1,39 +1,42 @@
-# ./
+# Student Registration System
 
-This template should help get you started developing with Vue 3 in Vite.
+A Vue 3 + TypeScript application for managing student records with authentication.
 
-## Recommended IDE Setup
+## Features
+- User authentication (Login/Registration)
+- Student record management (CRUD operations)
+- Course-based student organization
+- Age calculation and validation
+- Responsive design with glass-morphism UI
+- Protected routes with navigation guards
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Tech Stack
+- Vue 3 with Composition API
+- TypeScript
+- Pinia for state management
+- Vue Router for navigation
+- Element Plus UI components
+- Pinia Persisted State for data persistence
 
-## Type Support for `.vue` Imports in TS
+## Project Structure
+- `/src/stores` - Pinia stores for state management
+- `/src/views` - Page components
+- `/src/components` - Reusable UI components
+- `/src/router` - Route configurations and guards
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Development Requirements
+- Node.js >= 14.x
+- npm >= 6.x
 
-## Customize configuration
+## Installation and Setup
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Run development server: `npm run serve`
+4. Build for production: `npm run build`
 
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+## Features Implementation
+- Authentication using Pinia store
+- Protected routes with navigation guards
+- Real-time form validation
+- Persistent data storage
+- Responsive layout design
