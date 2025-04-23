@@ -1,0 +1,161 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #2148c0;
+}
+
+.inner-container {
+  z-index: 50;
+  width: 300px;
+  margin-top: 150px;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.input-container {
+  width: 100%;
+}
+
+.el-dialog__title {
+  font-family: bold;
+}
+
+.el-input__wrapper {
+  background-color: transparent;
+  height: 48px;
+}
+
+.el-drawer__header {
+  padding: 0;
+  margin-top: 10px;
+  position: absolute;
+  left: 1%;
+}
+
+.el-page-header__left {
+  display: none;
+}
+
+.el-icon {
+  color: white;
+  font-size: 18px;
+}
+
+.el-input__inner::placeholder {
+  color: white;
+  font-family: extraLight;
+}
+
+.el-input__inner {
+  margin-left: 10px;
+  font-family: extraLight;
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.login {
+  margin-top: 10px;
+}
+
+.confirm {
+  margin-top: 10px;
+}
+
+.button {
+  width: 100%;
+  font-size: 15px;
+  color: #2148c0;
+  font-family: semiBold;
+}
+
+.image-container {
+  z-index: 1;
+}
+
+.vector-image {
+  width: 60%;
+  height: 100vh;
+  position: absolute;
+  left: 40%;
+  top: 0;
+}
+
+.circle3-image {
+  width: 25%;
+  height: 50%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.circle2-image {
+  width: 20%;
+  height: 40%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.circle1-image {
+  width: 15%;
+  height: 30%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.el-pagination {
+  color: black;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-top: 5px;
+  color: white;
+  text-align: right;
+  margin-left: auto;
+}
+
+.forgot-password-text {
+  color: white;
+  font-size: 16px;
+  font-family: regular;
+  cursor: pointer;
+}
+
+.el-form-item__error {
+  font-family: regular;
+}
+
+.el-select__wrapper {
+  background-color: transparent;
+  height: 50px;
+}
+
+.el-select__placeholder {
+  margin-left: 35px;
+  color: white;
+}
+
+.el-select__selected-item {
+  font-family: regular;
+  width: 80%;
+}
+
+.el-select__placeholder.is-transparent {
+  color: white;
+  font-family: extraLight;
+  margin-left: 35px;
+}
+
+.el-input__inner {
+  color: white;
+}
+
+.submit {
+  margin-top: 30px;
+}
