@@ -1,66 +1,55 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import LoginView from '@/views/LoginView.vue'
-import SignupView from '@/views/SignupView.vue'
-import ForgotPasswordView from '@/views/ForgotPasswordView.vue'
-import { useStudentStore } from '@/stores'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
-      beforeEnter(to, from, next) {
-        const isAuthenticated = useStudentStore().handlePersistLogin()
-        if (isAuthenticated) {
-          next()
-        } else {
-          next('/login')
-        }
+      name: 'Login',
+      component: () => import('../views/LoginView.vue'),
+      meta: {
+        requiresAuth: false,
+        redirectIfAuth: true,
       },
     },
     {
-      path: '/login',
-      name: 'login',
-      component: LoginView,
-      beforeEnter(to, from, next) {
-        const isAuthenticated = useStudentStore().handlePersistLogin()
-        if (isAuthenticated) {
-          next('/')
-        } else {
-          next()
-        }
+      path: '/forgot-password',
+      name: 'Forgot Password',
+      component: () => import('../views/ForgotPassword.vue'),
+      meta: {
+        requiresAuth: false,
       },
     },
     {
-      path: '/signup',
-      name: 'signup',
-      component: SignupView,
-      beforeEnter(to, from, next) {
-        const isAuthenticated = useStudentStore().handlePersistLogin()
-        if (isAuthenticated) {
-          next('/')
-        } else {
-          next()
-        }
-      },
-    },
-    {
-      path: '/forgot_pass',
-      name: 'Forgot password',
-      component: ForgotPasswordView,
-      beforeEnter(to, from, next) {
-        const isAuthenticated = useStudentStore().handlePersistLogin()
-        if (isAuthenticated) {
-          next('/')
-        } else {
-          next()
-        }
+      path: '/register',
+      name: 'Register',
+      component: () => import('../views/StudentRegistration.vue'),
+      meta: {
+        requiresAuth: true,
       },
     },
   ],
+})
+
+// Navigation guard to check authentication
+router.beforeEach((to, from, next) => {
+  // Check if user is logged in by retrieving from localStorage
+  const isAuthenticated = localStorage.getItem('isLoggedIn') === 'true'
+
+  // If route requires authentication and user is not authenticated
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    // Redirect to login page
+    next({ name: 'Login' })
+  }
+  // If user is authenticated and route has redirectIfAuth flag (like login page)
+  else if (isAuthenticated && to.meta.redirectIfAuth) {
+    // Redirect already logged in users to the register page
+    next({ name: 'Register' })
+  }
+  // Otherwise proceed normally
+  else {
+    next()
+  }
 })
 
 export default router

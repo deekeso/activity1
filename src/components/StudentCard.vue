@@ -1,177 +1,174 @@
-<script setup lang="ts">
-import type { TStudent } from '@/types/types'
-import { MoreFilled } from '@element-plus/icons-vue'
-import { ref } from 'vue'
-import UpdateStudent from './UpdateStudent.vue'
-import ViewStudent from './ViewStudent.vue'
-import { useStudentStore } from '@/stores'
-import { deleteStudent } from '@/composables/useUser'
-import { imagePhoto } from '@/constant/image'
-import { ConfirmBox } from '@/composables/useConfirm'
-import { useProperName } from '@/composables/useProperName'
-
+<script lang="ts" setup>
+import { Edit, Delete } from '@element-plus/icons-vue'
+import type { Student } from '@/types/CommonModels'
+import { useStudentStore } from '@/stores/student'
+import { ElMessageBox, ElMessage } from 'element-plus'
 const props = defineProps<{
-  student: TStudent
+  student: Student
 }>()
-const updateDrawer = ref(false)
-const viewDrawer = ref(false)
 
-const handleClose = () => {
-  updateDrawer.value = false
-  useStudentStore().setStudent(null)
+const studentStore = useStudentStore()
+const emit = defineEmits(['edit'])
+
+const editStudent = () => {
+  // Emit an event to the parent to open the edit modal
+  emit('edit', props.student)
 }
-
-const handleOpen = () => {
-  updateDrawer.value = true
-  useStudentStore().setStudent(props.student)
+const deleteStudent = () => {
+  ElMessageBox.prompt('Please type "Confirm delete" to proceed with deletion.', 'Delete Student', {
+    confirmButtonText: 'Delete',
+    cancelButtonText: 'Cancel',
+    type: 'warning',
+    inputPlaceholder: 'Type "Confirm delete"',
+    inputValidator: (value) => {
+      if (value !== 'Confirm delete') {
+        return 'You must type "Confirm delete" to proceed.'
+      }
+      return true
+    },
+  })
+    .then(() => {
+      // Perform the delete operation
+      studentStore.deleteStudent(props.student.id)
+      ElMessage({
+        type: 'success',
+        message: 'Student deleted successfully',
+      })
+    })
+    .catch(() => {
+      // Operation was canceled
+    })
 }
-
-const handleView = () => {
-  viewDrawer.value = !viewDrawer.value
-}
-
-// Show Confirm box to make sure the user really want to delete the info.
-const DeleteStudentConfirmBox = (id: string) => {
-  ConfirmBox({
-    title: 'Delete ',
-    messageContent: 'Are you sure you want to delete user?',
-    callback: () => deleteStudent(id),
+function formatDate(dateString: string) {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   })
 }
 </script>
 
 <template>
-  <div
-    :style="student.id === useStudentStore().student?.id && 'border:1px solid #2148c0;'"
-    class="card"
-    @click="useStudentStore().setStudent(props.student)"
-  >
-    <div class="header">
-      <el-text size="small" style="width: 100%; font-size: 14px"
-        >@ {{ useProperName(student.lastName) }}</el-text
-      >
+  <el-card class="student-card" shadow="hover">
+    <template #header>
+      <div class="student-header">
+        <div class="student-info">
+          <h3 class="student-name">
+            {{ student.firstName }}
+            <template v-if="student.middleName"> {{ student.middleName }}. </template>
+            {{ student.lastName }}
+          </h3>
+        </div>
+      </div>
+    </template>
 
-      <el-dropdown class="" trigger="click">
-        <span class="el-dropdown-link student-card-dropdown">
-          <el-icon class="more" :size="20"><MoreFilled /></el-icon>
-        </span>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item class="view-student" @click="handleView"
-              ><el-text>View</el-text></el-dropdown-item
-            >
-            <el-dropdown-item @click="handleOpen"><el-text>Edit</el-text></el-dropdown-item>
-            <el-dropdown-item @click="DeleteStudentConfirmBox(student.id)"
-              ><el-text>Delete</el-text></el-dropdown-item
-            >
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+    <div class="student-details">
+      <p class="student-detail"><strong>Course:</strong> {{ student.course }}</p>
+      <p class="student-detail"><strong>Age:</strong> {{ student.age }}</p>
+      <p class="student-detail">
+        <strong>Birth Date:</strong> {{ formatDate(student.birthDate.toLocaleString()) }}
+      </p>
+      <p class="student-detail"><strong>Address:</strong> {{ student.address }}</p>
     </div>
-    <div class="img">
-      <img draggable="false" :src="imagePhoto" alt="imgPhoto" class="imgPhoto" />
-    </div>
-    <div class="info">
-      <el-text :truncated="true" class="bold-text" style="width: 100%; font-size: 18px">
-        {{
-          student.firstName
-            .split(' ')
-            .map((item) => useProperName(item))
-            .join(' ')
-        }}
-        {{ student?.middleInitial.toUpperCase() && student?.middleInitial.toUpperCase() + '.' }}
-        {{
-          student.lastName
-            .split(' ')
-            .map((item) => useProperName(item))
-            .join(' ')
-        }}</el-text
-      >
-      <el-text
-        :truncated="true"
-        :line-clamp="2"
-        size="small"
-        style="width: 100%; font-size: 14px"
-        >{{ student.course }}</el-text
-      >
-    </div>
-  </div>
 
-  <ViewStudent :student :view-drawer="viewDrawer" @handle-close-view="handleView" />
-  <UpdateStudent :student :update-drawer="updateDrawer" @handle-close="handleClose" />
+    <template #footer>
+      <div class="student-actions">
+        <el-button class="action-btn edit" @click="editStudent" type="primary" text>
+          <el-icon :size="20"><Edit /></el-icon>
+          <div style="margin-left: 10px">Edit</div>
+        </el-button>
+        <el-button class="action-btn delete" @click="deleteStudent" type="danger" text>
+          <el-icon :size="20"><Delete /></el-icon>
+          <div style="margin-left: 10px">Delete</div>
+        </el-button>
+      </div>
+    </template>
+  </el-card>
 </template>
 
 <style scoped>
-* {
-  /* border: 1px solid red; */
-  color: var(--secondary-text) !important;
-}
-
-.card {
-  background: var(--primary-text);
-  padding: 1em;
-  border-radius: 0.5em;
-
-  border: 1px solid var(--primary-border);
-  box-shadow: 0px 5px 5px 0px var(--primary-shadow);
-
-  width: 300px;
-  height: 400px;
-  max-width: 300px;
-  max-height: 400px;
-  /* height: fit-content; */
-
+.student-card {
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  .header {
-    width: 100%;
-    height: max-content;
-
-    margin-bottom: 8px;
-
-    display: flex;
-    align-items: center;
-    justify-content: end;
-
-    .more {
-      rotate: 90deg;
-    }
-
-    .more:hover {
-      scale: 1.1;
-      animation-duration: 500s;
-      transition: all 0.5s;
-      cursor: pointer;
-    }
-  }
-
-  .img {
-    width: 100%;
-    height: 100%;
-    .imgPhoto {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 4px;
-    }
-  }
-
-  .info {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin-top: 8px;
-  }
 }
 
-@media only screen and (min-device-width: 1366px) {
-  :deep(.view-student) {
-    display: none;
-  }
+:deep(.el-card__header) {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+:deep(.el-card__body) {
+  padding: 15px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.student-header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.student-info {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.avatar-container {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+.student-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.student-name {
+  margin: 0;
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.student-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.student-details {
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+  flex: 1;
+}
+
+.student-details p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.student-detail {
+  min-height: 2rem; /* Ensure uniform height for each detail */
 }
 </style>
